@@ -1,0 +1,100 @@
+.footer {
+  width: 100vw;
+  background-color: #286699;
+  padding: 50px 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.containerFooter {
+  width: 100%;
+  padding: 0 5vw;
+  box-sizing: border-box;
+}
+
+.rowFooter {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 20px;
+  padding-top: 30px;
+}
+
+.footerCol {
+  flex: 1;
+  min-width: 200px;
+  padding: 0 20px;
+  border-left: 1px solid #ffffff50;
+}
+
+.footerCol:first-child {
+  border-left: none;
+}
+
+.footerCol h4 {
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.footerCol ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerCol ul li {
+  margin: 10px 0;
+}
+
+.footerCol ul li a {
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #cdd5db;
+  text-decoration: none;
+  font-weight: 300;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.footerCol ul li a:hover {
+  color: white;
+  padding-left: 10px;
+}
+
+.petcoFooter {
+  font-family: 'More Sugar', cursive;
+  font-size: 40px;
+  color: #fff;
+  -webkit-text-stroke: 2px #fff;
+  margin-bottom: 10px;
+}
+
+.petcoDescricao {
+  font-size: 15px;
+  color: #cdd5db;
+  text-align: left;
+  font-weight: 300;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .rowFooter {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footerCol {
+    width: 100%;
+    text-align: center;
+    border-left: none;
+    border-top: 1px solid #ffffff30;
+    padding-top: 20px;
+  }
+
+  .petcoDescricao {
+    text-align: center;
+  }
+}
