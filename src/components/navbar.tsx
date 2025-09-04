@@ -20,11 +20,11 @@ export default function Nav() {
 
         <ul className={style.navCategorias}>
           <li><a href="/adotar">Adotar</a></li>
-          <li><a href="/voluntarios">Voluntarios</a></li>
+          <li><a href="/voluntarios">Voluntários</a></li>
           <li><a href="/doar">Doar</a></li>
           <li><a href="/denuncie">Denuncie</a></li>
+          <li><a href="">Registro Animal</a></li>
 
-          <SearchBar onSearch={handleSearch} />
         </ul>
 
         <ul className={style.botaoCadastro}>
