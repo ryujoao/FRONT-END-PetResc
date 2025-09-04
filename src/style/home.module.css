@@ -66,7 +66,7 @@ html, body {
 
 /* Responsivo */
 @media (max-width: 768px) {
-  .bannerArea {
+  .bannerUm {
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -77,7 +77,9 @@ html, body {
   .homeTitulo {
     margin-top: 5vh;
     text-align: center;
+    margin-left: 0;
   }
+
 
   .titulo {
     font-size: clamp(1.8rem, 6vw, 2.5rem);
@@ -114,22 +116,12 @@ html, body {
   align-items: center;
   margin-right: 2vw; /* afasta o card da borda direita */
 }
-.paginaDoar {
-  background: #286699;
-  color: #fff;
-  border-radius: 15px;
-  padding: 0 0 4rem 0;
-  max-width: 700px;
-  min-width: 40vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 
 .tituloDoar {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 1.2rem 0;
 }
 
 .paginaDoar p {

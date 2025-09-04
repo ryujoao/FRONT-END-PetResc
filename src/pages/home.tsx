@@ -3,6 +3,7 @@ import style from "../style/home.module.css";
 import Footer from "../components/footer";
 import MeusAnimais from "./meusAnimais";
 import OngsProximas from "./ongsProximas";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -13,7 +14,9 @@ function Home() {
       <section className={style.bannerUm}>
         <div className={style.homeTitulo}>
           <h1 className={style.titulo}>Conheça seu novo melhor amigo!</h1>
+          <Link to="/adotar" style={{ textDecoration: 'none' }}>
           <button className={style.subtitulo}>Adote-me</button>
+          </Link>
         </div>
       </section>
 

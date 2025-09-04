@@ -16,11 +16,12 @@
   flex-direction: column;
   align-items: center;
   border-radius: 15px;
+  margin-top: 1rem;
 }
 
 .titulo{
     color: #000;
-    font-size: 26px;
+    font-size: 22px;
     background-color: #B5D2E9;
     border-radius: 7px;
     width: 80%;
