@@ -23,7 +23,7 @@ export default function Nav() {
           <li><a href="/voluntarios">Voluntários</a></li>
           <li><a href="/doar">Doar</a></li>
           <li><a href="/denuncie">Denuncie</a></li>
-          <li><a href="">Registro Animal</a></li>
+          <li><a href="">Registra Animal</a></li>
 
         </ul>
 

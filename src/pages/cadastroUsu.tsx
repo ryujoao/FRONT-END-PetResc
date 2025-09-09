@@ -17,24 +17,22 @@ export default function CadastroUsu() {
           </p>
 
           <div className={styles.botoesRedes}>
-            <button
-              type="button"
-              className={`${styles.botaoRede} ${styles.google}`}
-            >
-              <Icon.Google size={20} style={{ marginRight: "11px" }} />
+            <button type="button" className={styles.botaoRede}>
+              <img className={styles.google} src="google.png" alt="Google" />
               Cadastre-se com o Google
             </button>
-            <button
-              type="button"
-              className={`${styles.botaoRede} ${styles.apple}`}
-            >
-              <Icon.Apple size={20} style={{ marginRight: "8px" }} />
+
+
+            <button type="button" className={styles.botaoRede}>
+              <img className={styles.apple} src="apple.png" alt="Apple" />
               Cadastre-se com a Apple
             </button>
           </div>
 
           <div className={styles.divisoria}>
-            <span>ou</span>
+            <div className={styles.linha}></div>
+            <span className={styles.texto}>ou</span>
+            <div className={styles.linha}></div>
           </div>
 
           <label className={styles.grupoInput}>
