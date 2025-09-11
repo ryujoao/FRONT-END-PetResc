@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST - Cria uma nova conta
+// POST 
 router.post('/', async (req, res) => {
   const { email, password, role, nome, cnpj, descricao, endereco } = req.body;
 
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// DELETE - Remove um usuário e dados relacionados
+// DELETE 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -58,7 +58,7 @@ router.delete('/:id', async (req, res) => {
    
     const usuario = await prisma.account.findUnique({
       where: { id: usuarioId },
-      include: { admin: true, ong: true, publico: true } // inclui relacionamentos
+      include: { admin: true, ong: true, publico: true }
     });
 
     if (!usuario) {

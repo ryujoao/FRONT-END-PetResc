@@ -4,7 +4,7 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 
-// GET - Listar todos os animais
+// GET Listar todos os animais
 
 router.get('/', async (req, res) => {
   try {
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET - Um animal específico
+// GET  Um animal específico
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -51,7 +51,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-// POST - Criar novo animal
+// POST 
 router.post('/', async (req, res) => {
   const { nome, especie, raca, idade, status, porte, sexo, descricao, photoURL, ongId } = req.body;
 
@@ -90,7 +90,7 @@ router.post('/', async (req, res) => {
 });
 
 
-// PUT - Atualizar animal
+// PUT 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, especie, raca, idade, status, porte, sexo, descricao, photoURL } = req.body;
@@ -119,7 +119,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-// DELETE - Remover animal
+// DELETE 
 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
@@ -135,9 +135,9 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Listar animais de uma ONG específica
-// =======================
+
+// GET 
+
 router.get('/ong/:ongId', async (req, res) => {
   const { ongId } = req.params;
 
@@ -161,9 +161,9 @@ router.get('/ong/:ongId', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Buscar / Filtrar animais
-// =======================
+
+// GET 
+
 router.get('/search', async (req, res) => {
   const { especie, porte, status, sexo } = req.query;
 

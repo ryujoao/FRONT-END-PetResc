@@ -3,9 +3,9 @@ const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// =======================
+
 // GET - Listar todas as doações
-// =======================
+
 router.get('/', async (req, res) => {
   try {
     const doacoes = await prisma.doacao.findMany({
@@ -20,9 +20,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Detalhes de uma doação
-// =======================
+
+// GET 
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -42,9 +42,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// POST - Criar nova doação
-// =======================
+
+// POST 
+
 router.post('/', async (req, res) => {
   const { usuarioId, ongId, valor } = req.body;
 
@@ -68,9 +68,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Doações de uma ONG específica
-// =======================
+
+// GET 
+
 router.get('/ong/:id', async (req, res) => {
   const { id } = req.params;
 

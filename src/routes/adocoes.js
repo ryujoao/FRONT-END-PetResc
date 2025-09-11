@@ -3,15 +3,14 @@ const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// =======================
-// GET - Listar todos os pedidos de adoção
-// =======================
+
+// GET 
 router.get('/', async (req, res) => {
   try {
     const adocoes = await prisma.adocao.findMany({
       include: {
-        usuario: true, // quem solicitou
-        animal: true,  // qual animal
+        usuario: true, 
+        animal: true,  
       }
     });
     res.json(adocoes);
@@ -20,9 +19,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Detalhes de um pedido
-// =======================
+// GET  
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -42,9 +40,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// POST - Solicitar adoção de um animal
-// =======================
+
+// POST 
 router.post('/', async (req, res) => {
   const { usuarioId, animalId } = req.body;
 
@@ -57,7 +54,7 @@ router.post('/', async (req, res) => {
       data: {
         usuarioId: parseInt(usuarioId),
         animalId: parseInt(animalId),
-        status: 'EM_ANALISE' // status inicial
+        status: 'EM_ANALISE' 
       },
       include: { usuario: true, animal: true }
     });
@@ -68,9 +65,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// =======================
-// PUT - Atualizar status do pedido
-// =======================
+// PUT  
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -94,9 +89,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// DELETE - Cancelar pedido de adoção
-// =======================
+// DELETE  
+
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 

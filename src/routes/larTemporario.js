@@ -3,9 +3,7 @@ const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// =======================
-// GET - Listar todos
-// =======================
+// GET 
 router.get('/', async (req, res) => {
   try {
     const lares = await prisma.larTemporario.findMany({
@@ -17,9 +15,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Detalhes
-// =======================
+
+// GET 
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -39,9 +37,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// POST - Registrar interesse
-// =======================
+
+// POST 
+ 
 router.post('/', async (req, res) => {
   const {
     usuarioId, ongId, animalId, nomeCompleto, cpf, dataNascimento,
@@ -81,9 +79,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// =======================
-// PUT - Atualizar status
-// =======================
+
+// PUT 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -100,9 +97,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// DELETE - Cancelar
-// =======================
+
+// DELETE 
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 

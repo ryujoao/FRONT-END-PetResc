@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// =======================
-// POST - Cadastro de ONG
-// =======================
+
+// POST    
+
 router.post('/register', async (req, res) => {
   const { email, password, name, cnpj, descricao, endereco } = req.body;
 
@@ -17,16 +17,13 @@ router.post('/register', async (req, res) => {
   }
 
   try {
-    // Verifica se já existe conta com esse email
     const existingAccount = await prisma.account.findUnique({ where: { email } });
     if (existingAccount) {
       return res.status(400).json({ error: 'Email já cadastrado' });
     }
 
-    // Criptografa a senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Cria conta da ONG
     const account = await prisma.account.create({
       data: {
         email,
@@ -35,7 +32,6 @@ router.post('/register', async (req, res) => {
       }
     });
 
-    // Cria registro da ONG vinculando a conta
     const ong = await prisma.ong.create({
       data: {
         name,
@@ -53,9 +49,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// =======================
-// POST - Login de ONG
-// =======================
+// POST 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -71,7 +65,6 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
-    // Gera token JWT
     const token = jwt.sign(
       { id: account.id, role: account.role },
       process.env.JWT_SECRET || 'segredo123',
@@ -84,9 +77,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Listar todas as ONGs
-// =======================
+
+// GET 
+
 router.get('/', async (req, res) => {
   try {
     const ongs = await prisma.ong.findMany({
@@ -98,9 +91,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Detalhes de uma ONG
-// =======================
+// GET 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -120,9 +111,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// =======================
-// GET - Lista animais de uma ONG
-// =======================
+
+// GET 
 router.get('/:id/animais', async (req, res) => {
   const { id } = req.params;
 
