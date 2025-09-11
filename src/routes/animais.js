@@ -1,9 +1,11 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client'); // Corrigido
+const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// GET Listar todos os animais
+
+// GET - Listar todos os animais
+
 router.get('/', async (req, res) => {
   try {
     const animais = await prisma.animal.findMany({
@@ -21,7 +23,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET
+// GET - Um animal específico
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   
@@ -47,11 +50,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-//POST Criar um novo animal
+
+// POST - Criar novo animal
 router.post('/', async (req, res) => {
   const { nome, especie, raca, idade, status, porte, sexo, descricao, photoURL, ongId } = req.body;
 
-  // Validação
   if (!nome || !especie || !ongId) {
     return res.status(400).json({ error: 'Nome, espécie e ONG são obrigatórios' });
   }
@@ -86,7 +89,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT Atualizar 
+
+// PUT - Atualizar animal
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { nome, especie, raca, idade, status, porte, sexo, descricao, photoURL } = req.body;
@@ -114,7 +118,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE 
+
+// DELETE - Remover animal
+
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -126,6 +132,61 @@ router.delete('/:id', async (req, res) => {
     res.status(204).send();
   } catch (err) {
     res.status(500).json({ error: 'Erro ao deletar animal' });
+  }
+});
+
+// =======================
+// GET - Listar animais de uma ONG específica
+// =======================
+router.get('/ong/:ongId', async (req, res) => {
+  const { ongId } = req.params;
+
+  try {
+    const animais = await prisma.animal.findMany({
+      where: { ongId: parseInt(ongId) },
+      include: {
+        ong: {
+          include: { account: true }
+        }
+      }
+    });
+
+    if (animais.length === 0) {
+      return res.status(404).json({ error: 'Nenhum animal encontrado para essa ONG' });
+    }
+
+    res.json(animais);
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao buscar animais da ONG' });
+  }
+});
+
+// =======================
+// GET - Buscar / Filtrar animais
+// =======================
+router.get('/search', async (req, res) => {
+  const { especie, porte, status, sexo } = req.query;
+
+  try {
+    const animais = await prisma.animal.findMany({
+      where: {
+        AND: [
+          especie ? { especie: { contains: especie, mode: 'insensitive' } } : {},
+          porte ? { porte: { contains: porte, mode: 'insensitive' } } : {},
+          status ? { status: { equals: status } } : {},
+          sexo ? { sexo: { equals: sexo } } : {}
+        ]
+      },
+      include: {
+        ong: {
+          include: { account: true }
+        }
+      }
+    });
+
+    res.json(animais);
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao buscar animais com filtros' });
   }
 });
 

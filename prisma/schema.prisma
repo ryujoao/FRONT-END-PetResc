@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,6 +16,10 @@ model Account {
   admin    Admin?
   ong      Ong?
   publico  Publico?
+
+  // Relações inversas
+  doacoes        Doacao[]
+  larTemporarios LarTemporario[]
 }
 
 /// papéis possíveis
@@ -26,7 +29,7 @@ enum Role {
   PUBLICO
 }
 
-/// Perfil de administrador — usa o mesmo ID da asccount
+/// Perfil de administrador — usa o mesmo ID da account
 model Admin {
   id      Int     @id
   nome    String
@@ -49,71 +52,111 @@ model Ong {
   endereco  String?
   account   Account  @relation(fields: [id], references: [id], onDelete: Cascade)
   animals   Animal[] @relation("AnimalOng")
+
+  // Relações inversas
+  doacoes        Doacao[]
+  larTemporarios LarTemporario[]
 }
 
 model Animal {
+  id              Int          @id @default(autoincrement())
+  nome            String
+  especie         String
+  raca            String?
+  idade           Int?
+  status          StatusAdocao @default(DISPONIVEL)
+  porte           String?
+  sexo            String?
+  descricao       String?
+  photoURL        String?
+  corPredominante String?
+
+  ficha Ficha? @relation("AnimalFicha")
+  ongId Int
+  ong   Ong    @relation("AnimalOng", fields: [ongId], references: [id])
+
+  denuncias      Denuncia[]      @relation("AnimalDenuncias")
+  larTemporarios LarTemporario[] // relação inversa
+}
+
+model Doacao {
   id        Int      @id @default(autoincrement())
-  nome      String
-  especie   String
-  raca      String?
-  idade     Int?
-  status    StatusAdocao @default(DISPONIVEL)
-  porte     String?
-  sexo      String?
-  descricao String?
-  photoURL  String?
-  corPredominante  String?
-
-
-  ficha     Ficha? @relation("AnimalFicha")
-
+  usuarioId Int
   ongId     Int
-  ong       Ong      @relation("AnimalOng", fields: [ongId], references: [id])
+  valor     Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
 
-  denuncias Denuncia[] @relation("AnimalDenuncias")
-  
-  @@map("animals")
+  usuario Account @relation(fields: [usuarioId], references: [id])
+  ong     Ong     @relation(fields: [ongId], references: [id])
+}
+
+model LarTemporario {
+  id                     Int      @id @default(autoincrement())
+  usuarioId              Int
+  ongId                  Int
+  animalId               Int?
+  nomeCompleto           String
+  cpf                    String
+  dataNascimento         DateTime
+  telefone               String
+  email                  String
+  endereco               String
+  tipoMoradia            String
+  possuiQuintal          Boolean
+  portesAceitos          String
+  especiesAceitas        String
+  possuiAnimais          Boolean
+  experiencia            String?
+  dispoVeterinario       String?
+  podeFornecerRacao      Boolean
+  precisaAjudaONG        Boolean
+  periodoDisponibilidade String
+  status                 String   @default("EM_ANALISE")
+  createdAt              DateTime @default(now())
+
+  usuario Account @relation(fields: [usuarioId], references: [id])
+  ong     Ong     @relation(fields: [ongId], references: [id])
+  animal  Animal? @relation(fields: [animalId], references: [id])
 }
 
 model Ficha {
+  id             Int          @id @default(autoincrement())
+  nome           String
+  photoURL       String?
+  especie        String
+  raca           String?
+  sexo           String?
+  porte          String?
+  dataNascimento DateTime?
+  idade          Int?
+  peso           Float?
+  status         StatusAdocao @default(DISPONIVEL)
 
-  id              Int      @id @default(autoincrement())
-  nome            String
-  photoURL        String?
-  especie         String
-  raca            String?
-  sexo            String?
-  porte           String?
-  dataNascimento  DateTime?
-  idade           Int?      // pode manter junto do nascimento (campo derivado)
-  peso            Float?
-  status          StatusAdocao @default(DISPONIVEL)
+  // Saúde
+  saude          String?
+  vacinas        String?
+  vermifugos     String?
+  castrado       Boolean   @default(false)
+  alergias       String?
+  medicacoes     String?
+  ultimaConsulta DateTime?
+  microchip      String?   @unique
 
-// Saúde
-  saude           String?
-  vacinas         String?
-  vermifugos      String?
-  castrado        Boolean   @default(false)
-  alergias        String?
-  medicacoes      String?
-  ultimaConsulta  DateTime?
-  microchip       String?   @unique
-
-// Comportamento
-  temperamento    String
-  socializacao    String?
-  cuidados        String?
-  nivelEnergia    Int?     
-  conviveCom      String?
+  // Comportamento
+  temperamento          String
+  socializacao          String?
+  cuidados              String?
+  nivelEnergia          Int?
+  conviveCom            String?
   necessidadesEspeciais String?
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  createdBy       Int?     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy Int?
 
-  animalId        Int      @unique
-  animal          Animal   @relation("AnimalFicha", fields: [animalId], references: [id])
-  
+  animalId Int    @unique
+  animal   Animal @relation("AnimalFicha", fields: [animalId], references: [id])
+
   @@map("fichas")
 }
 
@@ -125,17 +168,17 @@ enum StatusAdocao {
 }
 
 model Denuncia {
-  id         Int      @id @default(autoincrement())
-  descricao  String
+  id          Int      @id @default(autoincrement())
+  descricao   String
   localizacao String
-  anonimo   Boolean  @default(false)
-  contato    String
-  animalId   Int
-  animal     Animal   @relation("AnimalDenuncias", fields: [animalId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  createdBy       Int?     
-  
+  anonimo     Boolean  @default(false)
+  contato     String
+  animalId    Int
+  animal      Animal   @relation("AnimalDenuncias", fields: [animalId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Int?
+
   @@map("denuncias")
 }
 
