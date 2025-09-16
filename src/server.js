@@ -2,10 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 
+// Import 
+const authRoutes = require("./routes/auth");
 const usuariosRoutes = require("./routes/usuarios");
 const animaisRoutes = require("./routes/animais");
-const authRoutes = require("./routes/auth");
-const relatoriosRoutes = require("./routes/relatorios"); 
+const adocoesRoutes = require("./routes/adocoes");
+const doacoesRoutes = require("./routes/doacoes");
+const larTemporarioRoutes = require("./routes/larTemporario");
+const ongsRoutes = require("./routes/ongs");
+const relatoriosRoutes = require("./routes/relatorios");
+const feedRoutes = require("./routes/feed");
+const reportRoutes = require("./routes/report")
 
 const prisma = new PrismaClient();
 const app = express();
@@ -13,16 +20,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-// Rotas
-
+// Rotas principais
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuariosRoutes);
 app.use("/animais", animaisRoutes);
-app.use("/relatorios", relatoriosRoutes); 
+app.use("/adocoes", adocoesRoutes);
+app.use("/doacoes", doacoesRoutes);
+app.use("/larTemporario", larTemporarioRoutes);
+app.use("/ongs", ongsRoutes);
+app.use("/relatorios", relatoriosRoutes);
+app.use("/feed", feedRoutes);
+app.use("/report", reportRoutes)
 
-
-// Rota teste 
 
 app.get("/api", (req, res) => {
   res.json({ message: "API rodando corretamente!" });
@@ -32,7 +41,7 @@ app.get("/api", (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000 🚀");
 
-  // Testa conexão com banco
+  
   async function testConnection() {
     try {
       await prisma.$connect();

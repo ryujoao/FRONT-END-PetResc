@@ -5,7 +5,6 @@ const { login, register, me } = require("../controller/authController");
 const { authenticateToken } = require("../middleware/authMiddleware");
 
 
-// Rotas de Autenticação
 
 router.post("/register", register);           
 router.post("/login", login);                 
