@@ -32,6 +32,8 @@ html, body {
   margin-top: 7rem;
 }
 
+
+
 .titulo {
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 700;
@@ -64,32 +66,6 @@ html, body {
   border-bottom: none;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-  .bannerUm {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0 5vw;
-    text-align: center;
-  }
-
-  .homeTitulo {
-    margin-top: 5vh;
-    text-align: center;
-    margin-left: 0;
-  }
-
-
-  .titulo {
-    font-size: clamp(1.8rem, 6vw, 2.5rem);
-  }
-
-  .subtitulo {
-    font-size: 1rem;
-    padding: 0.5rem 2rem;
-  }
-}
 
 .bannerDois {
   position: relative;
@@ -144,4 +120,49 @@ html, body {
 .paginaDoar button a {
   color: #fff;
   text-decoration: none;
+
+
+  /* Responsividade do Título da Home */
+  @media (max-width: 1835px) {
+  
+    .homeTitulo {
+      margin-left: 13rem;
+    }
+  }
+  @media (max-width: 1653px) {
+  
+    .homeTitulo {
+      margin-left: 10rem; 
+    }
+  }
+  @media (max-width: 1560px) {
+  
+    .homeTitulo {
+      margin-left: 7rem; 
+    }
+  }
+  @media (max-width: 1443px) {
+  
+    .homeTitulo {
+      margin-left: 5rem; 
+    }
+  }
+  @media (max-width: 1374px) {
+  
+    .homeTitulo {
+      margin-left: 3rem; 
+    }
+  }
+  @media (max-width: 1300px) {
+  
+    .homeTitulo {
+      margin-left: 1.5rem;
+    }
+  }
+  @media (max-width: 1300px) {
+  
+    .homeTitulo {
+      margin-left: 1.5rem;
+    }
+  }
 }
