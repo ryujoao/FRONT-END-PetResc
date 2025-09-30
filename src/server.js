@@ -29,7 +29,6 @@ app.use("/api", adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuariosRoutes);
 app.use("/animais", animaisRoutes);
-app.use("/adocoes", adocoesRoutes);
 app.use("/doacoes", doacoesRoutes);
 app.use("/larTemporario", larTemporarioRoutes);
 app.use("/ongs", ongsRoutes);
