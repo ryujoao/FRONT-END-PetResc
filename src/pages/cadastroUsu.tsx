@@ -1,9 +1,51 @@
+import React, { useState } from 'react';
 import styles from "../style/cadastroUsu.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import api from '../services/api';
+
 import * as Icon from "react-bootstrap-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Link } from "react-router-dom";
 
 export default function CadastroUsu() {
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState(''); 
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault(); // Impede o recarregamento da página
+    setError('');
+
+    if (!name || !email || !password) {
+      setError('Por favor, preencha nome, email e senha.');
+      return;
+    }
+
+    try {
+      await api.post('/usuarios/register', {
+        name,
+        email,
+        password
+      });
+
+      alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
+      navigate('/login'); 
+  } catch (err: any) {
+      console.error("Erro no cadastro:", err); 
+
+      if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } 
+      else if (err.response) {
+        setError(`Erro ${err.response.status}: O servidor respondeu, mas não foi possível processar a resposta.`);
+      }
+      else {
+        setError('Ocorreu um erro de rede. O servidor está offline?');
+      }
+    }
+  };
   return (
     <div className={styles.pagCadastro}>
       <div className={styles.containerForms}>
@@ -11,7 +53,7 @@ export default function CadastroUsu() {
           <a href="/">PetCo</a>
         </div>
 
-        <form className={styles.form}>
+        <form className={styles.form}  onSubmit={handleRegister}>
           <h1 className={styles.titulo}>Cadastre-se</h1>
           <p className={styles.subTitulo}>
             Crie sua conta e ajude a transformar vidas
@@ -37,11 +79,13 @@ export default function CadastroUsu() {
 
           <label className={styles.grupoInput}>
             <span>Nome completo</span>
-            <input
-              className={styles.inputLogin}
-              type="text"
-              placeholder="Digite seu nome"
-            />
+               <input
+            className={styles.inputLogin}
+            type="text"
+            placeholder="Digite seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+               />         
           </label>
 
           <label className={styles.grupoInput}>
@@ -56,15 +100,30 @@ export default function CadastroUsu() {
           <label className={styles.grupoInput}>
             <span>E-mail</span>
             <input
-              className={styles.inputLogin}
-              type="email"
-              placeholder="user@gmail.com"
-            />
+            className={styles.inputLogin}
+            type="email"
+            placeholder="user@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           </label>
 
-          <Link  to={"/home"} style={{ textDecoration: 'none' }}>
-            <button type="submit" className={styles.botaoProx}>Cadastrar</button>
-          </Link>
+          <label className={styles.grupoInput}>
+            <span>Senha</span>
+            <input
+              className={styles.inputLogin}
+              type="password"
+              placeholder="Crie uma senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
+           <button type="submit" className={styles.botaoProx}>
+            Cadastrar
+          </button>
+      
           <p className={styles.loginLink}>
             Já tem conta? <a href="/login">Login</a>
           </p>
