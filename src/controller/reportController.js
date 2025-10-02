@@ -2,10 +2,8 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const criarReport = async (req, res) => {
-    // Pega o ID do usuário logado diretamente do token (mais seguro)
     const usuarioLogadoId = req.account.id;
     
-    // Pega os dados do corpo da requisição
     const { descricao, localizacao, contato, animalId, anonimo } = req.body;
 
     if (!descricao || !localizacao) {
@@ -16,16 +14,14 @@ const criarReport = async (req, res) => {
         const dadosParaCriar = {
             descricao,
             localizacao,
-            contato: contato || "", // Garante que contato não seja nulo se não for enviado
+            contato: contato || "", 
             anonimo: anonimo || false,
-            autor: { // Usa o nome da relação 'autor' para conectar ao usuário
+            autor: { 
                 connect: {
                     id: usuarioLogadoId
                 }
             }
         };
-
-        // Adiciona a conexão com o animal apenas se um animalId for fornecido
         if (animalId) {
             dadosParaCriar.animal = {
                 connect: {
@@ -34,7 +30,6 @@ const criarReport = async (req, res) => {
             };
         }
 
-        // Usa prisma.denuncia, pois o modelo no schema é 'Denuncia'
         const novaDenuncia = await prisma.denuncia.create({
             data: dadosParaCriar
         });
@@ -52,7 +47,7 @@ const listarReports = async (req, res) => {
     const denuncias = await prisma.denuncia.findMany({
       include: {
         animal: true,
-        autor: true // O nome da relação com Account é 'autor'
+        autor: true 
       }
     });
     res.json(denuncias);
@@ -62,24 +57,41 @@ const listarReports = async (req, res) => {
   }
 };
 
-// PUT
-const atualizarReport = async (req, res) => {
-  const { id } = req.params;
-  const { descricao } = req.body;
 
-  if (!descricao) return res.status(400).json({ error: "Descrição é obrigatória" });
+const atualizarReport = async (req, res) => {
+  const denunciaId = parseInt(req.params.id);
+  const { descricao } = req.body;
+  const usuarioLogado = req.account;
+
+  if (!descricao) {
+    return res.status(400).json({ error: "Descrição é obrigatória" });
+  }
 
   try {
-    const report = await prisma.report.update({
-      where: { id: parseInt(id) },
+    const denunciaExistente = await prisma.denuncia.findUnique({
+        where: { id: denunciaId }
+    });
+
+    if (!denunciaExistente) {
+        return res.status(404).json({ error: "Denúncia não encontrada." });
+    }
+
+    if (denunciaExistente.createdBy !== usuarioLogado.id && usuarioLogado.role !== 'ADMIN') {
+        return res.status(403).json({ error: "Acesso negado. Permissões insuficientes." });
+    }
+
+    const denunciaAtualizada = await prisma.denuncia.update({
+      where: { id: denunciaId },
       data: { descricao }
     });
-    res.json({ message: "Denúncia atualizada com sucesso", report });
+
+    res.json({ message: "Denúncia atualizada com sucesso", denuncia: denunciaAtualizada });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro ao atualizar denúncia" });
   }
-};
+}; 
 
 // DELETE
 const apagarReport = async (req, res) => {
@@ -87,7 +99,6 @@ const apagarReport = async (req, res) => {
     const usuarioLogadoId = req.account.id;
 
     try {
-        // Primeiro, busca a denúncia no banco
         const report = await prisma.report.findUnique({
             where: { id: reportId }
         });
@@ -96,12 +107,10 @@ const apagarReport = async (req, res) => {
             return res.status(404).json({ error: "Denúncia não encontrada" });
         }
 
-        // VERIFICA SE O USUÁRIO LOGADO É O DONO DA DENÚNCIA
         if (report.usuarioId !== usuarioLogadoId) {
             return res.status(403).json({ error: "Acesso negado. Você não tem permissão para apagar esta denúncia." });
         }
 
-        // Se passou na verificação, pode apagar
         await prisma.report.delete({ where: { id: reportId } });
         res.json({ message: "Denúncia apagada com sucesso" });
     } catch (err) {

@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
   const { email, password, role, name, cnpj, descricao, endereco } = req.body;
 
   try {
-    // Verifica se email já existe
+    // Verifica se email jaa existe
     const existingUser = await prisma.account.findUnique({ where: { email } });
     if (existingUser) return res.status(400).json({ error: 'E-mail já cadastrado.' });
 
@@ -53,7 +53,6 @@ exports.login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, usuario.password);
     if (!passwordMatch) return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
 
-    // Gera token com id, role e opcionalmente name
     const token = jwt.sign(
       { id: usuario.id, role: usuario.role, name: usuario.name },
       JWT_SECRET,
