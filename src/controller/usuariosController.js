@@ -20,7 +20,7 @@ const listarUsuarios = async (req, res) => {
 
 // ADMIN: Cria uma conta
 const criarUsuario = async (req, res) => {
-    const { email, password, role, name, cnpj, descricao, endereco } = req.body;
+    const { email, password, role, name, cnpj, descricao, endereco, cpf } = req.body;
 
     if (!email || !password || !role) {
         return res.status(400).json({ error: 'Preencha email, senha e role' });
@@ -33,9 +33,9 @@ const criarUsuario = async (req, res) => {
                 email,
                 password: hashedPassword,
                 role,
-                ...(role === 'ADMIN' && { admin: { create: { name } } }),
+                ...(role === 'ADMIN' && { admin: { create: { nome: name } } }),
                 ...(role === 'ONG' && { ong: { create: { name, cnpj, descricao, endereco } } }),
-                ...(role === 'PUBLICO' && { publico: { create: { name } } }),
+                ...(role === 'PUBLICO' && { publico: { create: { nome: name, cpf: cpf } } }),
             },
             include: { admin: true, ong: true, publico: true },
         });
@@ -43,8 +43,9 @@ const criarUsuario = async (req, res) => {
         res.status(201).json(novaConta);
     } catch (err) {
         console.error(err);
-        if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
-            return res.status(400).json({ error: 'Email já está em uso.' });
+        if (err.code === 'P2002') {
+            const field = err.meta.target.includes('email') ? 'Email' : 'CPF';
+            return res.status(400).json({ error: `Este ${field} já está em uso.` });
         }
         res.status(500).json({ error: 'Erro ao criar conta' });
     }
