@@ -4,6 +4,7 @@ import Footer from "../../components/footer";
 import { Link } from "react-router-dom";
 import NossaMissao from "./nossaMissao";
 import SaibaMais from "./saibaMais";
+import Estatisticas from "./estatisticas";
 
 function Index() {
   return (
@@ -23,7 +24,7 @@ function Index() {
 
       <SaibaMais />
 
-     
+     <Estatisticas />
 
       <Footer />
     </>

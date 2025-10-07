@@ -19,14 +19,12 @@ export default function CadastroUsu() {
     e.preventDefault();
     setError('');
 
-    // Adicionado 'cpf' na validação
     if (!name || !email || !password || !cpf) {
       setError('Por favor, preencha todos os campos obrigatórios (nome, email, senha e CPF).');
       return;
     }
 
     try {
-      // Adicionado 'cpf' no objeto enviado para a API
       await api.post('/usuarios/register', {
         name,
         email,
@@ -34,9 +32,12 @@ export default function CadastroUsu() {
         cpf 
       });
 
+      // Salva o nome do usuário no localStorage
+      localStorage.setItem('nomeUsuario', name);
+
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
       navigate('/login'); 
-  } catch (err: any) {
+    } catch (err: any) {
       console.error("Erro no cadastro:", err); 
 
       if (err.response?.data?.error) {
@@ -50,11 +51,12 @@ export default function CadastroUsu() {
       }
     }
   };
+
   return (
     <div className={styles.pagCadastro}>
       <div className={styles.containerForms}>
         <div className={styles.logoHeader}>
-          <a href="/">PetCo</a>
+          <a href="/">PetResc</a>
         </div>
 
         <form className={styles.form}  onSubmit={handleRegister}>

@@ -5,7 +5,7 @@ import Doar from "./pages/doar/doar";
 import Adotar from "./pages/adotar/adotar";
 import LarTemporario from "./pages/larTemporario/larTemporario";
 import CadastroUsu from "./pages/cadastro/cadastroUsu";
-import Index from "./pages/index";
+import Index from "./pages/index/index";
 import RegistrarAnimal from "./pages/registrarAnimal/registrarAnimal";
 import CentralAdocao from "./pages/centralAdocao/centralAdocao";
 import Perfil from "./pages/perfil/perfil";

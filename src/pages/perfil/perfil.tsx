@@ -28,6 +28,9 @@ export default function Perfil() {
     null
   );
 
+  // Recupera o nome do usuário do localStorage
+  const nome = localStorage.getItem('nomeUsuario') || 'Username';
+
   return (
     <>
       <Nav />
@@ -84,7 +87,7 @@ export default function Perfil() {
             <p>11 96584 2214</p>
           </div>
           <div className={styles.infoBox}>
-            <p className={styles.username}>Username</p>
+            <p className={styles.username}>{nome}</p>
           </div>
           <div className={styles.infoBox}>
             <p>Localização</p>
@@ -103,12 +106,26 @@ export default function Perfil() {
           {[
             {
               nome: "Zeus",
+<<<<<<< HEAD:src/pages/perfil.tsx
+              raca: "PitBull",
+=======
               raca: "Pitbull.",
+>>>>>>> aabcfd9c20fe73d8fa17ade26ef0810ac27e9151:src/pages/perfil/perfil.tsx
               sexo: "M",
               img: "../../../public/animais/zeus.png",
             },
             {
               nome: "Frajola",
+<<<<<<< HEAD:src/pages/perfil.tsx
+              raca: "Sem raça definida (SRD)",
+              sexo: "M",
+              img: "/frajola.png",
+            },
+            {
+              nome: "Branquinho",
+              raca: "Sem raça definida (SRD)",
+              sexo: "M",
+=======
               raca: "Sem raça definida (SRD)",
               sexo: "F",
               img: "../../../public/animais/frajola.png",
@@ -117,7 +134,12 @@ export default function Perfil() {
               nome: "Branquinho",
               raca: "Sem raça definida (SRD)",
               sexo: "M",
+<<<<<<< HEAD
               img: "../../../public/animais/branquinho.png",
+=======
+>>>>>>> aabcfd9c20fe73d8fa17ade26ef0810ac27e9151:src/pages/perfil/perfil.tsx
+              img: "/branquinho.png",
+>>>>>>> 5f47773b62118c423efe1beb90cb1a86dc15a45a
             },
           ].map((pet, index) => (
             <div key={index} className={styles.petCard}>
