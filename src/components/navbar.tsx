@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import styles from "../style/navbar.module.css";
 
 export default function Nav() {
+  // Recupera o nome do usuário do localStorage
+  const nome = localStorage.getItem('nomeUsuario') || 'username';
+
   return (
     <>
       {/* Adiciona classe global "topBar" */}
@@ -46,7 +49,7 @@ export default function Nav() {
               />
             </svg>
           </Link>
-          <span>@username</span>
+          <span>@{nome}</span>
         </ul>
       </div>
     </>

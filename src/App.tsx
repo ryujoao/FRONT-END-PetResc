@@ -6,11 +6,12 @@ import Doar from "./pages/doar";
 import Adotar from "./pages/adotar";
 import LarTemporario from "./pages/larTemporario";
 import CadastroUsu from "./pages/cadastroUsu";
-import Index from "./pages";
+import Index from "./pages/index";
 import RegistrarAnimal from "./pages/registrarAnimal";
 import CentralAdocao from "./pages/centralAdocao";
 import Perfil from "./pages/perfil";
 import PerfilAnimal from "./pages/perfilAnimal";
+
 
 function App() {
   return (

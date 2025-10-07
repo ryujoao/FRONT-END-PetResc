@@ -28,6 +28,9 @@ export default function Perfil() {
     null
   );
 
+  // Recupera o nome do usuário do localStorage
+  const nome = localStorage.getItem('nomeUsuario') || 'Username';
+
   return (
     <>
       <Nav />
@@ -84,7 +87,7 @@ export default function Perfil() {
             <p>11 96584 2214</p>
           </div>
           <div className={styles.infoBox}>
-            <p className={styles.username}>Username</p>
+            <p className={styles.username}>{nome}</p>
           </div>
           <div className={styles.infoBox}>
             <p>Localização</p>
@@ -102,22 +105,22 @@ export default function Perfil() {
         <div className={styles.petsContainer}>
           {[
             {
-              nome: "Neguinho",
+              nome: "Zeus",
+              raca: "PitBull",
+              sexo: "M",
+              img: "/zeus.png",
+            },
+            {
+              nome: "Frajola",
               raca: "Sem raça definida (SRD)",
               sexo: "M",
-              img: "/pet1.png",
+              img: "/frajola.png",
             },
             {
-              nome: "Frajao",
+              nome: "Branquinho",
               raca: "Sem raça definida (SRD)",
-              sexo: "F",
-              img: "/pet2.png",
-            },
-            {
-              nome: "Rabito",
-              raca: "Sem raça definida (SRD)",
-              sexo: "F",
-              img: "/pet3.png",
+              sexo: "M",
+              img: "/branquinho.png",
             },
           ].map((pet, index) => (
             <div key={index} className={styles.petCard}>
