@@ -1,6 +1,6 @@
-import Footer from "../components/footer";
-import Nav from "../components/navbar";
-import styles from "../style/perfil.module.css";
+import Footer from "../../components/footer";
+import Nav from "../../components/navbar";
+import styles from "./perfil.module.css";
 import { useLayoutEffect, useRef, useState } from "react";
 
 export default function Perfil() {
@@ -102,22 +102,22 @@ export default function Perfil() {
         <div className={styles.petsContainer}>
           {[
             {
-              nome: "Neguinho",
+              nome: "Zeus",
+              raca: "Pitbull.",
+              sexo: "M",
+              img: "/zeus.png",
+            },
+            {
+              nome: "Frajola",
+              raca: "Sem raça definida (SRD)",
+              sexo: "F",
+              img: "/frajola.png",
+            },
+            {
+              nome: "Branquinho",
               raca: "Sem raça definida (SRD)",
               sexo: "M",
-              img: "/pet1.png",
-            },
-            {
-              nome: "Frajao",
-              raca: "Sem raça definida (SRD)",
-              sexo: "F",
-              img: "/pet2.png",
-            },
-            {
-              nome: "Rabito",
-              raca: "Sem raça definida (SRD)",
-              sexo: "F",
-              img: "/pet3.png",
+              img: "/branquinho.png",
             },
           ].map((pet, index) => (
             <div key={index} className={styles.petCard}>
