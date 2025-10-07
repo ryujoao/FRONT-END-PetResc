@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import styles from "./cadastroUsu.module.css";
+import styles from "../cadastro/cadastroUsu.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import api from '../../services/api';
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-export default function CadastroUsu() {
+export default function CadastroNext() {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ export default function CadastroUsu() {
 
   return (
     <div className={styles.pagCadastro}>
-      <div className={styles.containerForms}>
+      <div className={styles.containerForms2}>
         <div className={styles.logoHeader}>
           <a href="/">PetResc</a>
         </div>
@@ -64,18 +64,6 @@ export default function CadastroUsu() {
             Crie sua conta e ajude a transformar vidas
           </p>
 
-          <div className={styles.botoesRedes}>
-            <button type="button" className={styles.botaoRede}>
-              <img className={styles.google} src="google.png" alt="Google" />
-              Cadastre-se com o Google
-            </button>
-
-            <button type="button" className={styles.botaoRede}>
-              <img className={styles.apple} src="apple.png" alt="Apple" />
-              Cadastre-se com a Apple
-            </button>
-          </div>
-
           <div className={styles.divisoria}>
             <div className={styles.linhaEsquerda}></div>
             <span className={styles.texto}>ou</span>
@@ -83,33 +71,33 @@ export default function CadastroUsu() {
           </div>
 
           <div>
-          <label className={styles.grupoInput}>Nome completo</label>
+          <label className={styles.grupoInput}>Telefone</label>
             <input
             className={styles.inputLogin}
             type="text"
-            placeholder="Digite seu nome"
+            placeholder="(+55) 00 00000-0000"
             value={name}
             onChange={(e) => setName(e.target.value)}
             />         
           </div>
           <div>
-          <label className={styles.grupoInput}>CPF</label>
+          <label className={styles.grupoInput}>Senha</label>
   
            <input
             className={styles.inputLogin}
             type="text"
-            placeholder="000.000.000-00"
+            placeholder="Digite sua senha"
             value={cpf}
             onChange={(e) => setCpf(e.target.value)}
           />
           </div>
           <div>
-          <label className={styles.grupoInput}>E-mail</label>
+          <label className={styles.grupoInput}>Confirme sua senha</label>
             
             <input
             className={styles.inputLogin}
-            type="email"
-            placeholder="user@gmail.com"
+            type="text"
+            placeholder="Confirme sua senha"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -130,3 +118,4 @@ export default function CadastroUsu() {
     </div>
   );
 }
+    

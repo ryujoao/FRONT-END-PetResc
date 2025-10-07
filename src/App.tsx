@@ -11,6 +11,7 @@ import RegistrarAnimal from "./pages/registrarAnimal/registrarAnimal";
 import CentralAdocao from "./pages/centralAdocao/centralAdocao";
 import Perfil from "./pages/perfil/perfil";
 import PerfilAnimal from "./pages/perfilAnimal/perfilAnimal";
+import CadastroNext from "./pages/cadastroNext/cadastroNext";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/larTemporario" element={<LarTemporario />} />
         <Route path="/doar" element={<Doar />} />
         <Route path="/cadastro" element={<CadastroUsu />} />
+        <Route path="/cadastroNext" element={<CadastroNext />} />
         <Route path="/registrarAnimal" element={<RegistrarAnimal />} />
         <Route path="/centralAdocao" element={<CentralAdocao />} />
         <Route path="/perfil" element={<Perfil />} />

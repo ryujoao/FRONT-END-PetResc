@@ -106,26 +106,12 @@ export default function Perfil() {
           {[
             {
               nome: "Zeus",
-<<<<<<< HEAD:src/pages/perfil.tsx
-              raca: "PitBull",
-=======
               raca: "Pitbull.",
->>>>>>> aabcfd9c20fe73d8fa17ade26ef0810ac27e9151:src/pages/perfil/perfil.tsx
               sexo: "M",
               img: "/zeus.png",
             },
             {
               nome: "Frajola",
-<<<<<<< HEAD:src/pages/perfil.tsx
-              raca: "Sem raça definida (SRD)",
-              sexo: "M",
-              img: "/frajola.png",
-            },
-            {
-              nome: "Branquinho",
-              raca: "Sem raça definida (SRD)",
-              sexo: "M",
-=======
               raca: "Sem raça definida (SRD)",
               sexo: "F",
               img: "/frajola.png",
@@ -134,7 +120,6 @@ export default function Perfil() {
               nome: "Branquinho",
               raca: "Sem raça definida (SRD)",
               sexo: "M",
->>>>>>> aabcfd9c20fe73d8fa17ade26ef0810ac27e9151:src/pages/perfil/perfil.tsx
               img: "/branquinho.png",
             },
           ].map((pet, index) => (

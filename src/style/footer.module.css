@@ -1,3 +1,4 @@
+
 .footer {
   width: 100vw;
   background-color: #286699;
@@ -27,6 +28,7 @@
   min-width: 200px;
   padding: 0 20px;
   border-left: 1px solid #ffffff50;
+  
 }
 
 .footerCol:first-child {
@@ -38,15 +40,19 @@
   color: #fff;
   margin-bottom: 20px;
   font-weight: 500;
+  font-size: 30px;
+  
 }
 
 .footerCol ul {
   list-style: none;
   padding: 0;
+  
 }
 
 .footerCol ul li {
   margin: 10px 0;
+
 }
 
 .footerCol ul li a {
@@ -57,6 +63,8 @@
   font-weight: 300;
   display: block;
   transition: all 0.3s ease;
+  font-size: 19px;
+  font-weight: 500;
 }
 
 .footerCol ul li a:hover {
@@ -76,7 +84,8 @@
   font-size: 15px;
   color: #cdd5db;
   text-align: left;
-  font-weight: 300;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 /* Responsivo */

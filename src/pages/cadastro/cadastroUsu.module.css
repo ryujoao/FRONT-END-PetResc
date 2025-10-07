@@ -1,7 +1,9 @@
+
 .pagCadastro {
   display: flex;
   height: 100vh;
   width: 200vh;
+  
 }
 
 .containerForms {
@@ -16,6 +18,21 @@
   background-size: cover;
   position: relative;
 }
+
+.containerForms2 {
+  width: 50%;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('/cadastroBanner2.png') no-repeat center center;
+  padding: 2rem;
+  background-size: cover;
+  position: relative;
+}
+
+
 
 .bannerSessao {
   width: 50%;
@@ -36,16 +53,16 @@
 }
 
 .form {
-  background: white;
-  padding: 3rem;
+  background: transparent;
+  padding: 3 2 2 2;
   border-radius: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  /* box-shadow: 0 8px 24px rgba(0,0,0,0.1); */
   width: 100%;
   max-width: 480px;
 }
 
 .titulo {
-  font-size: 2rem;
+  font-size: 3rem;
   font-weight: bold;
   color: #286699;
   text-align: center;
@@ -54,8 +71,10 @@
 .subTitulo {
   text-align: center;
   color: #286699;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .botoesRedes {
@@ -72,14 +91,15 @@
   gap: 0.5rem; /* espaço entre ícone e texto */
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
   border: none;
   max-width: 100%;
-  width: 300px;
+  width: 480px;
+  height: 56px;
   background-color: #fff;
-  color: #286699;
+  color: #000000;
   border: 1px solid #286699;
 }
 
@@ -95,28 +115,52 @@
 
 
 .divisoria {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   color: #286699;
-  gap: 1rem;
+  width: 100%;
 }
 
-label {
+.linhaEsquerda, .linhaDireita {
+  flex: 1;
+  height: 2px;
+  background-color: #286699;
+  opacity: 0.5;
+}
+
+.linhaEsquerda {
+  margin-right: 2rem;
+}
+
+.linhaDireita {
+  margin-left: 2rem;
+}
+
+.texto{
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #286699;
+  white-space: nowrap;
+}
+
+.grupoInput {
   display: block;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
+  color: #286699;
+  font-weight: 700;
+  font-size: 1.3rem;
+  
 }
 
-label span {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-input {
+.inputLogin {
   width: 100%;
   padding: 0.75rem;
   border-radius: 0.5rem;
   border: 1px solid #ccc;
+  font-size: 1.3rem;
 }
 
 .botaoProx {
@@ -126,8 +170,11 @@ input {
   padding: 1rem;
   border-radius: 0.75rem;
   font-weight: bold;
-  margin-top: 1rem;
+  margin-top: 2rem;
   cursor: pointer;
+  font-size: 1.3rem;
+  border: 1px solid #286699;
+
 }
 
 .botaoProx:hover {
@@ -138,7 +185,9 @@ input {
 .loginLink {
   text-align: center;
   margin-top: 1rem;
-  color: #545454;
+  color: #286699;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 .loginLink a {
@@ -150,10 +199,7 @@ input {
   text-decoration: underline;
 }
 
-.grupoInput {
-  margin-bottom: 1.5rem;
-  color: #286699;
-}
+
 
 .inputLogin {
   border: 1px solid #286699;
