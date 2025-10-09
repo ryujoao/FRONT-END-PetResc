@@ -5,34 +5,27 @@ import api from '../../services/api';
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-export default function CadastroNext() {
+export default function Login() {
 
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState(''); 
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const [cpf, setCpf] = useState('');
 
    const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (!name || !email || !password || !cpf) {
+    if (!email || !password ) {
       setError('Por favor, preencha todos os campos obrigatórios (nome, email, senha e CPF).');
       return;
     }
 
     try {
       await api.post('/usuarios/register', {
-        name,
         email,
         password,
-        cpf 
       });
-
-      // Salva o nome do usuário no localStorage
-      localStorage.setItem('nomeUsuario', name);
 
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
       navigate('/login'); 
@@ -53,69 +46,70 @@ export default function CadastroNext() {
 
   return (
     <div className={styles.pagCadastro}>
-      <div className={styles.containerForms2}>
+      <div className={styles.containerForms}>
         <div className={styles.logoHeader}>
           <a href="/">PetResc</a>
         </div>
 
         <form className={styles.form}  onSubmit={handleRegister}>
-          <h1 className={styles.titulo}>Cadastre-se</h1>
+          <h1 className={styles.titulo}>Bem-vindo de volta</h1>
           <p className={styles.subTitulo}>
-            Crie sua conta e ajude a transformar vidas
+            Faça login para continuar
           </p>
+
+          <div className={styles.botoesRedes}>
+            <button type="button" className={styles.botaoRede}>
+              <img className={styles.google} src="../../../public/icones/google.png" alt="Google" />
+              Entre com o Google
+            </button>
+
+            <button type="button" className={styles.botaoRede}>
+              <img className={styles.apple} src="../../../public/icones/apple.png" alt="Apple" />
+              Entre com a Apple
+            </button>
+          </div>
 
           <div className={styles.divisoria}>
             <div className={styles.linhaEsquerda}></div>
             <span className={styles.texto}>ou</span>
             <div className={styles.linhaDireita}></div>
           </div>
-
+        
           <div>
-          <label className={styles.grupoInput}>Telefone</label>
-            <input
-            className={styles.inputLogin}
-            type="text"
-            placeholder="(+55) 00 00000-0000"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            />         
-          </div>
-          <div>
-          <label className={styles.grupoInput}>Senha</label>
-  
-           <input
-            className={styles.inputLogin}
-            type="text"
-            placeholder="Digite sua senha"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-          />
-          </div>
-          <div>
-          <label className={styles.grupoInput}>Confirme sua senha</label>
+          <label className={styles.grupoInput}>E-mail</label>
             
             <input
             className={styles.inputLogin}
-            type="text"
-            placeholder="Confirme sua senha"
+            type="email"
+            placeholder="user@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           </div>
           {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
-          <Link to="/cadastroNext">
+          <label className={styles.grupoInput}>Senha</label>
+ 
+            <input
+              className={styles.inputLogin}
+              type="password"
+              placeholder="Crie uma senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
+          <Link to="/home">
            <button type="submit" className={styles.botaoProx}>
-            Próximo
+            Entrar
           </button>
           </Link>
           <p className={styles.loginLink}>
-            Já tem conta? <a href="/login">Login</a>
+            Não tem uma conta? <a href="/cadastroUsu">Cadastre-se</a>
           </p>
         </form>
       </div>
-      <div className={styles.bannerSessao}></div>
+      <div className={styles.bannerLogin}></div>
     </div>
   );
 }
-    

@@ -34,9 +34,19 @@
 
 
 
-.bannerSessao {
+.bannerCadastro {
   width: 50%;
-  background: #F0F9FF;
+  background: #F0F9FF url('/banners/cadastroImagem.png') no-repeat right;
+;
+}
+
+.bannerLogin {
+  width: 50%;
+  background: #F0F9FF url('/banners/loginImagem.png') no-repeat center;
+  background-size: 600px
+;
+
+  
 }
 
 .logoHeader a {

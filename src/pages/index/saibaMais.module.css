@@ -14,6 +14,7 @@
     width: 20%;
     color: black;
     padding: 30px;
+    position: relative;
 }
 
 .card h2 {
@@ -34,4 +35,7 @@
 
 .card a {
     color: #4BAEF2;
+    position: absolute;
+    bottom: 30px;
+    font-weight: 600;
 }

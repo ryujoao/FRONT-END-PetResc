@@ -52,7 +52,6 @@
   padding: 0 2rem;
 }
 
-<<<<<<< HEAD
 .navCategorias li a {
   text-decoration: none;
   color: #000;
@@ -70,12 +69,23 @@
   font-size: 23px;
 }
 
-button {
+.botoesCadastro button {
+  font-size: 1.5rem;
+  font-weight: 600;
+  min-width: 250px;
+  max-height: 50px;
   border-radius: 8px;
-=======
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.5rem;
+  transition: 0.3s;
+}
+
 .navLink {
   background: none;
->>>>>>> 33dc982ab691308e2ef0da56cdf778f7f319a619
   border: none;
   color: #000;
   font-weight: 700;
@@ -207,7 +217,7 @@ button {
   color: black;
 }
 
-.button {
+.notificacao {
   width: 50px;
   height: 50px;
   position: relative;
