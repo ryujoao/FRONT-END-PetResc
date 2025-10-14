@@ -49,7 +49,7 @@
   padding: 0 2rem;
 }
 
-.navCategorias li a {
+.navCategorias li a, button.navLink {
   text-decoration: none;
   color: #000;
   font-size: 1.5rem;
@@ -99,19 +99,29 @@
   background-color: #1976d2;
 }
 
+.botaoLogout {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background-color 0.3s ease;
+}
+
 
 
 .navLink {
   background: none;
   border: none;
-  color: #000;
-  font-weight: 700;
-  font-size: 1.3rem;
   cursor: pointer;
   text-decoration: none;
+  background-color: #fff;
   padding: 0;
   transition: color 0.2s ease;
 }
+
 
 @media (max-width: 1513px) {
   .navCategorias {
@@ -163,6 +173,14 @@
 .perfilUsuario svg {
   font-size: 2rem;
   color: black;
+}
+
+.usernameText {
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+  
+ 
 }
 
 .notificacao {

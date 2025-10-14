@@ -15,6 +15,31 @@ html, body {
 .bannerUm {
   width: 100vw;
   height: 100vh;
+  background: url('../../../public/banners/banner1.png') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 5vw;
+  box-sizing: border-box;
+}
+
+.bannerDois {
+  position: relative;
+  width: 100vw;
+  height: 80vh;
+  background: url('/banner2.png') no-repeat center bottom;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding-right: 20vw; /* aumente para afastar do canto direito */
+}
+
+.bannerTres {
+  width: 100vw;
+  height: 100vh;
   background: url('../../../public/banners/banner3.png') no-repeat center center;
   background-size: cover;
   display: flex;
@@ -67,18 +92,7 @@ html, body {
 }
 
 
-.bannerDois {
-  position: relative;
-  width: 100vw;
-  height: 80vh;
-  background: url('/banner2.png') no-repeat center bottom;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  overflow: hidden;
-  padding-right: 20vw; /* aumente para afastar do canto direito */
-}
+
 
 
 .paginaDoar {
