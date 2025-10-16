@@ -82,9 +82,7 @@
   text-align: center;
   color: #286699;
   margin-bottom: 1rem;
-  font-weight: 500;
   font-size: 1.5rem;
-  font-weight: 600;
 }
 
 .botoesRedes {
@@ -156,7 +154,6 @@
 }
 
 .texto{
-  font-weight: 600;
   font-size: 1.5rem;
   color: #286699;
   white-space: nowrap;

@@ -47,9 +47,13 @@
   margin-bottom: 0.8rem;
 }
 
-.cardText p {
+.cardText {
   font-size: 2rem;
-  font-weight: 600;
+  
+  color: #fff;
+}
+
+.cardSubtext {
   color: #fff;
 }
 
@@ -68,8 +72,8 @@
 }
 
 .tituloInstituicoes {
-  font-size: 1.3rem;
-  font-weight: normal;
+  font-size: 1.5rem;
+ 
   color: #000;
   margin-bottom: 2rem;
 }
@@ -105,15 +109,17 @@
 }
 
 .enderecoInstituicoes {
-  font-size: 0.95rem;
-  color: #555;
+  font-size: 1.2rem;
+  color: #000;
   margin-bottom: 1rem;
+  
 }
 
 .valorInstituicoes {
-  font-size: 1rem;
+  font-size: 1.3rem;
   color: #286699;
   margin-top: 0.5rem;
+  
 }
 
 progress {

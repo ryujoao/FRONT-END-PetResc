@@ -76,7 +76,6 @@
 }
 
 .label {
-  font-weight: 600;
   margin-bottom: 10px;
   text-align: left;
   margin-top: 1rem;
@@ -91,7 +90,6 @@
 
 .titulo {
   margin-bottom: 1rem;
-  font-weight: 600;
   display: flex;
   justify-content: center;
   font-size: 2rem;
