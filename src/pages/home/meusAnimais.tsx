@@ -59,7 +59,7 @@ export default function MeusAnimais() {
             <p className={styles.descricaoCard}>(SRD)</p>
 
             <div className={styles.statusInferior}>
-              Status: Dicumentação em Análise
+              Status: Documentação em Análise
             </div>
           </div>
         </div>
