@@ -51,6 +51,8 @@ export default function CadastroNext() {
       // lógica da api iria aqui 
       // --
       //
+
+      await api.post('/usuarios/register', dadosCompletos);
       
 
       console.log("Enviando para a API:", dadosCompletos);

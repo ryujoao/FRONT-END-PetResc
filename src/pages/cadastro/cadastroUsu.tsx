@@ -22,7 +22,7 @@ export default function CadastroUsu() {
   const navigate = useNavigate();
 
   // --- Estados para os campos desta página ---
-  const [name, setName] = useState('');
+  const [nome, setName] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -32,7 +32,7 @@ export default function CadastroUsu() {
     setError('');
 
     // Validação dos campos
-    if (!name || !cpf || !email) {
+    if (!nome || !cpf || !email) {
       setError('Por favor, preencha todos os campos.');
       return;
     }
@@ -44,7 +44,7 @@ export default function CadastroUsu() {
     }
 
     // Agrupa os dados desta página
-    const dadosDaPagina1 = { name, cpf, email };
+    const dadosDaPagina1 = { nome, cpf, email };
 
     // Navega para a próxima página enviando o TIPO 'usuario' e os DADOS
     navigate('/cadastroNext', { 
@@ -91,7 +91,7 @@ export default function CadastroUsu() {
               className={styles.inputLogin}
               type="text"
               placeholder="Digite seu nome"
-              value={name}
+              value={nome}
               onChange={(e) => setName(e.target.value)}
   
             />

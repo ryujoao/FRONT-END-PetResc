@@ -11,7 +11,7 @@ export default function Login() {
   const { login } = useAuth();
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); 
+  const [senha, setPassword] = useState(''); 
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
 
-    if (!email || !password ) {
+    if (!email || !senha ) {
       setError('Por favor, preencha todos os campos obrigatórios (email e senha).');
       return;
     }
@@ -27,7 +27,7 @@ export default function Login() {
     try {
       await api.post('/usuarios/register', {
         email,
-        password,
+        senha,
       });
 
       alert('Cadastro realizado com sucesso! Você será redirecionado para o login.');
@@ -98,7 +98,7 @@ export default function Login() {
               className={styles.inputLogin}
               type="password"
               placeholder="Crie uma senha"
-              value={password}
+              value={senha}
               onChange={(e) => setPassword(e.target.value)}
             />
           {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
