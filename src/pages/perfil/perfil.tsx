@@ -97,8 +97,8 @@ export default function Perfil() {
 
         {/* Botões */}
         <div className={styles.btnContainer}>
-          <button className={styles.btnActive}>Salvos</button>
-          <button className={styles.btn}>Editar perfil</button>
+          <button className={styles.salvos}>Salvos</button>
+          <button className={styles.editarPerfil}>Editar perfil</button>
         </div>
 
         {/* Pets salvos */}

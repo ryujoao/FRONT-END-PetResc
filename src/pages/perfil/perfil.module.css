@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  /* padding: 2rem; */
   padding-top: 120px; /* deixa espaço para a navbar */
   background-color: #fff;
   min-width: 100%;  
@@ -28,6 +28,7 @@
   border-radius: 50%;
   background-color: #d8d8d8;
   overflow: hidden;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,15 +38,6 @@
 
 .avatar:hover {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-}
-
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #d8d8d8;
-  overflow: hidden;
-  position: relative;
 }
 
 .avatarLabel {
@@ -58,6 +50,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  
 }
 
 .avatarImage {
@@ -98,27 +91,34 @@
   display: flex;
   width: 60%;
   border: 1px solid #004080;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
   margin-bottom: 2rem;
+  
 }
 
-.btn {
+
+.salvos {
+  flex: 1;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 15px;
+  background: #c9dff4;
+  color: #004080;
+  font-weight: 600;
+  font-size: 1.2rem;
+  
+}
+
+.editarPerfil {
   flex: 1;
   padding: 0.7rem;
   border: none;
   background: transparent;
   color: #004080;
   cursor: pointer;
-}
-
-.btnActive {
-  flex: 1;
-  padding: 0.7rem;
-  border: none;
-  background: #c9dff4;
-  color: #004080;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 600  ;
 }
 
 .petsContainer {

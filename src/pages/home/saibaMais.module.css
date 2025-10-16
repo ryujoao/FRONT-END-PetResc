@@ -25,7 +25,6 @@
 
 .card p {
     font-size: 1.3rem;
-    font-weight: 500;
     line-height: 1.5;
     text-align: left;
     margin-top: 0.5rem;
@@ -37,5 +36,4 @@
     color: #4BAEF2;
     position: absolute;
     bottom: 30px;
-    font-weight: 600;
 }
