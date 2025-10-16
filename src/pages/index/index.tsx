@@ -1,4 +1,4 @@
-import Nav from "../../components/navindex";
+import Nav from "../../components/navbar";
 import styles from "./index.module.css";
 import Footer from "../../components/footer";
 import { Link } from "react-router-dom";
@@ -12,13 +12,13 @@ function Index() {
       <Nav />
 
       {/* Banner com imagem de fundo e texto sobreposto */}
-      <section className={styles.bannerUm}>
+      <div className={styles.bannerUm}>
         <div className={styles.homeTitulo}>
           <h1 className={styles.titulo}>Conheça seu novo melhor amigo!</h1>
           <Link to="/adotar" style={{ textDecoration: "none" }}>
           </Link>
         </div>
-      </section>
+      </div>
 
       <NossaMissao />
 

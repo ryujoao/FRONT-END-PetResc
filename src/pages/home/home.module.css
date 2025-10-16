@@ -13,15 +13,14 @@ body {
   background-color: #fff; /* ou a cor que você quiser */
   display: block; /* garante que o body ocupe 100% */
   overflow-x: hidden; /* impede rolagem horizontal */
-  font-family: 'Darker Grotesque', sans-serif;
+  font-family: "Darker Grotesque", sans-serif;
 }
-
 
 /* Banner com imagem de fundo */
 .bannerUm {
   width: 100vw;
   height: 100vh;
-  background: url('../../../public/banners/banner1.png') no-repeat center center;
+  background: url("../../../public/banners/banner1.png") no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -34,7 +33,7 @@ body {
   position: relative;
   width: 100vw;
   height: 80vh;
-  background: url('/banner2.png') no-repeat center bottom;
+  background: url("/banner2.png") no-repeat center bottom;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -46,7 +45,7 @@ body {
 .bannerTres {
   width: 100vw;
   height: 100vh;
-  background: url('../../../public/banners/banner3.png') no-repeat center center;
+  background: url("../../../public/banners/banner3.png") no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -54,7 +53,6 @@ body {
   padding-left: 5vw;
   box-sizing: border-box;
 }
-
 
 /* Título e botão */
 .homeTitulo {
@@ -66,12 +64,10 @@ body {
   line-height: 1.1;
 }
 
-
-
 .titulo {
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 700;
-  font-family: 'More Sugar', cursive;
+  font-family: "More Sugar", cursive;
   color: #286699;
   margin-bottom: 20px;
   -webkit-text-stroke: 2px #286699;
@@ -84,11 +80,12 @@ body {
   padding: 0.75rem 3rem;
   border-radius: 15px;
   border: none;
-  background-color: #4BAEF2;
+  background-color: #4baef2;
   transition: background-color 0.3s ease;
   font-weight: bold;
   display: inline-block;
   margin-top: 10px;
+  margin-right: 3rem;
 }
 
 .subtitulo:hover {
@@ -101,12 +98,11 @@ body {
   border-bottom: none;
 }
 
-
 .bannerDois {
   position: relative;
   width: 100vw;
   height: 80vh;
-  background: url('../../../public/banners/banner2.png') no-repeat center bottom;
+  background: url("../../../public/banners/banner2.png") no-repeat center bottom;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -114,7 +110,6 @@ body {
   overflow: hidden;
   padding-right: 20vw; /* aumente para afastar do canto direito */
 }
-
 
 .paginaDoar {
   background: #286699;
@@ -128,7 +123,6 @@ body {
   align-items: center;
   margin-right: 2vw; /* afasta o card da borda direita */
 }
-
 
 .tituloDoar {
   font-size: 1.5rem;
@@ -144,7 +138,7 @@ body {
 }
 
 .paginaDoar button {
-  background: #4BAEF2;
+  background: #4baef2;
   border: none;
   border-radius: 15px;
   padding: 0.7rem 2rem;
@@ -156,48 +150,115 @@ body {
 .paginaDoar button a {
   color: #fff;
   text-decoration: none;
-
 }
-  /* Responsividade do Título da Home */
-  @media (max-width: 1835px) {
-  
-    .homeTitulo {
-      margin-left: 13rem;
-    }
+
+/* pagina adotar */
+.pageComoAdotar {
+  width: 100vw;
+  height: 100vh;
+}
+
+.pageComoAdotarCima {
+  background-color: #f0f9ff;
+}
+
+.explicacaoAdotar {
+  padding: 8rem 4.3rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f4979;
+}
+
+.linhaAdotar {
+  height: 3px;
+  background-color: #ccc;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.tituloComoAdotar {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #0f4979;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.camposCards {
+  display: flex;
+  gap: 15rem;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 2rem 1rem;
+}
+
+.cardComoAdotar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+  gap: 1rem;
+}
+
+.cardCirculo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #b5d2e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardTitulo {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #0f4979;
+}
+
+.cardTexto {
+  font-size: 1.4rem;
+  color: #0f4979;
+}
+
+/* Responsividade do Título da Home */
+@media (max-width: 1835px) {
+  .homeTitulo {
+    margin-left: 13rem;
   }
-  @media (max-width: 1653px) {
-  
-    .homeTitulo {
-      margin-left: 10rem; 
-    }
+}
+@media (max-width: 1653px) {
+  .homeTitulo {
+    margin-left: 10rem;
   }
-  @media (max-width: 1560px) {
-  
-    .homeTitulo {
-      margin-left: 7rem; 
-    }
+}
+@media (max-width: 1560px) {
+  .homeTitulo {
+    margin-left: 7rem;
   }
-  @media (max-width: 1443px) {
-  
-    .homeTitulo {
-      margin-left: 5rem; 
-    }
+}
+@media (max-width: 1443px) {
+  .homeTitulo {
+    margin-left: 5rem;
   }
-  @media (max-width: 1374px) {
-  
-    .homeTitulo {
-      margin-left: 3rem; 
-    }
+}
+@media (max-width: 1374px) {
+  .homeTitulo {
+    margin-left: 3rem;
   }
-  @media (max-width: 1300px) {
-  
-    .homeTitulo {
-      margin-left: 1.5rem;
-    }
+}
+@media (max-width: 1300px) {
+  .homeTitulo {
+    margin-left: 1.5rem;
   }
-  @media (max-width: 1300px) {
-  
-    .homeTitulo {
-      margin-left: 1.5rem;
-    }
+}
+@media (max-width: 1300px) {
+  .homeTitulo {
+    margin-left: 1.5rem;
   }
+}
