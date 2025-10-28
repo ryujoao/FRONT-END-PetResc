@@ -34,7 +34,7 @@ export default function Perfil() {
   return (
     <>
       <Nav />
-
+      
       <div className={styles.perfilContainer}>
         {/* Banner com avatar */}
         <div className={styles.banner}>
@@ -60,7 +60,7 @@ export default function Perfil() {
               )}
             </label>
 
-            <input
+            {/* <input
               type="file"
               id="uploadImagem"
               accept="image/*"
@@ -75,7 +75,7 @@ export default function Perfil() {
                   reader.readAsDataURL(file);
                 }
               }}
-            />
+            /> */}
           </div>
         </div>
 
