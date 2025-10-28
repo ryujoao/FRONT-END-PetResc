@@ -15,6 +15,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   // 3. CORREÇÃO AQUI: Especificamos os tipos dos argumentos
   login: (email: string, password: string) => Promise<void>; 
   logout: () => void;
@@ -85,8 +86,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return null; // ou um componente de splash screen/loading global
   }
 
+  const isAuthenticated = !!user; // <-- adicionado
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

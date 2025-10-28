@@ -70,7 +70,7 @@ export default function Nav() {
             <Link to={"/cadastro"} style={{ textDecoration: 'none' }} >
               <button className={styles.cadastro}>Cadastre-se</button>
             </Link>
-            <button onClick={login}>Simular login (dev)</button>
+            {/* <button onClick={login}>Simular login (dev)</button> */}
           </ul>
         )}
       </div>

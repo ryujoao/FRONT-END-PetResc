@@ -39,7 +39,7 @@ body {
   align-items: center;
   justify-content: flex-end;
   overflow: hidden;
-  padding-right: 20vw; /* aumente para afastar do canto direito */
+  padding-right: 20vw; 
 }
 
 .bannerTres {
@@ -50,7 +50,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 5vw;
+
+  /* padding-left: 5vw; */
   box-sizing: border-box;
 }
 

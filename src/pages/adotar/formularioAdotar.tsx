@@ -170,8 +170,8 @@ export default function FormularioAdotar() {
                   state === "done"
                     ? styles.done
                     : state === "active"
-                    ? styles.active
-                    : styles.idle;
+                      ? styles.active
+                      : styles.idle;
                 return (
                   <div key={s.id} className={`${styles.step} ${stateClass}`}>
                     <div className={styles.iconWrap} aria-hidden>
@@ -210,7 +210,9 @@ export default function FormularioAdotar() {
         </div>
 
         <main className={styles.conteudo}>
-          <h1 className={styles.titulo}>Formulário de Interesse em Adoção</h1>
+          {majorStep === 0 && subStep === 0 && (
+            <h1 className={styles.titulo}>Formulário de Interesse em Adoção</h1>
+          )}
 
           {/* introdução grande aparece apenas no primeiro bloco/subpasso */}
           {majorStep === 0 && subStep === 0 && (
@@ -251,7 +253,7 @@ export default function FormularioAdotar() {
                 disabled={!canProceed}
               >
                 {majorStep === majorSteps.length - 1 &&
-                subStep === majorSteps[majorStep].pages - 1
+                  subStep === majorSteps[majorStep].pages - 1
                   ? "Enviar"
                   : "Próximo"}
               </button>

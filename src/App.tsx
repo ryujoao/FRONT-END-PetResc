@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Routes, Route } from "react-router-dom";
+// ...existing code...
 import Home from "./pages/home/home";
 import Doar from "./pages/doar/doar";
 import Adotar from "./pages/adotar/adotar";
@@ -17,10 +17,9 @@ import CadastroFinal from "./pages/cadastro/cadastroFinal";
 import FormularioLarTemporario from "./pages/larTemporario/formularioLarTemporario";
 import FormularioAdotar from "./pages/adotar/formularioAdotar";
 
-
+// ...existing code...
 function App() {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/adotar" element={<Adotar />} />
@@ -39,7 +38,6 @@ function App() {
         <Route path="/formularioLarTemporario" element={<FormularioLarTemporario />} />
         <Route path="/formularioAdotar" element={<FormularioAdotar />} />
       </Routes>
-    </BrowserRouter>
   );
 }
 

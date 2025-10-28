@@ -14,7 +14,7 @@
   width: 90%;
   height: 300px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #9fc9ef, #d1e7f9);
+  background: radial-gradient(ellipse at center, #fafafa, #9fc9ef);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,12 +77,12 @@
 
 .infoBox {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: #333;
 }
 
 .username {
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #004080;
 }
