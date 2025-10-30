@@ -8,7 +8,10 @@ export default function Perfil() {
 
   useLayoutEffect(() => {
     setTimeout(() => {
-      const pageEl = pageRef.current;
+      // O seu 'pageRef' está nulo. 
+      // Você precisa adicioná-lo ao container principal.
+      // Veja a linha 34.
+      const pageEl = pageRef.current; 
       if (!pageEl) return;
 
       const topBar = document.querySelector(".topBar") as HTMLElement | null;
@@ -23,22 +26,26 @@ export default function Perfil() {
     }, 0);
   }, []);
 
-  // Estado que guarda a imagem selecionada (como base64)
   const [imagemSelecionada, setImagemSelecionada] = useState<string | null>(
     null
   );
 
-  // Recupera o nome do usuário do localStorage
   const nome = localStorage.getItem('nomeUsuario') || 'Username';
 
   return (
     <>
       <Nav />
       
-      <div className={styles.perfilContainer}>
-        {/* Banner com avatar */}
+      {/* Adicione a ref aqui para que o useLayoutEffect funcione 
+      */}
+      <div className={styles.perfilContainer} ref={pageRef}> 
+        
+        {/* Banner */}
         <div className={styles.banner}>
-          <div className={styles.avatar}>
+        </div>
+
+        {/* Avatar */}
+        <div className={styles.avatar}>
             <label htmlFor="uploadImagem" className={styles.avatarLabel}>
               {imagemSelecionada ? (
                 <img
@@ -60,37 +67,26 @@ export default function Perfil() {
               )}
             </label>
 
-            {/* <input
-              type="file"
-              id="uploadImagem"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    setImagemSelecionada(reader.result as string);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-            /> */}
-          </div>
+            {/* <input ... /> */}
         </div>
+        
+        {/* Agora as seções abaixo estão DENTRO do 
+          perfilContainer e serão centralizadas 
+        */}
 
         {/* Infos do usuário */}
         <div className={styles.infoContainer}>
-          <div className={styles.infoBox}>
-            <p>Contato</p>
+          <div className={`${styles.infoBox} ${styles.alignLeft}`}>
+            <p><strong>Contato</strong></p> {/* Adicionei <strong> para ficar como na imagem */}
             <p>Username@gmail.com</p>
             <p>11 96584 2214</p>
           </div>
-          <div className={styles.infoBox}>
-            <p className={styles.username}>{nome}</p>
+          <div className={`${styles.infoBox} ${styles.alignCenter}`}>
+             {/* Adicionei <strong> */}
+            <p className={styles.username}><strong>{nome}</strong></p>
           </div>
-          <div className={styles.infoBox}>
-            <p>Localização</p>
+          <div className={`${styles.infoBox} ${styles.alignRight}`}>
+            <p><strong>Localização</strong></p> {/* Adicionei <strong> */}
             <p>SP, Brasil</p>
           </div>
         </div>
@@ -132,7 +128,8 @@ export default function Perfil() {
             </div>
           ))}
         </div>
-      </div>
+      
+      </div> 
 
       <Footer />
     </>
