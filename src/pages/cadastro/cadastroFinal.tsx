@@ -9,6 +9,7 @@ interface IBGEUFResponse {
   sigla: string;
   nome: string;
 }
+
 interface IBGECidadeResponse {
   id: number;
   nome: string;
@@ -17,8 +18,6 @@ interface IBGECidadeResponse {
 export default function CadastroFinal() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // dadosEtapaAnterior deve conter: { nome, email, cnpj, descricao, telefone, password, role }
   const dadosEtapaAnterior = location.state;
 
   const [cep, setCep] = useState("");
@@ -30,11 +29,9 @@ export default function CadastroFinal() {
   const [cidade, setCidade] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [estados, setEstados] = useState<IBGEUFResponse[]>([]);
   const [cidades, setCidades] = useState<IBGECidadeResponse[]>([]);
 
-  // (Os useEffects para buscar CEP, Estados e Cidades continuam iguais)
   useEffect(() => {
     axios
       .get<IBGEUFResponse[]>(
@@ -53,98 +50,51 @@ export default function CadastroFinal() {
     }
   }, [estado]);
 
-  useEffect(() => {
-    const cepFormatado = cep.replace(/\D/g, "");
-    if (cepFormatado.length === 8) {
-      axios
-        .get(`https://viacep.com.br/ws/${cepFormatado}/json/`)
-        .then((response) => {
-          if (!response.data.erro) {
-            setRua(response.data.logradouro);
-            setBairro(response.data.bairro);
-            setEstado(response.data.uf);
-            setCidade(response.data.localidade);
-            setError("");
-          } else {
-            setError("CEP não encontrado.");
-          }
-        })
-        .catch(() => setError("Erro ao buscar o CEP."));
-    }
-  }, [cep]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    if (!cep || !rua || !numero || !bairro || !cidade || !estado) {
-      setError("Por favor, preencha todos os campos do endereço.");
-      return;
-    }
+    setIsLoading(true);
 
     if (!dadosEtapaAnterior) {
-      setError("Ocorreu um erro. Por favor, volte para o início do cadastro.");
-      return;
-    }
-
-    // --- MUDANÇA 1: VERIFICAR SE 'descricao' VEIO DA PÁGINA ANTERIOR ---
-    if (!dadosEtapaAnterior.descricao) {
-      setError(
-        "Erro: A 'descrição' da ONG não foi encontrada. Por favor, volte ao início do cadastro."
-      );
+      setError("Dados anteriores não encontrados. Por favor, reinicie o cadastro.");
       setIsLoading(false);
       return;
     }
-    // --- FIM DA MUDANÇA ---
 
-    setIsLoading(true);
-
-    const enderecoFormatado = `${rua}, ${numero}${
-      complemento ? ` - ${complemento}` : ""
-    } - ${bairro}, ${cidade}/${estado} - ${cep}`;
-
-    // --- MUDANÇA 2: MONTAR O PAYLOAD CORRETO ---
-    const dadosCompletos = {
-      nome: dadosEtapaAnterior.nome,
-      email: dadosEtapaAnterior.email,
-      password: dadosEtapaAnterior.password,
-      role: dadosEtapaAnterior.role, // "ONG"
-      cnpj: dadosEtapaAnterior.cnpj,
-      descricao: dadosEtapaAnterior.descricao, // <-- Lendo o dado que veio do state
-      telefone: dadosEtapaAnterior.telefone,
-      endereco: enderecoFormatado,
+    const enderecoFormatado = {
+      cep,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado
     };
 
+    const dadosCompletos = {
+      ...dadosEtapaAnterior,
+      role: "ONG", // Forçando o role como ONG
+      endereco: enderecoFormatado
+    };
+
+    console.log("Dados para registro de ONG:", dadosCompletos);
+
     try {
-      await api.post("/auth/register", dadosCompletos);
-      alert(
-        "Cadastro da ONG realizado com sucesso! Você será redirecionado para o login."
-      );
+      const response = await api.post("/auth/register", dadosCompletos);
+      console.log("Resposta do registro:", response.data);
+      alert("Cadastro realizado com sucesso!");
       navigate("/login");
     } catch (apiError) {
       if (apiError instanceof AxiosError && apiError.response) {
-        console.error("Erro do backend:", apiError.response.data);
-
-        let msg = "Não foi possível realizar o cadastro.";
-        // Tenta ler a mensagem de erro específica do back-end
-        if (apiError.response.data && apiError.response.data.error) {
-          msg = apiError.response.data.error; // Ex: "E-mail já cadastrado."
-        } else if (
-          apiError.response.data &&
-          typeof apiError.response.data === "object"
-        ) {
-          msg =
-            "Erro de validação. Verifique se todos os campos estão corretos.";
-        }
-        setError(msg);
+        setError(apiError.response.data.error || "Erro ao realizar cadastro");
       } else {
-        console.error("Erro ao cadastrar:", apiError);
-        setError("Erro de conexão. Verifique se o servidor está rodando.");
+        setError("Erro ao conectar com o servidor");
       }
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={styles.pagCadastro}>
       <div className={styles.containerForms2}>
@@ -158,9 +108,6 @@ export default function CadastroFinal() {
             Complete os dados de localização para finalizar
           </p>
 
-          {/* --- MUDANÇA 3: REMOVER O CAMPO DE DESCRIÇÃO DAQUI --- */}
-          {/* O <textarea> de Descrição foi removido. */}
-
           <div>
             <label className={styles.grupoInput}>CEP</label>
             <input
@@ -172,6 +119,7 @@ export default function CadastroFinal() {
               maxLength={9}
             />
           </div>
+
           <div>
             <label className={styles.grupoInput}>Rua/Avenida</label>
             <input
@@ -254,11 +202,7 @@ export default function CadastroFinal() {
             </p>
           )}
 
-          <button
-            type="submit"
-            className={styles.botaoProx}
-            disabled={isLoading}
-          >
+          <button type="submit" className={styles.botaoProx} disabled={isLoading}>
             {isLoading ? "Finalizando..." : "Finalizar Cadastro"}
           </button>
 
