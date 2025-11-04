@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
-import api from '../services/api'; // O Contexto importa o Axios
+import api from '../services/api';
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom'; // Para redirecionar
+import { useNavigate } from 'react-router-dom';
 
-// 1. Interface para os dados do usuário (vem do backend)
 interface User {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: 'ADMIN' | 'ONG' | 'PUBLICO';
+  cpf?: string;
+  cnpj?: string;
 }
 
 interface AuthContextType {
@@ -17,6 +18,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>; 
   logout: () => void;
+  hasPermission: (requiredRole: User['role'][]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,15 +28,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Efeito para carregar o usuário do localStorage ao iniciar
+  const isTokenValid = (token: string): boolean => {
+    try {
+      const [, payload] = token.split('.');
+      const decodedPayload = JSON.parse(atob(payload));
+      return decodedPayload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
+  };
+
   useEffect(() => {
     async function loadStoragedData() {
       const storedToken = localStorage.getItem('@AuthData:token');
       const storedUser = localStorage.getItem('@AuthData:user');
 
       if (storedToken && storedUser) {
+        if (!isTokenValid(storedToken)) {
+          logout();
+          return;
+        }
+
+        const parsedUser = JSON.parse(storedUser);
+        console.log("Dados do usuário carregados:", parsedUser);
+        
         api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-        setUser(JSON.parse(storedUser));
+        setUser(parsedUser);
       }
       setIsLoading(false);
     }
@@ -45,23 +64,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await api.post('/auth/login', {
         email,
-        password, 
+        password,
       });
 
       const { token, usuario } = response.data;
 
-      localStorage.setItem('@AuthData:token', token);
-      localStorage.setItem('@AuthData:user', JSON.stringify(usuario));
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser(usuario);
+      console.log("=== Dados do Login ===");
+      console.log("Usuario:", usuario);
+      console.log("Role:", usuario.role);
+      console.log("===================");
 
-      if (usuario.role === 'ADMIN') {
-        navigate('/admin/dashboard'); 
-      } else {
-        navigate('/'); 
+      if (!['ADMIN', 'ONG', 'PUBLICO'].includes(usuario.role)) {
+        throw new Error('Role de usuário inválido');
       }
 
+      const userData = {
+        ...usuario,
+        role: usuario.role
+      };
+
+      localStorage.setItem('@AuthData:token', token);
+      localStorage.setItem('@AuthData:user', JSON.stringify(userData));
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
+      setUser(userData);
+      navigate('/');
+
     } catch (err) {
+      console.error('Erro no login:', err);
       if (err instanceof AxiosError && err.response) {
         throw new Error(err.response.data.error || 'E-mail ou senha inválidos.');
       }
@@ -74,17 +104,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('@AuthData:user');
     api.defaults.headers.common['Authorization'] = undefined;
     setUser(null);
-    navigate('/login'); 
+    navigate('/login');
   };
 
-  if (isLoading) {
-    return null; // ou um componente de splash screen/loading global
-  }
+  const hasPermission = (requiredRoles: User['role'][]): boolean => {
+    if (!user) return false;
+    return requiredRoles.includes(user.role);
+  };
 
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAuthenticated, login, logout }}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        isLoading, 
+        isAuthenticated, 
+        login, 
+        logout,
+        hasPermission 
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -9,16 +9,29 @@ interface IBGEUFResponse {
   sigla: string;
   nome: string;
 }
+
 interface IBGECidadeResponse {
   id: number;
   nome: string;
 }
 
+interface DadosCadastro {
+  nome?: string;
+  name?: string;
+  cpf?: string;
+  nomeOng?: string;
+  cnpj?: string;
+  email?: string;
+  descricao?: string;
+  telefone?: string;
+  password?: string;
+  role?: string;
+}
+
 export default function CadastroFinal() {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const dadosEtapaAnterior = location.state;
+  const dadosEtapaAnterior = location.state as DadosCadastro;
   const tipo = dadosEtapaAnterior?.role === "ONG" ? "ong" : "usuario";
 
   const [cep, setCep] = useState("");
@@ -30,48 +43,46 @@ export default function CadastroFinal() {
   const [cidade, setCidade] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [estados, setEstados] = useState<IBGEUFResponse[]>([]);
   const [cidades, setCidades] = useState<IBGECidadeResponse[]>([]);
 
   useEffect(() => {
+  axios
+    .get<IBGEUFResponse[]>(
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+    )
+    .then((response) => setEstados(response.data));
+}, []);
+
+useEffect(() => {
+  if (estado) {
     axios
-      .get<IBGEUFResponse[]>(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+      .get<IBGECidadeResponse[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
       )
-      .then((response) => setEstados(response.data));
-  }, []);
+      .then((response) => setCidades(response.data));
+  }
+}, [estado]);
 
-  useEffect(() => {
-    if (estado) {
-      axios
-        .get<IBGECidadeResponse[]>(
-          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado}/municipios`
-        )
-        .then((response) => setCidades(response.data));
-    }
-  }, [estado]);
-
-  useEffect(() => {
-    const cepFormatado = cep.replace(/\D/g, "");
-    if (cepFormatado.length === 8) {
-      axios
-        .get(`https://viacep.com.br/ws/${cepFormatado}/json/`)
-        .then((response) => {
-          if (!response.data.erro) {
-            setRua(response.data.logradouro);
-            setBairro(response.data.bairro);
-            setEstado(response.data.uf);
-            setCidade(response.data.localidade);
-            setError("");
-          } else {
-            setError("CEP não encontrado.");
-          }
-        })
-        .catch(() => setError("Erro ao buscar o CEP."));
-    }
-  }, [cep]);
-
+useEffect(() => {
+  const cepFormatado = cep.replace(/\D/g, "");
+  if (cepFormatado.length === 8) {
+    axios
+      .get(`https://viacep.com.br/ws/${cepFormatado}/json/`)
+      .then((response) => {
+        if (!response.data.erro) {
+          setRua(response.data.logradouro);
+          setBairro(response.data.bairro);
+          setEstado(response.data.uf);
+          setCidade(response.data.localidade);
+          setError("");
+        } else {
+          setError("CEP não encontrado.");
+        }
+      })
+      .catch(() => setError("Erro ao buscar o CEP."));
+  }
+}, [cep]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -81,8 +92,8 @@ export default function CadastroFinal() {
       return;
     }
 
-    if (!dadosEtapaAnterior) {
-      setError("Ocorreu um erro. Por favor, volte para o início do cadastro.");
+    if (!dadosEtapaAnterior || !dadosEtapaAnterior.email || !dadosEtapaAnterior.password || !dadosEtapaAnterior.cpf) {
+      setError("Campos obrigatórios da etapa anterior estão faltando.");
       return;
     }
 
@@ -93,13 +104,22 @@ export default function CadastroFinal() {
 
     setIsLoading(true);
 
-    const enderecoFormatado = `${rua}, ${numero}${
-      complemento ? ` - ${complemento}` : ""
-    } - ${bairro}, ${cidade}/${estado} - ${cep}`;
-
     const dadosCompletos = {
-      ...dadosEtapaAnterior,
-      endereco: enderecoFormatado,
+      name: dadosEtapaAnterior.nome || dadosEtapaAnterior.name,
+      cpf: dadosEtapaAnterior.cpf,
+      nomeOng: dadosEtapaAnterior.nomeOng,
+      cnpj: dadosEtapaAnterior.cnpj,
+      email: dadosEtapaAnterior.email,
+      descricao: dadosEtapaAnterior.descricao,
+      telefone: dadosEtapaAnterior.telefone,
+      password: dadosEtapaAnterior.password,
+      cep,
+      rua,
+      numero,
+      complemento,
+      bairro,
+      cidade,
+      estado,
     };
 
     try {
@@ -113,13 +133,11 @@ export default function CadastroFinal() {
       navigate("/login");
     } catch (apiError) {
       if (apiError instanceof AxiosError && apiError.response) {
-        console.error("Erro do backend:", apiError.response.data);
         const msg =
           apiError.response.data.error ||
           "Erro de validação. Verifique os campos.";
         setError(msg);
       } else {
-        console.error("Erro ao cadastrar:", apiError);
         setError("Erro de conexão. Verifique se o servidor está rodando.");
       }
     } finally {
@@ -151,6 +169,7 @@ export default function CadastroFinal() {
               maxLength={9}
             />
           </div>
+
           <div>
             <label className={styles.grupoInput}>Rua/Avenida</label>
             <input
@@ -233,11 +252,7 @@ export default function CadastroFinal() {
             </p>
           )}
 
-          <button
-            type="submit"
-            className={styles.botaoProx}
-            disabled={isLoading}
-          >
+          <button type="submit" className={styles.botaoProx} disabled={isLoading}>
             {isLoading ? "Finalizando..." : "Finalizar Cadastro"}
           </button>
 
