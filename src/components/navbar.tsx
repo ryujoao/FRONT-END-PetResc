@@ -1,16 +1,16 @@
-// src/components/navbar.tsx (ou o nome que você preferir)
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../style/navbar.module.css";
 import Denuncie from "./denuncie";
 import Notificacoes from "./notificacoes";
-import { useAuth } from "../auth/AuthContext"; // Importe o hook!
+import { useAuth } from "../auth/AuthContext"; 
 
 export default function Nav() {
-  const { isAuthenticated, login, logout } = useAuth(); // Obtenha o estado de autenticação!
+  const { isAuthenticated, login, logout, user } = useAuth(); 
 
   const [showModal, setShowModal] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  
 
   const toggleNotifications = () => {
     setIsNotificationsOpen(!isNotificationsOpen);
@@ -53,7 +53,7 @@ export default function Nav() {
             </li>
             <li>
               <Link to="/perfil">
-              <span className={styles.usernameText}>@username</span>
+                 <span className={styles.usernameText}>@{user?.nome || 'Usuário'}</span>
               </Link>
             </li>
             
