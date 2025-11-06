@@ -8,6 +8,7 @@ import NossaMissao from "./nossaMissao";
 import SaibaMais from "./saibaMais";
 import MeusAnimais from "./meusAnimais"; 
 import AnimaisCadastrados from "./animaisCadastrados";
+import OngsProximas from "./ongsProximas";
 
 function Home() {
   const { isAuthenticated, user } = useAuth();
@@ -76,7 +77,26 @@ function Home() {
 
     // Conteúdo do Usuário
     if (user?.role === "PUBLICO") {
-      return <MeusAnimais />;
+      return (
+      <>
+      <section className={styles.bannerDois}>
+            <div className={styles.paginaDoar}>
+              <h2 className={styles.tituloDoar}>Sua contribuição salva vidas!</h2>
+              <p>
+                Com sua ajuda, conseguimos garantir alimento, cuidados médicos e
+                abrigo seguro para animais em situação de abandono. Cada
+                contribuição é essencial para que eles tenham uma nova chance de
+                vida cheia de carinho e dignidade.
+              </p>
+              <button>
+                <a href="/doar">Doe agora!</a>
+              </button>
+            </div>
+          </section>
+      <MeusAnimais />
+      <OngsProximas />
+      </>
+      )
     }
 
     // Conteúdo da ONG/Admin

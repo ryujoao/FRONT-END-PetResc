@@ -73,7 +73,7 @@
 .infoContainer {
   display: flex;
   justify-content: space-between;
-  width: 50%;
+  width: 60%;
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
@@ -109,7 +109,7 @@
 
 .btnContainer {
   display: flex;
-  width: 50%;
+  width: 30%;
   border: 1px solid #004080;
   border-radius: 15px;
   overflow: hidden;
@@ -124,7 +124,7 @@
   background: #c9dff4;
   color: #004080;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .editarPerfil {
@@ -193,4 +193,46 @@
   color: red;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+.nonFavorite {
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  color: #ccc;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.petsTitulo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #004080;
+}
+
+.petsHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.addIcon {
+  font-weight: 300;     
+  font-size: 4rem;   
+  color: #004080;  
+  line-height: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  text-decoration: none;  
+
+  position: relative;
+  top: -0.6rem;
+  
+
 }
