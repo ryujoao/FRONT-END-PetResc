@@ -1,90 +1,104 @@
 .containerPrincipal {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+ background: #fff;
+ min-height: 70vh;
+ display: flex;
+ gap: 2rem;
+ padding: 0 2rem 2rem 2rem;
+ justify-content: space-between; 
+ width: 100%;
+ flex-wrap: wrap; 
 }
 
-.secaoAnimais {
-  margin-bottom: 3rem;
+.containerMeusAnimais,
+.adocaoProcesso {
+ width: 49%;
+ background-color: #F0F9FF;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ border-radius: 15px;
+ margin-top: 1rem;
+ padding: 1rem 0;
 }
 
-.secaoAnimais h2 {
-  color: #1B4B84;
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.listaCards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+.titulo{
+  color: #000;
+  font-size: 22px;
+  background-color: #B5D2E9;
+  border-radius: 7px;
+  width: 80%;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.2rem;
 }
 
 .card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  overflow: hidden;
+ display: flex;
+ align-items: center;
+ gap: 3rem; 
+ background-color: #B5D2E9;
+ border-radius: 15px;
+ margin-bottom: 2rem;
+ width: 80%;
+  position: relative; /* movido daqui .card { position: relative; } */
 }
 
-.cardImagem {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+.imgCard {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ width: 120px;
+ height: 120px;
+ border-radius: 10px;
+ padding: 1rem 0 1rem 2rem;
+ background: transparent;
 }
 
-.cardInfo {
-  padding: 1rem;
+.imgCard img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ border-radius: 10px;
 }
 
-.cardInfo h3 {
-  color: #1B4B84;
-  margin: 0 0 0.5rem 0;
+.cardNome h1 {
+ font-size: 22px;
+ margin-bottom: 0.7rem;
+ color: #000;
 }
 
-.status {
-  display: block;
-  margin: 0.5rem 0;
-  color: #666;
-  font-size: 0.9rem;
+.descricaoCard {
+ font-size: 1.1rem;
+ color: #000;
+}
+
+/* canto superior direito */
+.statusSuperior {
+ position: absolute;
+ top: 10px;
+ right: 15px;
+ font-size: 1.2rem;
+ color: #333;
+}
+
+/* canto inferior direito */
+.statusInferior {
+ position: absolute;
+ bottom: 10px;
+ right: 15px;
+ font-size: 1.2rem;
+ color: #333;
 }
 
 .verMais {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: #1B4B84;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-}
-
-.secaoCampanhas {
-  background: #f5f5f5;
-  padding: 2rem;
-  border-radius: 8px;
-  margin-top: 2rem;
-}
-
-.botoesCampanha {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.botaoPrimario {
-  padding: 0.75rem 1.5rem;
-  background: #1B4B84;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-}
-
-.botaoSecundario {
-  padding: 0.75rem 1.5rem;
-  background: white;
-  color: #1B4B84;
-  border: 1px solid #1B4B84;
-  text-decoration: none;
-  border-radius: 4px;
+  background-color: #286699;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 10%;
+  font-size: 1rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 650;
+  margin-top: auto;
 }
