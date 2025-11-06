@@ -16,6 +16,7 @@ import Login from "./pages/cadastro/login";
 import CadastroFinal from "./pages/cadastro/cadastroFinal";
 import FormularioLarTemporario from "./pages/larTemporario/formularioLarTemporario";
 import FormularioAdotar from "./pages/adotar/formularioAdotar";
+import Config from "./pages/configuracoes/config";
 
 // ...existing code...
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/cadastroFinal" element={<CadastroFinal />} />
         <Route path="/formularioLarTemporario" element={<FormularioLarTemporario />} />
         <Route path="/formularioAdotar" element={<FormularioAdotar />} />
+        <Route path="/config" element={<Config />} />
       </Routes>
   );
 }
