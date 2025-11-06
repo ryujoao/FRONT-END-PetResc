@@ -92,13 +92,17 @@
 
 .verMais {
   background-color: #286699;
-  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
   padding: 0.5rem 10%;
   font-size: 1rem;
   cursor: pointer;
   font-size: 1.3rem;
   font-weight: 650;
   margin-top: auto;
+}
+
+.verMais a {
+  color: #fff;
+  text-decoration: none;
 }

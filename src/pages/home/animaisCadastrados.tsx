@@ -41,7 +41,9 @@ export default function AnimaisCadastrados() {
             <div className={styles.statusInferior}>Status: Disponível</div>
           </div>
         </div>
-        <button className={styles.verMais}>Ver Mais</button>
+        <button className={styles.verMais}>
+          <a href="/perfilOng">Ver Mais</a>
+        </button>
       </div>
 
       <div className={styles.adocaoProcesso}>
@@ -66,7 +68,9 @@ export default function AnimaisCadastrados() {
             </div>
           </div>
         </div>
-        <button className={styles.verMais}>Ver Mais</button>
+        <button className={styles.verMais}>
+          <a href="/perfilOng">Ver Mais</a>
+        </button>
       </div>
 
       <div className={styles.adocaoProcesso}>
@@ -91,7 +95,9 @@ export default function AnimaisCadastrados() {
             </div>
           </div>
         </div>
-        <button className={styles.verMais}>Ver Mais</button>
+        <button className={styles.verMais}>
+          <a href="/perfilOng">Ver Mais</a>
+        </button>
       </div>
 
       <div className={styles.adocaoProcesso}>
@@ -116,7 +122,9 @@ export default function AnimaisCadastrados() {
             </div>
           </div>
         </div>
-        <button className={styles.verMais}>Ver Mais</button>
+        <button className={styles.verMais}>
+          <a href="/perfilOng">Ver Mais</a>
+        </button>
       </div>
     </div>
   );
