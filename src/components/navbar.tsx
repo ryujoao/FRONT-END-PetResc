@@ -7,10 +7,11 @@ import Notificacoes from "./notificacoes";
 import { useAuth } from "../auth/AuthContext"; // Importe o hook!
 
 export default function Nav() {
-  const { isAuthenticated, login, logout } = useAuth(); // Obtenha o estado de autenticação!
+  const { isAuthenticated, login, logout, user } = useAuth(); // Obtenha o estado de autenticação!
 
   const [showModal, setShowModal] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  
 
   const toggleNotifications = () => {
     setIsNotificationsOpen(!isNotificationsOpen);
@@ -53,7 +54,7 @@ export default function Nav() {
             </li>
             <li>
               <Link to="/perfil">
-              <span className={styles.usernameText}>@username</span>
+                 <span className={styles.usernameText}>@{user?.nome || 'Usuário'}</span>
               </Link>
             </li>
             

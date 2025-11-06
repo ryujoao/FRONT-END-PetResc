@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useAuth } from '../../auth/AuthContext';
 
+
+
 export default function Login() {
   const { login } = useAuth(); 
   const navigate = useNavigate();
@@ -39,6 +41,8 @@ export default function Login() {
       setIsLoading(false);
     }
   };
+
+  
   return (
     <div className={styles.pagCadastro}>
       <div className={styles.containerForms}>

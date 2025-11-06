@@ -1,11 +1,8 @@
-// src/pages/home/Home.tsx (ou o nome que você preferir)
-import Nav from "../../components/navbar"; // Use o novo Nav unificado
+import Nav from "../../components/navbar"; 
 import styles from "./home.module.css";
 import Footer from "../../components/footer";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../auth/AuthContext"; // Importe o hook!
-
-// Importe os componentes para AMBAS as versões da home
+import { useAuth } from "../../auth/AuthContext"; 
 import MeusAnimais from "./meusAnimais";
 import OngsProximas from "./ongsProximas";
 import Estatisticas from "../estatisticas";
@@ -14,7 +11,7 @@ import SaibaMais from "./saibaMais";
 
 
 function Home() {
-  const { isAuthenticated } = useAuth(); // Obtenha o estado de autenticação!
+  const { isAuthenticated } = useAuth(); 
 
   return (
     <>
@@ -34,7 +31,6 @@ function Home() {
 
       {/* AQUI ESTÁ A MÁGICA: Renderiza seções diferentes da página */}
       {isAuthenticated ? (
-        // Se estiver LOGADO, mostra os componentes da home logada
         <>
           <MeusAnimais />
           <section className={styles.bannerDois}>
@@ -54,7 +50,6 @@ function Home() {
           <OngsProximas />
         </>
       ) : (
-        // Se NÃO estiver logado, mostra os componentes da página inicial
         <>
 
       

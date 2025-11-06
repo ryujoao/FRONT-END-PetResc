@@ -1,22 +1,19 @@
 import React, { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
-import api from '../services/api'; // O Contexto importa o Axios
+import api from '../services/api'; 
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom'; // Para redirecionar
+import { useNavigate } from 'react-router-dom'; 
 
-// 1. Interface para os dados do usuário (vem do backend)
 interface User {
   id: number;
-  name: string;
+  nome: string;
   email: string;
   role: string;
 }
 
-// 2. Interface para o valor do Contexto (O "CONTRATO")
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  // 3. CORREÇÃO AQUI: Especificamos os tipos dos argumentos
   login: (email: string, password: string) => Promise<void>; 
   logout: () => void;
 }
@@ -28,7 +25,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Efeito para carregar o usuário do localStorage ao iniciar
   useEffect(() => {
     async function loadStoragedData() {
       const storedToken = localStorage.getItem('@AuthData:token');
@@ -43,37 +39,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     loadStoragedData();
   }, []);
 
-  // 4. A LÓGICA DE LOGIN (A "IMPLEMENTAÇÃO")
-  // 5. CORREÇÃO AQUI: Especificamos os tipos novamente na implementação
   const login = async (email: string, password: string) => {
-    try {
-      const response = await api.post('/auth/login', {
-        email,
-        password, 
-      });
+  try {
+    const response = await api.post('/auth/login', {
+      email,
+      password, 
+    });
 
-      const { token, usuario } = response.data;
+    const { token, usuario } = response.data;
 
-      localStorage.setItem('@AuthData:token', token);
-      localStorage.setItem('@AuthData:user', JSON.stringify(usuario));
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser(usuario);
+    localStorage.setItem('@AuthData:token', token);
+    localStorage.setItem('@AuthData:user', JSON.stringify(usuario));
 
-      // Redirecionamento inteligente
-      if (usuario.role === 'ADMIN') {
-        navigate('/admin/dashboard'); 
-      } else {
-        navigate('/'); 
-      }
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser(usuario);
 
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        throw new Error(err.response.data.error || 'E-mail ou senha inválidos.');
-      }
-      throw new Error('Erro de conexão. Tente novamente.');
+    if (usuario.role === 'ADMIN') {
+      navigate('/admin/dashboard'); 
+    } else {
+      navigate('/'); 
     }
-  };
 
+  } catch (err) {
+    if (err instanceof AxiosError && err.response) {
+      throw new Error(err.response.data.error || 'E-mail ou senha inválidos.');
+    }
+    throw new Error('Erro de conexão. Tente novamente.');
+  }
+};
   const logout = () => {
     localStorage.removeItem('@AuthData:token');
     localStorage.removeItem('@AuthData:user');
@@ -83,10 +76,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   if (isLoading) {
-    return null; // ou um componente de splash screen/loading global
+    return null; 
   }
 
-  const isAuthenticated = !!user; // <-- adicionado
+  const isAuthenticated = !!user; 
 
   return (
     <AuthContext.Provider value={{ user, isLoading, isAuthenticated, login, logout }}>
