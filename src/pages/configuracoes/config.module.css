@@ -1,0 +1,91 @@
+.configContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10rem 2rem 5rem 2rem; 
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.titulo {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #004080;
+  margin-bottom: 3rem;
+}
+
+.configSection {
+  width: 100%;
+  max-width: 700px; 
+  margin-bottom: 2.5rem;
+}
+
+.subtitulo {
+  font-size: 1.7rem;
+  color: #004080;
+
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+}
+
+
+.configItem {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.configItem:last-child {
+  border-bottom: none;
+}
+
+.configItem:hover {
+  background-color: #f9f9f9;
+}
+
+.iconCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #004080; 
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1.5rem;
+}
+
+.itemTexto {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #004080;
+}
+
+.seta {
+  margin-left: auto;
+  color: #004080;
+}
+
+.ajudaLista {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 0.5rem;
+}
+
+.ajudaLink {
+  font-size: 1.3rem;
+  color: #004080;
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.ajudaLink:hover {
+  text-decoration: underline;
+}

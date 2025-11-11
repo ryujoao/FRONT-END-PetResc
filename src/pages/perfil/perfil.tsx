@@ -187,15 +187,19 @@ const petsParaExibir =
         </div>
 
         <div className={styles.infoContainer}>
-          <div className={styles.infoBox}>
+          <div className={`${styles.infoBox} ${styles.alignLeft}`}>
              <p>{usuario?.email || 'Email não disponível'}</p>
              <p>{usuario?.telefone || 'Telefone não disponível'}</p>
-             <p className={styles.username}>{usuario?.nome || usuario?.nome || 'Username'}</p>
+          </div>
+          <div className={`${styles.infoBox} ${styles.alignCenter }`}>
+            <p className={styles.username}>
+              {usuario?.nome || usuario?.nome || 'Username'}
+            </p>
           </div>
           {/* <div className={styles.infoBox}>
           <p className={styles.username}>{usuario?.nome || 'Username'}</p>
           </div> */}
-          <div className={styles.infoBox}>
+          <div className={`${styles.infoBox} ${styles.alignRight}`}>
             <p>Localização</p>
             <p>SP, Brasil</p>
           </div>
@@ -225,7 +229,9 @@ const petsParaExibir =
             {activeView === "todos" ? "Meus Pets" : "Pets Salvos"}
           </h2>
           <Link to="/registrarAnimal" className={styles.addIcon}>
-            +
+            <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
           </Link>
         </div>
 
