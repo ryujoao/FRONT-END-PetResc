@@ -110,44 +110,41 @@ export default function Perfil() {
     null
   );
 
-  // --- BLOCO useEffect CORRIGIDO ---
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("@AuthData:token");
-      if (!token) {
-        console.error("Usuário não autenticado");
-        return;
+   useEffect(() => {
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('@AuthData:token');
+    if (!token) {
+      console.error("Usuário não autenticado");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      console.log("Token enviado:", token);
+
+      if (!response.ok) {
+        throw new Error("Falha ao buscar dados do usuário");
       }
 
-      // 1. O 'try' começa aqui
-      try {
-        // 2. Removi a chamada duplicada. Deixei apenas a com '/api/'
-        const response = await fetch("http://localhost:3000/api/auth/me", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const data: UserData = await response.json();
+      console.log("Dados recebidos:", data);
+      setUsuario(data);
 
-        console.log("Token enviado:", token);
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
+  };
 
-        if (!response.ok) {
-          throw new Error("Falha ao buscar dados do usuário");
-        }
+  fetchUserData();
+}, []);
 
-        const data: UserData = await response.json();
-        console.log("Dados recebidos:", data);
-        setUsuario(data);
-        
-      } catch (error) {
-        // 3. Adicionei o 'catch' que faltava para o 'try' principal
-        console.error("Erro ao buscar dados do usuário:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []); // O array de dependências vazio está correto
 
   return (
     <>
