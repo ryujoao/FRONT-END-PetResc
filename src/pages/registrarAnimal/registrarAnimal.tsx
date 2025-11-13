@@ -1,332 +1,637 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import Nav from "../../components/navbar";
+import Footer from "../../components/footer";
 import styles from "./registrarAnimal.module.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
 
-export default function RegistrarAnimal() {
-  const pageRef = useRef<HTMLDivElement | null>(null);
- 
-  const navigate = useNavigate();
+// =================================================================
+// === COMPONENTE 1: FORMULÁRIO DO USUÁRIO COMUM (SIMPLIFICADO) ===
+// =================================================================
+const RegistrarAnimalUsuario = () => {
+  const pageRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
-  useLayoutEffect(() => {
-    const pageEl = pageRef.current;
-    if (!pageEl) return;
-    const topBar = document.querySelector(".topBar") as HTMLElement | null;
-    const navBar = document.querySelector(".navbar") as HTMLElement | null;
-    const topHeight = topBar?.offsetHeight ?? 0;
-    const navHeight = navBar?.offsetHeight ?? 0;
-    const totalHeight = topHeight + navHeight;
-    pageEl.style.paddingTop = `${totalHeight}px`;
-  }, []); 
+  // Ajuste de padding para o TopBar/NavBar
+  useLayoutEffect(() => {
+    const timer = setTimeout(() => {
+      const pageEl = pageRef.current;
+      if (!pageEl) return;
+      const topBar = document.querySelector(".topBar") as HTMLElement | null;
+      const navBar = document.querySelector(".navbar") as HTMLElement | null;
+      const topHeight = topBar?.offsetHeight ?? 0;
+      const navHeight = navBar?.offsetHeight ?? 0;
+      const totalHeight = topHeight + navHeight;
+      pageEl.style.paddingTop = `${totalHeight}px`;
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const [imagemPreview, setImagemPreview] = useState<string | null>(null);
-  const [imagemArquivo, setImagemArquivo] = useState<File | null>(null);
+  const [imagemPreview, setImagemPreview] = useState<string | null>(null);
+  const [imagemArquivo, setImagemArquivo] = useState<File | null>(null);
+  
+  // Campos do Usuário
+  const [nome, setNome] = useState("");
+  const [historia, setHistoria] = useState("");
+  const [cuidado, setCuidado] = useState("");
+  const [sociabilidade, setSociabilidade] = useState("");
+  const [situacao, setSituacao] = useState("");
+  const [especie, setEspecie] = useState("");
+  const [genero, setGenero] = useState("");
+  const [raca, setRaca] = useState("");
+  const [porte, setPorte] = useState("");
+  const [cor, setCor] = useState("");
+  const [idade, setIdade] = useState("");
+  
+  const [loadingEnvio, setLoadingEnvio] = useState(false); // Renomeado para evitar conflito
+  const [error, setError] = useState<string | null>(null);
 
-  const [nome, setNome] = useState("");
-  const [historia, setHistoria] = useState("");
-  const [cuidado, setCuidado] = useState("");
-  const [sociabilidade, setSociabilidade] = useState("");
-  const [situacao, setSituacao] = useState("");
-  const [especie, setEspecie] = useState("");
-  const [genero, setGenero] = useState("");
-  const [raca, setRaca] = useState("");
-  const [porte, setPorte] = useState("");
-  const [cor, setCor] = useState("");
-  const [idade, setIdade] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSelecaoDeArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImagemArquivo(file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagemPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-  const token = localStorage.getItem("@AuthData:token");
-    if (!token) {
-      setError("Usuário não autenticado. Faça login novamente.");
-      setLoading(false);
-      return;
-    }
-
-    if (!imagemArquivo) {
-      setError("Por favor, selecione uma imagem.");
-      setLoading(false);
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('imagem', imagemArquivo);
-    formData.append('nome', nome);
-    formData.append('especie', especie);
-    formData.append('raca', raca);
-    formData.append('idade', idade);
-    formData.append('status', situacao);
-    formData.append('porte', porte);
-    formData.append('sexo', genero);
-    formData.append('descricao', historia);
-    // Lembre-se de adicionar 'cor', 'cuidado', 'sociabilidade' se o backend os aceitar
-     formData.append('cor', cor);
-     formData.append('cuidado', cuidado);
-     formData.append('sociabilidade', sociabilidade);
-
-    try {
-      const response = await fetch('http://localhost:3000/api/animais', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData,
-      });
-
-      setLoading(false);
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Falha ao registrar animal');
-      }
-
-      const novoAnimal = await response.json();
-      alert('Animal registrado com sucesso!');
-      navigate(`/animal/${novoAnimal.id}`); 
-
-    } catch (err) {
-    setLoading(false);
-    if (err instanceof Error) {
-      setError(err.message);
-      console.error(err);
-    } else {
-      setError("Erro desconhecido");
-      console.error("Erro não identificado:", err);
+  const handleSelecaoDeArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImagemArquivo(file);
+      const reader = new FileReader();
+      reader.onload = () => setImagemPreview(reader.result as string);
+      reader.readAsDataURL(file);
     }
-  } // <-- fecha o catch
-}; // <-- fecha a função handleSubmit
+  };
 
-  return (
-    <>
-      <Nav />
-      <div ref={pageRef} className={styles.pageRegistroAnimal}>
-        <div className={styles.colunaUm}>
-          <div className={styles.imagemContainer}>
-            {!imagemPreview ? (
-              <form className={styles.formularioUploadArquivo}>
-                <label
-                  className={styles.rotuloUploadArquivo}
-                  htmlFor="uploadImagem"
-                >
-                  <div className={styles.designUploadArquivo}>
-                    <svg height="1em" viewBox="0 0 640 512">
-                      <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path>
-                    </svg>
-                    <p>Arraste uma imagem nesta área</p>
-                    <p>ou</p>
-                    <span className={styles.botaoNavegar}>
-                      clique para selecionar uma imagem
-                    </span>
-                  </div>
-                </label>
-              </form>
-            ) : (
-              <div className={styles.previewContainer}>
-                {/* CORREÇÃO 4: Usando 'imagemPreview' para o src */}
-                <img
-                  src={imagemPreview}
-                  alt="Pré-visualização da imagem selecionada"
-                  className={styles.imagem}
-                />
-                <label
-                  htmlFor="uploadImagem"
-                  className={styles.botaoTrocarImagem}
-                >
-                  Trocar Imagem
-                </label>
-              </div>
-            )}
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingEnvio(true);
+    setError(null);
 
-            <input
-              type="file"
-              id="uploadImagem"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={handleSelecaoDeArquivo}
-            />
-          </div>
+    const token = localStorage.getItem("@AuthData:token");
+    if (!token) {
+      setError("Usuário não autenticado. Faça login novamente.");
+      setLoadingEnvio(false);
+      return;
+    }
+    if (!imagemArquivo) {
+      setError("Por favor, selecione uma imagem.");
+      setLoadingEnvio(false);
+      return;
+    }
 
-          {}
-          <label className={styles.label} htmlFor="nome">
-            Nome
-          </label>
-          <input className={styles.barraInfos}
-            type="text"
-            id="nome"
-            placeholder="Deixe em branco se não tiver nome"
-            required
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-        />
-          <label className={styles.label} htmlFor="historia">
-            História do Pet
-          </label>
-          <textarea
-            className={styles.barraInfos}
-            id="historia"
-            placeholder="Conte a história do pet, como ele foi encontrado..."
-            required
-            value={historia}
-            onChange={(e) => setHistoria(e.target.value)}
-          />
-          <label className={styles.label} htmlFor="cuidado">
-            Cuidado Veterinário
-          </label>
-          <textarea
-            className={styles.barraInfos}
-            id="cuidado"
-            placeholder="Ex: Vacinado, Castrado, ETC."
-            required
-            value={cuidado}
-            onChange={(e) => setCuidado(e.target.value)}
-          />
-          <label className={styles.label} htmlFor="sociabilidade">
-            Sociabilidade
-          </label>
-          <textarea
-            className={styles.barraInfos}
-            id="sociabilidade"
-            placeholder="Ex: Sociável com estranhos, Sociável com gatos, ETC."
-            required
-            value={sociabilidade}
-            onChange={(e) => setSociabilidade(e.target.value)}
-          />
-        </div>
+    const formData = new FormData();
+    formData.append("imagem", imagemArquivo);
+    formData.append("nome", nome);
+    formData.append("especie", especie);
+    formData.append("raca", raca);
+    formData.append("idade", idade);
+    formData.append("status", situacao);
+    formData.append("porte", porte);
+    formData.append("sexo", genero);
+    formData.append("descricao", historia);
+    formData.append("cor", cor);
+    formData.append("cuidado", cuidado);
+    formData.append("sociabilidade", sociabilidade);
 
-        <div className={styles.colunaDois}>
-          <h1 className={styles.titulo}>Criar Registro Pet</h1>
-          <p className={styles.subtitulo}>
-            Crie a conta do pet seguindo suas necessidades
-          </p>
-          {/*
-            'handleSubmit' agora é lido pela tag <form>
-           */}
-          <form className={styles.formulario} onSubmit={handleSubmit}>
-            <label className={styles.label} htmlFor="situacao">
-              Situação
-            </label>
-            <select
-              className={styles.barraInfos}
-              id="situacao"
-              required
-              value={situacao}
-              onChange={(e) => setSituacao(e.target.value)}
-            >
-              <option value="" disabled>Selecione</option>
-              <option value="PERDIDO">Perdido</option>
-              <option value="ENCONTRADO">Encontrado</option>
-              <option value="DISPONIVEL">Para Adoção</option>
-            </select>
+    try {
+      const response = await fetch("http://localhost:3000/api/animais", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
-            <label className={styles.label} htmlFor="especie">
-              Espécie
-            </label>
-            <select
-              className={styles.barraInfos}
-              id="especie"
-              required
-              value={especie}
-              onChange={(e) => setEspecie(e.target.value)}
-            >
-              <option value="" disabled>Selecione</option>
-              <option value="Cachorro">Cachorro</option>
-              <option value="Gato">Gato</option>
-            </select>
+      setLoadingEnvio(false);
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Falha ao registrar animal");
+      }
 
-            <label className={styles.label} htmlFor="genero">
-              Genêro
-            </label>
-            <select
-              className={styles.barraInfos}
-              id="genero"
-              required
-              value={genero}
-              onChange={(e) => setGenero(e.target.value)}
-            >
-              <option value="" disabled>Selecione</option>
-              <option value="MACHO">Macho</option>
-              <option value="FEMEA">Fêmea</option>
-            </select>
+      const novoAnimal = await response.json();
+      alert("Animal registrado com sucesso!");
+      navigate(`/animal/${novoAnimal.id}`);
+    } catch (err) {
+      setLoadingEnvio(false);
+      if (err instanceof Error) setError(err.message);
+      else setError("Erro desconhecido");
+    }
+  };
 
-            <label className={styles.label} htmlFor="raca">
-              Raça
-            </label>
-            <input
-              className={styles.barraInfos}
-              type="text"
-              id="raca"
-              placeholder="Deixe em branco se não souber a raça"
-              value={raca}
-              onChange={(e) => setRaca(e.target.value)}
-            />
+  return (
+    <div ref={pageRef} className={styles.pageRegistroAnimal}>
+      <div className={styles.colunaUm}>
+        <div className={styles.imagemContainer}>
+          {!imagemPreview ? (
+            <form className={styles.formularioUploadArquivo}>
+              <label className={styles.rotuloUploadArquivo} htmlFor="uploadImagem">
+                <div className={styles.designUploadArquivo}>
+                  <svg height="1em" viewBox="0 0 640 512">
+                    <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path>
+                  </svg>
+                  <p>Arraste uma imagem nesta área</p>
+                  <p>ou</p>
+                  <span className={styles.botaoNavegar}>clique para selecionar uma imagem</span>
+                </div>
+              </label>
+            </form>
+          ) : (
+            <div className={styles.previewContainer}>
+              <img src={imagemPreview} alt="Preview" className={styles.imagem} />
+              <label htmlFor="uploadImagem" className={styles.botaoTrocarImagem}>Trocar Imagem</label>
+            </div>
+          )}
+          <input type="file" id="uploadImagem" accept="image/*" style={{ display: "none" }} onChange={handleSelecaoDeArquivo} />
+        </div>
 
-            <label className={styles.label} htmlFor="porte">
-             Porte:
-            </label>
-            <select
-              className={styles.barraInfos}
-              id="porte"
-              required
-              value={porte}
-              onChange={(e) => setPorte(e.target.value)}
-            >
-              <option value="" disabled>Selecione</option>
-             <option value="Pequeno">Pequeno</option>
-              <option value="Medio">Médio</option>
-              <option value="Grande">Grande</option>
-         </select>
+        <label className={styles.label} htmlFor="nome">Nome</label>
+        <input className={styles.barraInfos} type="text" id="nome" placeholder="Deixe em branco se não tiver nome" value={nome} onChange={(e) => setNome(e.target.value)} />
 
-            <label className={styles.label} htmlFor="cor">
-              Cor Predominante
-            </label>
-            <input
-              className={styles.barraInfos}
-              type="text"
-              id="cor"
-              placeholder="Digite a cor predominante do pet"
-              value={cor}
-              onChange={(e) => setCor(e.target.value)}
-            />
+        <label className={styles.label} htmlFor="historia">História do Pet</label>
+        <textarea className={styles.barraInfos} id="historia" placeholder="Conte a história..." value={historia} onChange={(e) => setHistoria(e.target.value)} />
 
-            <label className={styles.label} htmlFor="idade">
-              Idade
-            </label>
-            <input
-              className={styles.barraInfos}
-              type="text"
-              id="idade"
-              placeholder="Deixe em branco se não souber a idade"
-              value={idade}
-              onChange={(e) => setIdade(e.target.value)}
-            />
+        <label className={styles.label} htmlFor="cuidado">Cuidado Veterinário</label>
+        <textarea className={styles.barraInfos} id="cuidado" placeholder="Ex: Vacinado..." value={cuidado} onChange={(e) => setCuidado(e.target.value)} />
 
-              <button type="submit" className={styles.botao} disabled={loading}>
-               {loading ? "Enviando..." : "Enviar Formulário"}
-             </button>
-             {error && <p className={styles.erro}>{error}</p>} 
-           </form>
-       </div>
-      </div>
-    </>
-  );
-}
+        <label className={styles.label} htmlFor="sociabilidade">Sociabilidade</label>
+        <textarea className={styles.barraInfos} id="sociabilidade" placeholder="Ex: Sociável..." value={sociabilidade} onChange={(e) => setSociabilidade(e.target.value)} />
+      </div>
+
+      <div className={styles.colunaDois}>
+        <h1 className={styles.titulo}>Criar Registro Pet</h1>
+        <p className={styles.subtitulo}>Crie a conta do pet seguindo suas necessidades</p>
+        <form className={styles.formulario} onSubmit={handleSubmit}>
+          <label className={styles.label} htmlFor="situacao">Situação</label>
+          <select className={styles.barraInfos} id="situacao" required value={situacao} onChange={(e) => setSituacao(e.target.value)}>
+            <option value="" disabled>Selecione</option>
+            <option value="PERDIDO">Perdido</option>
+            <option value="ENCONTRADO">Encontrado</option>
+            <option value="DISPONIVEL">Para Adoção</option>
+          </select>
+
+          <label className={styles.label} htmlFor="especie">Espécie</label>
+          <select className={styles.barraInfos} id="especie" required value={especie} onChange={(e) => setEspecie(e.target.value)}>
+            <option value="" disabled>Selecione</option>
+            <option value="Cachorro">Cachorro</option>
+            <option value="Gato">Gato</option>
+          </select>
+
+          <label className={styles.label} htmlFor="genero">Gênero</label>
+          <select className={styles.barraInfos} id="genero" required value={genero} onChange={(e) => setGenero(e.target.value)}>
+            <option value="" disabled>Selecione</option>
+            <option value="MACHO">Macho</option>
+            <option value="FEMEA">Fêmea</option>
+          </select>
+
+          <label className={styles.label} htmlFor="raca">Raça</label>
+          <input className={styles.barraInfos} type="text" id="raca" placeholder="Opcional" value={raca} onChange={(e) => setRaca(e.target.value)} />
+
+          <label className={styles.label} htmlFor="porte">Porte:</label>
+          <select className={styles.barraInfos} id="porte" required value={porte} onChange={(e) => setPorte(e.target.value)}>
+            <option value="" disabled>Selecione</option>
+            <option value="Pequeno">Pequeno</option>
+            <option value="Medio">Médio</option>
+            <option value="Grande">Grande</option>
+          </select>
+
+          <label className={styles.label} htmlFor="cor">Cor Predominante</label>
+          <input className={styles.barraInfos} type="text" id="cor" placeholder="Cor" value={cor} onChange={(e) => setCor(e.target.value)} />
+
+          <label className={styles.label} htmlFor="idade">Idade</label>
+          <input className={styles.barraInfos} type="text" id="idade" placeholder="Opcional" value={idade} onChange={(e) => setIdade(e.target.value)} />
+
+          <button type="submit" className={styles.botao} disabled={loadingEnvio}>
+            {loadingEnvio ? "Enviando..." : "Enviar Formulário"}
+          </button>
+          {error && <p className={styles.erro}>{error}</p>}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// =================================================================
+// === COMPONENTE 2: FORMULÁRIO DA ONG (COMPLETO E DETALHADO) ===
+// =================================================================
+const RegistrarAnimalOng = () => {
+  const pageRef = useRef<HTMLFormElement | null>(null);
+  const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    const timer = setTimeout(() => {
+      const formEl = pageRef.current;
+      if (!formEl) return;
+      const topBar = document.querySelector(".topBar") as HTMLElement | null;
+      const navBar = document.querySelector(".navbar") as HTMLElement | null;
+      const topHeight = topBar?.offsetHeight ?? 0;
+      const navHeight = navBar?.offsetHeight ?? 0;
+      const totalHeight = topHeight + navHeight;
+      formEl.style.paddingTop = `${totalHeight}px`;
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // --- States da ONG ---
+  const [imgResgatePreview, setImgResgatePreview] = useState<string | null>(null);
+  const [imgResgateArquivo, setImgResgateArquivo] = useState<File | null>(null);
+  const [imgAtualPreview, setImgAtualPreview] = useState<string | null>(null);
+  const [imgAtualArquivo, setImgAtualArquivo] = useState<File | null>(null);
+  
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [numero, setNumero] = useState("");
+  const [filhotes, setFilhotes] = useState<"sim" | "nao" | "">("");
+  const [coleira, setColeira] = useState<"sim" | "nao" | "">("");
+  const [ondeEncontrado, setOndeEncontrado] = useState("");
+  const [motivo, setMotivo] = useState("");
+  const [atualmente, setAtualmente] = useState("");
+  
+  const [nome, setNome] = useState("");
+  const [especie, setEspecie] = useState("Cachorro");
+  const [genero, setGenero] = useState("");
+  const [raca, setRaca] = useState("");
+  const [idadeAprox, setIdadeAprox] = useState("");
+  const [dataResgate, setDataResgate] = useState("");
+  const [porte, setPorte] = useState("");
+  const [cor, setCor] = useState("");
+  const [obs, setObs] = useState("");
+  const [historia, setHistoria] = useState("");
+  
+  // Saúde
+  const [vermifugado, setVermifugado] = useState<"sim" | "nao" | "">("");
+  const [dataVermifugado, setDataVermifugado] = useState("");
+  const [vacinado, setVacinado] = useState<"sim" | "nao" | "">("");
+  const [txtVacinado, setTxtVacinado] = useState("");
+  const [castrado, setCastrado] = useState<"sim" | "nao" | "">("");
+  const [dataCastrado, setDataCastrado] = useState("");
+  const [testado, setTestado] = useState<"sim" | "nao" | "">("");
+  const [txtTestado, setTxtTestado] = useState("");
+  const [resultados, setResultados] = useState("");
+  
+  const [loadingEnvio, setLoadingEnvio] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Handlers Imagens
+  const handleImgResgate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImgResgateArquivo(file);
+      const reader = new FileReader();
+      reader.onload = () => setImgResgatePreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+  const handleImgAtual = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImgAtualArquivo(file);
+      const reader = new FileReader();
+      reader.onload = () => setImgAtualPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmitOng = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingEnvio(true);
+    setError(null);
+
+    const token = localStorage.getItem("@AuthData:token");
+    if (!token) {
+      setError("Usuário não autenticado.");
+      setLoadingEnvio(false);
+      return;
+    }
+    if (!imgAtualArquivo) {
+      setError("A foto atual do animal é obrigatória.");
+      setLoadingEnvio(false);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("imagem", imgAtualArquivo);
+    if (imgResgateArquivo) formData.append("imagem_resgate", imgResgateArquivo);
+    
+    formData.append("nome", nome);
+    formData.append("especie", especie);
+    formData.append("sexo", genero);
+    formData.append("raca", raca);
+    formData.append("idade", idadeAprox);
+    formData.append("data_resgate", dataResgate);
+    formData.append("porte", porte);
+    formData.append("cor", cor);
+    formData.append("observacoes", obs);
+    formData.append("descricao", historia);
+    
+    formData.append("local_estado", estado);
+    formData.append("local_cidade", cidade);
+    formData.append("local_numero", numero);
+    formData.append("tinha_filhotes", filhotes);
+    formData.append("tinha_coleira", coleira);
+    formData.append("motivo_nao_disponivel", motivo);
+    formData.append("local_atual", atualmente);
+    
+    formData.append("vermifugado", vermifugado);
+    formData.append("data_vermifugado", dataVermifugado);
+    formData.append("vacinado", vacinado);
+    formData.append("vacinas_texto", txtVacinado);
+    formData.append("castrado", castrado);
+    formData.append("data_castrado", dataCastrado);
+    formData.append("testado_doencas", testado);
+    formData.append("testes_texto", txtTestado);
+    formData.append("resultados_testes", resultados);
+    formData.append("status", ondeEncontrado === "disponivel" ? "DISPONIVEL" : "NAO_DISPONIVEL");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/animais", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      setLoadingEnvio(false);
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Falha ao registrar animal");
+      }
+
+      const novoAnimal = await response.json();
+      alert("Animal registrado com sucesso pela ONG!");
+      navigate(`/animal/${novoAnimal.id}`);
+    } catch (err) {
+      setLoadingEnvio(false);
+      if (err instanceof Error) setError(err.message);
+      else setError("Erro desconhecido");
+    }
+  };
+
+  return (
+    <form ref={pageRef} className={`${styles.formOng} ${styles.pageRegistroAnimal}`} onSubmit={handleSubmitOng}>
+      {/* Coluna 1 - ESQUERDA */}
+      <div className={styles.colunaUm}>
+        <div className={styles.campoForm}>
+          <div className={styles.imagemContainer}>
+            {!imgResgatePreview ? (
+              <label className={styles.rotuloUploadArquivo} htmlFor="uploadResgate">
+                <div className={styles.designUploadArquivo}>
+                   <svg height="1em" viewBox="0 0 640 512"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path></svg>
+                   <p>Arraste ou clique</p>
+                </div>
+              </label>
+            ) : (
+              <div className={styles.previewContainer}>
+                <img src={imgResgatePreview} alt="Foto resgate" className={styles.imagem} />
+                <label htmlFor="uploadResgate" className={styles.botaoTrocarImagem}>Trocar</label>
+              </div>
+            )}
+            <input type="file" id="uploadResgate" accept="image/*" style={{ display: "none" }} onChange={handleImgResgate} />
+            <label className={styles.label}>Foto do resgate</label>
+          </div>
+        </div>
+
+        <div className={styles.campoForm}>
+           <div className={styles.imagemContainer}>
+             {!imgAtualPreview ? (
+               <label className={styles.rotuloUploadArquivo} htmlFor="uploadAtual">
+                 <div className={styles.designUploadArquivo}>
+                    <svg height="1em" viewBox="0 0 640 512"><path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path></svg>
+                    <p>Arraste ou clique</p>
+                 </div>
+               </label>
+             ) : (
+               <div className={styles.previewContainer}>
+                 <img src={imgAtualPreview} alt="Foto atual" className={styles.imagem} />
+                 <label htmlFor="uploadAtual" className={styles.botaoTrocarImagem}>Trocar</label>
+               </div>
+             )}
+             <input type="file" id="uploadAtual" accept="image/*" style={{ display: "none" }} onChange={handleImgAtual} />
+             <label className={styles.label}>Foto atual do animal*</label>
+           </div>
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Local Encontrado</label>
+          <input className={styles.barraInfos} type="text" placeholder="Estado" value={estado} onChange={(e) => setEstado(e.target.value)} />
+          <input className={styles.barraInfos} style={{ marginTop: "8px" }} type="text" placeholder="Cidade" value={cidade} onChange={(e) => setCidade(e.target.value)} />
+          <input className={styles.barraInfos} style={{ marginTop: "8px" }} type="text" placeholder="Número" value={numero} onChange={(e) => setNumero(e.target.value)} />
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Com filhotes?</label>
+          <div className={styles.grupoOpcoes}>
+            <label className={styles.checkboxCustomizado}>
+              <input type="radio" name="filhotes" value="sim" checked={filhotes === "sim"} onChange={(e) => setFilhotes("sim")} />
+              <span className={styles.checkmark}></span>Sim
+            </label>
+            <label className={styles.checkboxCustomizado}>
+              <input type="radio" name="filhotes" value="nao" checked={filhotes === "nao"} onChange={(e) => setFilhotes("nao")} />
+              <span className={styles.checkmark}></span>Não
+            </label>
+          </div>
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Com Coleira?</label>
+          <div className={styles.grupoOpcoes}>
+             <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="coleira" value="sim" checked={coleira === "sim"} onChange={(e) => setColeira("sim")} />
+               <span className={styles.checkmark}></span>Sim
+             </label>
+             <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="coleira" value="nao" checked={coleira === "nao"} onChange={(e) => setColeira("nao")} />
+               <span className={styles.checkmark}></span>Não
+             </label>
+          </div>
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Disponível para adoção?</label>
+           <select className={styles.barraInfos} value={ondeEncontrado} onChange={(e) => setOndeEncontrado(e.target.value)}>
+             <option value="" disabled>Selecione</option>
+             <option value="disponivel">Sim</option>
+             <option value="naoDisponivel">Não</option>
+           </select>
+        </div>
+        
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Motivo (se não)</label>
+           <input className={styles.barraInfos} type="text" placeholder="Ex: Em tratamento" value={motivo} onChange={(e) => setMotivo(e.target.value)} disabled={ondeEncontrado === "disponivel"} />
+        </div>
+        
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Local atual</label>
+           <select className={styles.barraInfos} value={atualmente} onChange={(e) => setAtualmente(e.target.value)}>
+             <option value="" disabled>Selecione</option>
+             <option value="larTemporario">Lar temporário</option>
+             <option value="abrigo">Abrigo</option>
+           </select>
+        </div>
+      </div>
+
+      {/* Coluna 2 - DIREITA */}
+      <div className={styles.colunaDois}>
+        <h1 className={styles.titulo}>Criar Registro Pet (ONG)</h1>
+        <p className={styles.subtitulo}>Registro detalhado para controle da organização</p>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Nome</label>
+          <input className={styles.barraInfos} type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Espécie e Gênero</label>
+          <div style={{display: 'flex', gap: '10px'}}>
+            <select className={styles.barraInfos} value={especie} onChange={(e) => setEspecie(e.target.value)}>
+              <option value="Cachorro">Cachorro</option>
+              <option value="Gato">Gato</option>
+            </select>
+            <select className={styles.barraInfos} value={genero} onChange={(e) => setGenero(e.target.value)}>
+              <option value="" disabled>Gênero</option>
+              <option value="MACHO">Macho</option>
+              <option value="FEMEA">Fêmea</option>
+            </select>
+          </div>
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Raça</label>
+           <input className={styles.barraInfos} type="text" placeholder="Raça" value={raca} onChange={(e) => setRaca(e.target.value)} />
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Idade e Data Resgate</label>
+           <div style={{display: 'flex', gap: '10px'}}>
+             <input className={styles.barraInfos} type="text" placeholder="Ex: 2 anos" value={idadeAprox} onChange={(e) => setIdadeAprox(e.target.value)} />
+             <input className={styles.barraInfos} type="date" value={dataResgate} onChange={(e) => setDataResgate(e.target.value)} />
+           </div>
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Porte e Cor</label>
+           <div style={{display: 'flex', gap: '10px'}}>
+             <select className={styles.barraInfos} value={porte} onChange={(e) => setPorte(e.target.value)}>
+               <option value="" disabled>Porte</option>
+               <option value="Pequeno">Pequeno</option>
+               <option value="Medio">Médio</option>
+               <option value="Grande">Grande</option>
+             </select>
+             <input className={styles.barraInfos} type="text" placeholder="Cor predominante" value={cor} onChange={(e) => setCor(e.target.value)} />
+           </div>
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>História e Observações</label>
+           <textarea className={styles.barraInfos} placeholder="História..." style={{marginBottom: '10px'}} value={historia} onChange={(e) => setHistoria(e.target.value)} />
+           <textarea className={styles.barraInfos} placeholder="Obs: Comportamento, etc." value={obs} onChange={(e) => setObs(e.target.value)} />
+        </div>
+
+        {/* --- ÁREA DE SAÚDE --- */}
+        <h3 className={styles.label} style={{marginTop: '20px', borderBottom: '1px solid #ccc'}}>Saúde</h3>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Vermifugado?</label>
+          <div className={styles.grupoOpcoes}>
+            <label className={styles.checkboxCustomizado}>
+              <input type="radio" name="vermifugado" value="sim" checked={vermifugado === "sim"} onChange={() => setVermifugado("sim")} />
+              <span className={styles.checkmark}></span>Sim
+            </label>
+            <label className={styles.checkboxCustomizado}>
+              <input type="radio" name="vermifugado" value="nao" checked={vermifugado === "nao"} onChange={() => setVermifugado("nao")} />
+              <span className={styles.checkmark}></span>Não
+            </label>
+          </div>
+          {vermifugado === "sim" && (
+             <input className={styles.barraInfos} type="date" style={{marginTop: '8px'}} value={dataVermifugado} onChange={(e) => setDataVermifugado(e.target.value)} />
+          )}
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Vacinado?</label>
+          <div className={styles.grupoOpcoes}>
+            <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="vacinado" value="sim" checked={vacinado === "sim"} onChange={() => setVacinado("sim")} />
+               <span className={styles.checkmark}></span>Sim
+            </label>
+            <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="vacinado" value="nao" checked={vacinado === "nao"} onChange={() => setVacinado("nao")} />
+               <span className={styles.checkmark}></span>Não
+            </label>
+          </div>
+          {vacinado === "sim" && (
+             <input className={styles.barraInfos} type="text" placeholder="Quais vacinas?" style={{marginTop: '8px'}} value={txtVacinado} onChange={(e) => setTxtVacinado(e.target.value)} />
+          )}
+        </div>
+
+        <div className={styles.campoForm}>
+          <label className={styles.label}>Castrado?</label>
+          <div className={styles.grupoOpcoes}>
+            <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="castrado" value="sim" checked={castrado === "sim"} onChange={() => setCastrado("sim")} />
+               <span className={styles.checkmark}></span>Sim
+            </label>
+            <label className={styles.checkboxCustomizado}>
+               <input type="radio" name="castrado" value="nao" checked={castrado === "nao"} onChange={() => setCastrado("nao")} />
+               <span className={styles.checkmark}></span>Não
+            </label>
+          </div>
+          {castrado === "sim" && (
+             <input className={styles.barraInfos} type="date" style={{marginTop: '8px'}} value={dataCastrado} onChange={(e) => setDataCastrado(e.target.value)} />
+          )}
+        </div>
+
+        <div className={styles.campoForm}>
+           <label className={styles.label}>Testado para doenças?</label>
+           <div className={styles.grupoOpcoes}>
+             <label className={styles.checkboxCustomizado}>
+                <input type="radio" name="testado" value="sim" checked={testado === "sim"} onChange={() => setTestado("sim")} />
+                <span className={styles.checkmark}></span>Sim
+             </label>
+             <label className={styles.checkboxCustomizado}>
+                <input type="radio" name="testado" value="nao" checked={testado === "nao"} onChange={() => setTestado("nao")} />
+                <span className={styles.checkmark}></span>Não
+             </label>
+           </div>
+           {testado === "sim" && (
+             <>
+               <input className={styles.barraInfos} type="text" placeholder="Quais testes?" style={{marginTop: '8px'}} value={txtTestado} onChange={(e) => setTxtTestado(e.target.value)} />
+               <input className={styles.barraInfos} type="text" placeholder="Resultados" style={{marginTop: '8px'}} value={resultados} onChange={(e) => setResultados(e.target.value)} />
+             </>
+           )}
+        </div>
+
+        <button type="submit" className={styles.botao} disabled={loadingEnvio}>
+           {loadingEnvio ? "Registrando..." : "Finalizar Registro ONG"}
+        </button>
+        {error && <p className={styles.erro}>{error}</p>}
+      </div>
+    </form>
+  );
+};
+
+// =================================================================
+// === COMPONENTE PRINCIPAL: GERENCIADOR DA PÁGINA ===
+// =================================================================
+const PaginaRegistrarAnimal = () => {
+  // FIX: Usando isLoading ao invés de loading
+  const { user, isLoading } = useAuth(); 
+
+  // FIX: Verificando isLoading
+  if (isLoading) {
+    return <div className={styles.loading}>Carregando informações...</div>;
+  }
+
+  if (!user) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
+        <h2>Acesso Negado</h2>
+        <p>Você precisa estar logado para registrar um animal.</p>
+        <a href="/login">Ir para Login</a>
+      </div>
+    );
+  }
+
+  // FIX: Usando user.role ao invés de user.tipo
+  const ehOng = user.role === "ONG"; 
+
+  return (
+    <>
+      <Nav />
+      {ehOng ? <RegistrarAnimalOng /> : <RegistrarAnimalUsuario />}
+      <Footer />
+    </>
+  );
+};
+
+export default PaginaRegistrarAnimal;

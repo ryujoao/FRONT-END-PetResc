@@ -105,7 +105,7 @@ useEffect(() => {
     setIsLoading(true);
 
     const dadosCompletos = {
-      name: dadosEtapaAnterior.nome || dadosEtapaAnterior.name,
+      nome: dadosEtapaAnterior.nome || dadosEtapaAnterior.name,
       cpf: dadosEtapaAnterior.cpf,
       nomeOng: dadosEtapaAnterior.nomeOng,
       cnpj: dadosEtapaAnterior.cnpj,
@@ -124,10 +124,11 @@ useEffect(() => {
 
     try {
       if (tipo === "ong") {
-        await api.post("/api/auth/register-ong", dadosCompletos);
-      } else {
-        await api.post("/api/auth/register", dadosCompletos);
-      }
+  await api.post("/api/auth/register-ong", dadosCompletos);
+} else {
+  await api.post("/api/auth/register", dadosCompletos);
+}
+
 
       alert("Cadastro realizado com sucesso!");
       navigate("/login");
@@ -255,6 +256,10 @@ useEffect(() => {
           <button type="submit" className={styles.botaoProx} disabled={isLoading}>
             {isLoading ? "Finalizando..." : "Finalizar Cadastro"}
           </button>
+
+          <p className={styles.inputLogin}>
+            Caso a ONG tenha mais de um endereço, opte pela unidade principal e depois adicione o outro endereço no perfil 
+          </p>
 
           <p className={styles.loginLink}>
             Já tem conta? <a href="/login">Login</a>

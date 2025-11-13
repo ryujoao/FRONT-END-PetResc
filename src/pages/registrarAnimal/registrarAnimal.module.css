@@ -12,27 +12,27 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center; /* centraliza horizontalmente */
-  text-align: center; /* centraliza textos e labels */
+  align-items: center;
+  text-align: center;
 }
 
 .imagemContainer {
   width: 60%;
-  min-height: 300px;        /* altura mínima para o container */
-  max-height: 400px;        /* altura máxima para o container */
+  min-height: 300px; /* altura mínima para o container */
+  max-height: 400px; /* altura máxima para o container */
   border-radius: 4px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;         /* evita que a imagem ultrapasse os limites */
+  overflow: hidden; /* evita que a imagem ultrapasse os limites */
 }
 
 .imagem {
-  width: 100%;             
-  height: 100%;            
-  object-fit: cover;        /* garante que a imagem preencha sem distorcer */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* garante que a imagem preencha sem distorcer */
   border-radius: 8px;
   margin-bottom: 10px;
   cursor: pointer;
@@ -65,23 +65,22 @@
   line-height: 1.4;
 }
 
+.label {
+  margin-bottom: 0.25rem;
+  text-align: left;
+  width: 100%;
+  display: block;
+  font-size: 1.3rem;
+}
+
 .barraInfos {
-  width: 80%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.6rem;
   border: 1px solid #6487a3;
   border-radius: 5px;
   background-color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.label {
-  margin-bottom: 10px;
-  text-align: left;
-  margin-top: 1rem;
-  width: 80%;
-  font-size: 1.3rem;
+  color: #0f4979;
+  margin-bottom: 0;
 }
 
 /* Coluna do formulário */
@@ -141,8 +140,8 @@ select {
 }
 
 .formularioUploadArquivo {
-  width: 100%; 
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -155,7 +154,7 @@ select {
   border: 1px solid rgb(82, 82, 82);
   width: 100%;
   height: 100%;
-  display: flex; 
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -195,4 +194,74 @@ select {
 
 .botaoNavegar:hover {
   background-color: rgb(14, 14, 14);
+}
+
+.campoForm {
+  margin-bottom: 24px; /* Garante o espaçamento vertical */
+  width: 100%; /* Garante que o bloco ocupe a coluna */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 2. Bônus: Melhorando seu grupo de opções */
+.grupoOpcoes {
+  display: flex;
+  width: 100%;
+}
+
+.checkboxCustomizado {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 500px;
+  color: #333;
+  position: relative;
+  user-select: none;
+}
+
+.checkboxCustomizado input {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #0f4979;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: background-color 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkboxCustomizado:hover input ~ .checkmark {
+  background-color: #f0f8ff;
+}
+
+.checkboxCustomizado input:checked ~ .checkmark {
+  background-color: #286699;
+  border-color: #286699;
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkboxCustomizado input:checked ~ .checkmark::after {
+  display: block;
+}
+
+.checkboxCustomizado .checkmark::after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }
