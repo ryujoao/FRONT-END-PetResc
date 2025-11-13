@@ -109,52 +109,39 @@ export default function Perfil() {
 
    useEffect(() => {
   const fetchUserData = async () => {
-     const token = localStorage.getItem('@AuthData:token');
+    const token = localStorage.getItem('@AuthData:token');
     if (!token) {
       console.error("Usuário não autenticado");
       return;
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/me', {
-         method: 'GET',
-          headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-         }
+      const response = await fetch("http://localhost:3000/api/auth/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
       });
-      
-       console.log("Token enviado:", token);
+
+      console.log("Token enviado:", token);
 
       if (!response.ok) {
-        throw new Error('Falha ao buscar dados do usuário');
+        throw new Error("Falha ao buscar dados do usuário");
       }
 
-      try {
-        const response = await fetch("http://localhost:3000/auth/me", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const data: UserData = await response.json();
+      console.log("Dados recebidos:", data);
+      setUsuario(data);
 
-        console.log("Token enviado:", token);
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
+  };
 
-        if (!response.ok) {
-          throw new Error("Falha ao buscar dados do usuário");
-        }
+  fetchUserData();
+}, []);
 
-        const data: UserData = await response.json();
-        console.log("Dados recebidos:", data);
-        setUsuario(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   return (
     <>
