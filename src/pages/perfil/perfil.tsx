@@ -10,6 +10,9 @@ interface UserData {
   email: string;
   telefone?: string;
   role: string;
+  // NOVO: Adicionei nomeOng para bater com a lógica da Navbar
+  // (Seu backend precisa enviar isso)
+  nomeOng?: string; 
 }
 
 interface Pet {
@@ -107,31 +110,19 @@ export default function Perfil() {
     null
   );
 
-   useEffect(() => {
-  const fetchUserData = async () => {
-     const token = localStorage.getItem('@AuthData:token');
-    if (!token) {
-      console.error("Usuário não autenticado");
-      return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:3000/api/auth/me', {
-         method: 'GET',
-          headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-         }
-      });
-      
-       console.log("Token enviado:", token);
-
-      if (!response.ok) {
-        throw new Error('Falha ao buscar dados do usuário');
+  // --- BLOCO useEffect CORRIGIDO ---
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("@AuthData:token");
+      if (!token) {
+        console.error("Usuário não autenticado");
+        return;
       }
 
+      // 1. O 'try' começa aqui
       try {
-        const response = await fetch("http://localhost:3000/auth/me", {
+        // 2. Removi a chamada duplicada. Deixei apenas a com '/api/'
+        const response = await fetch("http://localhost:3000/api/auth/me", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -148,13 +139,15 @@ export default function Perfil() {
         const data: UserData = await response.json();
         console.log("Dados recebidos:", data);
         setUsuario(data);
+        
       } catch (error) {
-        console.error(error);
+        // 3. Adicionei o 'catch' que faltava para o 'try' principal
+        console.error("Erro ao buscar dados do usuário:", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, []); // O array de dependências vazio está correto
 
   return (
     <>
@@ -205,12 +198,12 @@ export default function Perfil() {
           </div>
           <div className={`${styles.infoBox} ${styles.alignCenter}`}>
             <p className={styles.username}>
-              {usuario?.nome || usuario?.nome || "Username"}
+              {/* Lógica para mostrar nome da ONG ou nome do usuário */}
+              {usuario?.role === "ONG"
+                ? usuario?.nomeOng || usuario?.nome
+                : usuario?.nome || "Username"}
             </p>
           </div>
-          {/* <div className={styles.infoBox}>
-          <p className={styles.username}>{usuario?.nome || 'Username'}</p>
-          </div> */}
           <div className={`${styles.infoBox} ${styles.alignRight}`}>
             <p>Localização</p>
             <p>SP, Brasil</p>
