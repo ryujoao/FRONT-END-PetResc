@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import styles from "./conta.module.css"; 
+import styles from "./conta.module.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../auth/AuthContext";
 
@@ -70,14 +69,15 @@ export default function Conta() {
 
   return (
     <div className={styles.formContainer}>
-      <div className={styles.formHeader}>
-        <h1 className={styles.title}>Conta</h1>
-      </div>
-
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>
           <label htmlFor="nome">Nome</label>
-          <input id="nome" type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+          <input
+            id="nome"
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
         </div>
 
         <div className={styles.inputGroup}>
@@ -87,10 +87,19 @@ export default function Conta() {
 
         <div className={styles.inputGroup}>
           <label htmlFor="telefone">Telefone</label>
-          <input id="telefone" type="tel" value={telefone} onChange={(e) => setTelefone(e.target.value)} />
+          <input
+            id="telefone"
+            type="tel"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+          />
         </div>
 
-        <button type="submit" className={styles.saveButton}>Salvar Alterações</button>
+        <div className={styles.buttonContainer}>
+          <button type="submit" className={styles.botaoSalvar}>
+            Salvar Alterações
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -48,9 +48,9 @@ export default function Institutos() {
         <h2>Escolha sua doação</h2>
 
         <div className={styles.valores}>
-          <label><input type="radio" name="valor" value="10" /> R$ 10,00 – Alimentação</label>
-          <label><input type="radio" name="valor" value="20" /> R$ 20,00 – Alimentação e emergências</label>
-          <label><input type="radio" name="valor" value="50" /> R$ 50,00 – Alimentação + tratamento</label>
+          <label><input type="radio" name="valor" value="10" /> R$ 10,00 - Alimentação</label>
+          <label><input type="radio" name="valor" value="20" /> R$ 20,00 - Alimentação e emergências</label>
+          <label><input type="radio" name="valor" value="50" /> R$ 50,00 - Alimentação + tratamento</label>
           <label className={styles.outroValor}>
             <input type="radio" name="valor" value="outro" /> Outro valor:
             <input type="number" placeholder="Digite o valor" />

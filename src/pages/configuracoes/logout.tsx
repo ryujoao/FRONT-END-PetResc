@@ -1,4 +1,3 @@
-// src/components/LogoutConfirm.tsx
 import React from 'react';
 import styles from '../configuracoes/logout.module.css'; 
 

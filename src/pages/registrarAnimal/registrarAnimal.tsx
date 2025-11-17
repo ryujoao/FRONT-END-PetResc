@@ -2,8 +2,8 @@ import { useState } from "react";
 import styles from "./registrarAnimal.module.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { IconCloud } from "../../components/icons";
 import Layout from "../../components/layout";
+import { BsCloudArrowUpFill } from "react-icons/bs";
 
 // =================================================================
 // === COMPONENTE 1: FORMULÁRIO DO USUÁRIO COMUM (SIMPLIFICADO) ===
@@ -104,10 +104,10 @@ const RegistrarAnimalUsuario = () => {
             <form className={styles.formularioUploadArquivo}>
               <label className={styles.rotuloUploadArquivo} htmlFor="uploadImagem">
                 <div className={styles.designUploadArquivo}>
-                  <IconCloud />
+                  <BsCloudArrowUpFill />
                   <p>Arraste uma imagem nesta área</p>
                   <p>ou</p>
-                  <span className={styles.botaoNavegar}>clique para selecionar uma imagem</span>
+                  <span className={styles.botaoNavegar}>Clique para selecionar uma imagem</span>
                 </div>
               </label>
             </form>
@@ -335,7 +335,7 @@ const RegistrarAnimalOng = () => {
             {!imgResgatePreview ? (
               <label className={styles.rotuloUploadArquivo} htmlFor="uploadResgate">
                 <div className={styles.designUploadArquivo}>
-                  <IconCloud />
+                  <BsCloudArrowUpFill />
                    <p>Arraste ou clique</p>
                 </div>
               </label>
@@ -355,7 +355,7 @@ const RegistrarAnimalOng = () => {
              {!imgAtualPreview ? (
                <label className={styles.rotuloUploadArquivo} htmlFor="uploadAtual">
                  <div className={styles.designUploadArquivo}>
-                    <IconCloud />
+                    <BsCloudArrowUpFill />
                     <p>Arraste ou clique</p>
                  </div>
                </label>

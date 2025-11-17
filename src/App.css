@@ -12,8 +12,8 @@
   max-height: 1080px;
 }
 
-::marker {
-  color: rgba(255, 255, 255, 0.87);
+ul, ol {
+  list-style: none;
 }
 
 a {

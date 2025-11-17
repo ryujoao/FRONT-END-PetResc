@@ -7,8 +7,41 @@ import StepPersonal from "./stepPersonal";
 import StepQuestionsGroup from "./stepQuestionsGroup";
 import StepFinal from "./stepFinal";
 import StepTermo from "./stepTermo";
-import { IconWrap } from "../../components/icons";
 
+// 1. REMOVI o IconWrap antigo
+// import { IconWrap } from "../../components/icons";
+
+// 2. ADICIONEI os ícones do react-icons
+import { 
+  FaRegCircle, 
+  FaRegDotCircle, 
+  FaRegCheckCircle 
+} from "react-icons/fa";
+
+// 3. DEFINI O NOVO IconWrap AQUI DENTRO
+type IconWrapProps = {
+  state: "done" | "active" | "idle";
+};
+
+const progressIconStyle = {
+  width: "20px",
+  height: "20px",
+};
+
+const IconWrap = ({ state }: IconWrapProps) => {
+  switch (state) {
+    case "done":
+      return <FaRegCheckCircle style={progressIconStyle} />;
+    case "active":
+      // Aqui está o ícone que você pediu
+      return <FaRegDotCircle style={progressIconStyle} />;
+    case "idle":
+    default:
+      return <FaRegCircle style={progressIconStyle} />;
+  }
+};
+
+// O resto do seu arquivo começa aqui
 export type FormData = {
   nome: string;
   email: string;
@@ -190,6 +223,7 @@ export default function FormularioAdotar() {
                 return (
                   <div key={s.id} className={`${styles.step} ${stateClass}`}>
                     <div className={styles.iconWrap} aria-hidden>
+                      {/* O NOVO IconWrap local será usado aqui */}
                       <IconWrap state={state} />
                     </div>
                     <div className={styles.stepTitle}>{s.title}</div>

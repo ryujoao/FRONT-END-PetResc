@@ -1,4 +1,4 @@
-import { IconGraphUp, IconJournalText, IconUiChecks } from "../../components/icons";
+import { BsGraphUp, BsJournalText, BsUiChecks } from "react-icons/bs";
 import Layout from "../../components/layout";
 import styles from "../home/home.module.css";
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ export default function Adotar() {
           <div className={styles.camposCards}>
             <div className={styles.cardComoAdotar}>
               <div className={styles.cardCirculo}>
-                <IconJournalText />
+                <BsJournalText />
               </div>
               <h3 className={styles.cardTitulo}>Formulário de Interesse</h3>
               <p className={styles.cardTexto}>
@@ -48,7 +48,7 @@ export default function Adotar() {
 
             <div className={styles.cardComoAdotar}>
               <div className={styles.cardCirculo}>
-                <IconGraphUp />
+                <BsGraphUp />
               </div>
               <h3 className={styles.cardTitulo}>Avaliação da adoção</h3>
               <p className={styles.cardTexto}>
@@ -60,7 +60,7 @@ export default function Adotar() {
 
             <div className={styles.cardComoAdotar}>
               <div className={styles.cardCirculo}>
-                <IconUiChecks />
+                <BsUiChecks />
               </div>
               <h3 className={styles.cardTitulo}>Adoção Completa</h3>
               <p className={styles.cardTexto}>

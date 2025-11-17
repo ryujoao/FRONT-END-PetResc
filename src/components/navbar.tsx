@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom"; // Import REAL
 import styles from "../style/navbar.module.css"; // Import REAL
 import Denuncie from "./denuncie"; // Import REAL
-import Notificacoes from "./notificacoes"; // Import REAL
+import Notificacoes from "./notificacao"; // Import REAL
 import { useAuth } from "../auth/AuthContext"; // Import REAL
-import { IconProfile } from "./icons";
+import { BsPersonCircle } from "react-icons/bs";
 
 export default function Nav() {
   const { isAuthenticated, login, logout, user } = useAuth(); // Hook REAL
@@ -108,7 +108,7 @@ export default function Nav() {
 
             <li>
               <Link to="/perfil" className={styles.perfilLink}>
-                <IconProfile />
+                <BsPersonCircle className={styles.perfilIcon} />
                 {/*
                   LÓGICA DO NOME CORRIGIDA (baseado no seu AuthContext):
                   Usando 'user.nome' porque 'user.nomeOng' não existe no seu context.

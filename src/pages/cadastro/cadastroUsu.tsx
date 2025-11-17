@@ -1,6 +1,8 @@
 import React, { useState } from 'react';import styles from "./cadastro.module.css";
 import { useNavigate } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { FaApple } from 'react-icons/fa6';
+import { FcGoogle } from 'react-icons/fc';
 
 function isCpfValido(cpf: string): boolean {
   // Remove caracteres não numéricos
@@ -64,11 +66,11 @@ export default function CadastroUsu() {
 
           <div className={styles.botoesRedes}>
             <button type="button" className={styles.botaoRede}>
-              <img className={styles.google} src="/icones/google.png" alt="Google" />
+              <FcGoogle />
               Cadastre-se com o Google
             </button>
             <button type="button" className={styles.botaoRede}>
-              <img className={styles.apple} src="/icones/apple.png" alt="Apple" />
+              <FaApple />
               Cadastre-se com a Apple
             </button>
           </div>

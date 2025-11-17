@@ -11,7 +11,7 @@ export default function Denuncie({ isOpen, onClose }: Props) {
   // Se não estiver aberto, não renderiza nada
   if (!isOpen) return null;
 
-  // ✅ Fecha o modal se o clique for no fundo (overlay)
+  //  Fecha o modal se o clique for no fundo (overlay)
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();

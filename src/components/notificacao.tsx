@@ -1,6 +1,6 @@
-import styles from '../style/notificacoes.module.css';
+import styles from '../style/notificacao.module.css';
 
-export default function Notificacoes() {
+export default function Notificacao() {
   const notificacoesExemplo = [
     { id: 1, message: 'Seu pet "Bolinha" foi cadastrado com sucesso!', time: 'Agora' },
     { id: 2, message: 'Lembrete: vacina da raiva para "Faisca" amanhã.', time: 'Ontem' },

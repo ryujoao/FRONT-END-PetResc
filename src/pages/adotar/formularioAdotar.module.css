@@ -1,6 +1,6 @@
 .pageFormularioAdotar {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background: #fff;
   color: #0f4979;
   box-sizing: border-box;
@@ -116,6 +116,7 @@
   flex-grow: 1; 
   display: flex; 
   flex-direction: column; 
+  
 }
 
 .titulo {
@@ -141,6 +142,7 @@
   gap: 1rem;
   min-height: 300px;
   flex-grow: 1; 
+  
 }
 
 .stepSection {
@@ -294,6 +296,8 @@
   margin-top: auto; /* Empurra para o final */
   flex-wrap: wrap;
 }
+
+
 .botoesVoltar,
 .botoesAvancar {
   width: 200px;
@@ -649,4 +653,10 @@
     font-size: 1rem;
     padding-left: 0.5rem;
   }
+}
+
+.finalIcon {
+  width: 80px;
+  height: 80px;
+  color: #3b9a6f;
 }

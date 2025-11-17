@@ -1,7 +1,7 @@
 import styles from "./formularioAdotar.module.css";
 // Importe o tipo de dados que você acabou de exportar
 import type { FormData } from "./formularioAdotar";
-import { IconCheckFinal } from "../../components/icons";
+import { BsCheckCircleFill } from "react-icons/bs";
 
 // Componente auxiliar para renderizar cada item da lista
 // (Definido fora para ser mais limpo)
@@ -38,7 +38,7 @@ export default function StepFinal({ data }: Props) {
     // section não precisa mais do stepSection, pois o header já centraliza
     <section> 
       <div className={styles.finalHeader}>
-        <IconCheckFinal />
+        <BsCheckCircleFill className={styles.finalIcon} />
 
         <h2 className={styles.finalTitle}>Tudo pronto!</h2>
 

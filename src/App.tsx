@@ -16,10 +16,13 @@ import Login from "./pages/cadastro/login";
 import CadastroFinal from "./pages/cadastro/cadastroFinal";
 import FormularioLarTemporario from "./pages/larTemporario/formularioLarTemporario";
 import FormularioAdotar from "./pages/adotar/formularioAdotar";
-import Config from "./pages/configuracoes/configMenu";
 import ConfigLayout from "./pages/configuracoes/configLayout";
 import ConfigMenu from "./pages/configuracoes/configMenu";
 import Conta from "./pages/configuracoes/conta";
+import Endereco from "./pages/configuracoes/endereco";
+import Notificacoes from "./pages/configuracoes/notificacoes";
+import Privacidade from "./pages/configuracoes/privacidade";
+
 
 // ...existing code...
 function App() {
@@ -49,10 +52,10 @@ function App() {
 
       <Route element={<ConfigLayout />}>
         <Route path="/config/conta" element={<Conta />} />
-        {/* <Route path="endereco" element={<PaginaEndereco />} /> */}
-        {/* <Route path="seguranca" element={<PaginaSeguranca />} /> */}
-        {/* <Route path="notificacao" element={<PaginaNotificacao />} /> */}
-        {/* ... etc ... */}
+        <Route path="/config/endereco" element={<Endereco />} />
+        <Route path="/config/notificacoes" element={<Notificacoes />} />
+        <Route path="/config/privacidade" element={<Privacidade />} />
+        
       </Route>
     </Routes>
   );

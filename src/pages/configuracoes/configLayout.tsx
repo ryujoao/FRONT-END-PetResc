@@ -1,9 +1,9 @@
-import { Link, Outlet } from "react-router-dom"; // Importe o Outlet!
-// Recomendo criar um CSS novo, mas pode usar o de perfil se as classes baterem
+import { Link, Outlet } from "react-router-dom"; 
 import styles from "../perfil/perfil.module.css";
 import { useState, useEffect } from "react";
-import { IconAvatar, IconConfig } from "../../components/icons";
 import Layout from "../../components/layout";
+import { BsFillPersonFill } from "react-icons/bs";
+import { TbSettingsFilled } from "react-icons/tb";
 
 interface UserData {
   id: number;
@@ -14,7 +14,6 @@ interface UserData {
 }
 
 export default function ConfigLayout() {
-
   const [usuario, setUsuario] = useState<UserData | null>(null);
   const [imagemSelecionada, setImagemSelecionada] = useState<string | null>(
     null
@@ -50,35 +49,33 @@ export default function ConfigLayout() {
   return (
     <>
       <Layout>
+        <div className={styles.perfilContainer}>
+          <div className={styles.banner}>
+            <Link to="/config" className={styles.configIcon}>
+              <TbSettingsFilled />
+            </Link>
+          </div>
 
-      <div className={styles.perfilContainer}>
-        <Link to="/config" className={styles.configIcon}>
-          <IconConfig />
-        </Link>
+          <div className={styles.avatar}>
+            <div  className={styles.avatarLabel}>
+              {imagemSelecionada ? (
+                <img
+                  src={imagemSelecionada}
+                  alt="Avatar"
+                  className={styles.avatarImage}
+                />
+              ) : (
+                <BsFillPersonFill className={styles.avatarIcon} />
+              )}
+            </div>
+          </div>
 
-        <div className={styles.banner}></div>
+          <p className={styles.username}>{usuario?.nome || "Username"}</p>
 
-        <div className={styles.avatar}>
-          <label htmlFor="uploadImagem" className={styles.avatarLabel}>
-            {imagemSelecionada ? (
-              <img
-                src={imagemSelecionada}
-                alt="Avatar"
-                className={styles.avatarImage}
-              />
-            ) : (
-              <IconAvatar className={styles.avatarIcon} />
-            )}
-          </label>
+          <div className={styles.contentArea}>
+            <Outlet />
+          </div>
         </div>
-
-        <p className={styles.username}>{usuario?.nome || "Username"}</p>
-
-        <div className={styles.contentArea}>
-          <Outlet />
-        </div>
-      </div>
-
       </Layout>
     </>
   );

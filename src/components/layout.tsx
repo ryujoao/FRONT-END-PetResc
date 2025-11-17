@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className={styles.wrapper}>
       <Nav />
       
-      /* espaçamento correto */
+      
       <main className={styles.mainContent}>
         {children}
       </main>

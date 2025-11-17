@@ -2,6 +2,7 @@
   font-family: 'Darker Grotesque', sans-serif;
 }
 
+
 .navbar {
   display: flex;
   width: 100%;
@@ -183,6 +184,12 @@ button.navLink:hover {
 
 .perfilUsuario svg {
   color: black;
+}
+
+.perfilIcon {
+  width: 35px;
+  height: 35px;
+  color: #000;
 }
 
 

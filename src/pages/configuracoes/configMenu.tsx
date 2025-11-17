@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import styles from "../configuracoes/config.module.css";
 import { useAuth } from "../../auth/AuthContext";
 import Logout from "../configuracoes/logout"; 
-import { IconPerson, IconHome, IconBell, IconShield, IconLock, IconArrowRight } from "../../components/icons";
 import Layout from "../../components/layout";
+import { BsBellFill, BsChevronRight, BsFillLockFill, BsFillShieldFill, BsHouseFill, BsPersonFill } from "react-icons/bs";
 
 export default function ConfigMenu() {
   const { logout } = useAuth();
@@ -17,11 +17,11 @@ export default function ConfigMenu() {
 
   // Icones e rotas do menu de configurações
   const menuItems = [
-    { to: "/config/conta", label: "Conta", icon: <IconPerson /> },
-    { to: "/config/endereco", label: "Endereço", icon: <IconHome /> },
-    { to: "/config/notificacao", label: "Notificação", icon: <IconBell /> },
-    { to: "/config/privacidade", label: "Privacidade", icon: <IconShield /> },
-    { to: "/config/seguranca", label: "Segurança", icon: <IconLock /> },
+    { to: "/config/conta", label: "Conta", icon: <BsPersonFill /> },
+    { to: "/config/endereco", label: "Endereço", icon: <BsHouseFill />  },
+    { to: "/config/notificacoes", label: "Notificação", icon: <BsBellFill /> },
+    { to: "/config/privacidade", label: "Privacidade", icon: <BsFillShieldFill /> },
+    { to: "/config/seguranca", label: "Segurança", icon: <BsFillLockFill />},
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function ConfigMenu() {
                   {item.icon}
                 </div>
                 <span className={styles.itemTexto}>{item.label}</span>
-                <IconArrowRight />
+                <BsChevronRight  className={styles.seta} />
               </Link>
             ))}
           </div>

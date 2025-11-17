@@ -39,7 +39,7 @@ export default function Footer() {
             <ul>
               <li><a href="#">E-mail: contato@petcontrol.org</a></li>
               <li><a href="#">Telefone/WhatsApp: (11) 99999-9999</a></li>
-              <li><a href="#">Endereço: Rua Exemplo, 123 – São Paulo/SP</a></li>
+              <li><a href="#">Endereço: Rua Exemplo, 123 - São Paulo/SP</a></li>
             </ul>
           </div>
 
