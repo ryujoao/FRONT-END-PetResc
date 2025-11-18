@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 2rem 5rem 2rem;
+  padding: 2rem; 
   background-color: #fff;
   min-height: 100vh;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .titulo {
@@ -19,30 +20,40 @@
   width: 100%;
   max-width: 700px;
   margin-bottom: 2.5rem;
+  display: flex;        /* Garante comportamento flex */
+  flex-direction: column; /* Itens um abaixo do outro */
 }
 
 .subtitulo {
   font-size: 1.7rem;
   color: #004080;
-
   letter-spacing: 0.5px;
   margin-bottom: 1rem;
   padding-left: 0.5rem;
 }
 
+/* O SEGREDO DA PADRONIZAÇÃO */
 .configItem {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Garante distribuição */
+  width: 100%;          /* Ocupa toda a largura da section */
   padding: 1rem 0.5rem;
   border-bottom: 1px solid #f0f0f0;
   text-decoration: none;
   color: #333;
   transition: background-color 0.2s;
+  box-sizing: border-box; /* Padding não aumenta a largura total */
+  
+  /* Resets para Botões (<button>) */
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f0f0f0; /* Recoloca a borda que o reset tirou */
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left; /* Importante para botões */
 }
 
-.configItem:last-child {
-  border-bottom: none;
-}
 
 .configItem:hover {
   background-color: #f9f9f9;
@@ -58,18 +69,28 @@
   align-items: center;
   justify-content: center;
   margin-right: 1.5rem;
+  flex-shrink: 0; /* Impede o ícone de amassar */
 }
 
 .itemTexto {
   font-size: 1.5rem;
   font-weight: 700;
   color: #004080;
+  flex: 1; /* EMPURRA A SETA: Ocupa todo o espaço disponível */
+  margin-right: 1rem;
 }
 
+.seta {
+  color: #004080;
+  font-size: 1.5rem;
+  flex-shrink: 0; /* Impede a seta de sumir/amassar */
+}
+
+/* Estilos específicos para AJUDA/LOGOUT */
 .ajudaLista {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  width: 100%;
   padding-left: 0.5rem;
 }
 
@@ -82,9 +103,8 @@
   border: none;
   padding: 0;
   font-family: inherit;
-  text-align: left;
-  width: 100%;
   cursor: pointer;
+  text-align: left;
 }
 
 .ajudaLink:hover {
@@ -96,14 +116,168 @@
   font-weight: 900;
 }
 
-.botaoLogout:hover {
-  filter: brightness(0.8);
-  text-decoration: underline;
+.wideSection {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
 }
 
-.seta {
-  margin-left: auto;
+.tabContainer {
+  display: flex;
+  width: 100%;
+  border: 1px solid #004080;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background-color: #fff;
+}
+
+.tabActive {
+  flex-basis: 25%;
+  flex-shrink: 0;
+  padding: 0.8rem 0.5rem;
+  border: none;
+  background: #c9dff4;
   color: #004080;
-  font-size: 1.5rem;
-  
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: default;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.tabInactive {
+  flex-basis: 25%;
+  flex-shrink: 0;
+  padding: 0.8rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: #6b8bad;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  border-left: 1px solid #e0e0e0;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.tabInactive:first-child {
+  border-left: none;
+}
+
+.tabInactive:hover {
+  background-color: #eef7fb;
+  color: #004080;
+}
+
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  background-color: #f0f9ff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.cardImageWrapper {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.petName {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0f4979;
+  margin: 0;
+}
+
+.badgeStatus {
+  background-color: #2e7d32;
+  color: white;
+  padding: 0.2rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.petDetails {
+  font-size: 0.9rem;
+  color: #0f4979;
+  margin-top: 0.2rem;
+}
+
+.cardStage {
+  flex: 1.5;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stageTitle {
+  font-size: 1.1rem;
+  color: #0f4979;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.stageDesc {
+  font-size: 0.9rem;
+  color: #0f4979;
+  line-height: 1.4;
+  max-width: 350px;
+}
+
+.emptyState {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .cardInfo, .cardStage {
+    align-items: center;
+    text-align: center;
+  }
+  .tabContainer {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  .tabInactive {
+    border-left: none;
+    border-top: 1px solid #eee;
+  }
 }

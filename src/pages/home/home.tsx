@@ -50,7 +50,7 @@ function Home() {
         <section className={styles.bannerUm}>
           <div className={styles.homeTitulo}>
             <h1 className={styles.titulo}>Apresente um novo amigo ao mundo!</h1>
-            <Link to="/registrarAnimal" style={{ textDecoration: "none" }}>
+            <Link to="/registrar-animal" style={{ textDecoration: "none" }}>
               <button className={styles.subtitulo}>Cadastrar Animal</button>
             </Link>
           </div>

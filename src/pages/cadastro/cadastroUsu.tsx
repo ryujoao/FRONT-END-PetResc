@@ -43,7 +43,7 @@ export default function CadastroUsu() {
     const dadosDaPagina1 = { nome, cpf, email };
 
     // Navega para a próxima página enviando o TIPO 'usuario' e os DADOS
-    navigate('/cadastroNext', { 
+    navigate('/cadastro-next', { 
       state: { 
         tipo: 'usuario', 
         dados: dadosDaPagina1 
@@ -115,7 +115,7 @@ export default function CadastroUsu() {
 
           {error && <p style={{ color: 'red', textAlign: 'center', marginTop: '1rem' }}>{error}</p>}
           
-        {/* <Link to={"/cadastroNext"}> */}
+        {/* <Link to={"/cadastro-next"}> */}
           <button type="submit"  className={styles.botaoProx}>
             Próximo
           </button>

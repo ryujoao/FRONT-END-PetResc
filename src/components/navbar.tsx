@@ -61,7 +61,7 @@ export default function Nav() {
               </li>
               <li>
                 <Link
-                  to={isAuthenticated ? "/larTemporario" : "/cadastro"}
+                  to={isAuthenticated ? "/lar-temporario" : "/cadastro"}
                   className={styles.navLink}
                 >
                   Lar Temporário
@@ -91,7 +91,7 @@ export default function Nav() {
           </li>
           <li>
             <Link
-              to={isAuthenticated ? "/registrarAnimal" : "/cadastro"}
+              to={isAuthenticated ? "/registrar-animal" : "/cadastro"}
               className={styles.navLink}
             >
               Registrar Animal
@@ -125,7 +125,7 @@ export default function Nav() {
         ) : (
           // Se DESLOGADO
           <ul className={styles.botoesCadastro}>
-            <Link to={"/cadastroOng"} style={{ textDecoration: "none" }}>
+            <Link to={"/cadastro-ong"} style={{ textDecoration: "none" }}>
               <button className={styles.cadastroONG}>Cadastre sua ONG</button>
             </Link>
             <Link to={"/cadastro"} style={{ textDecoration: "none" }}>

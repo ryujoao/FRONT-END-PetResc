@@ -73,7 +73,7 @@ export default function CadastroNext() {
       };
 
       delete dadosCombinados.name;
-      navigate("/cadastroFinal", { state: dadosCombinados });
+      navigate("/cadastro-final", { state: dadosCombinados });
     } else {
       setError("Tipo de cadastro desconhecido.");
       setIsLoading(false);
