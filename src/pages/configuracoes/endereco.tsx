@@ -4,6 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 
 export default function Endereco() {
   const { user, setUser } = useAuth();
+  
 
   const [cep, setCep] = useState(user?.cep || "");
   const [rua, setRua] = useState(user?.rua || "");
@@ -13,6 +14,7 @@ export default function Endereco() {
   const [cidade, setCidade] = useState(user?.cidade || "");
   const [estado, setEstado] = useState(user?.estado || "");
   const [loading, setLoading] = useState(false);
+
 
   const numeroRef = useRef<HTMLInputElement>(null);
 
@@ -57,6 +59,7 @@ export default function Endereco() {
       setLoading(false);
       return;
     }
+
 
     const enderecoData = { cep, rua, numero, complemento, bairro, cidade, estado };
 
@@ -107,6 +110,7 @@ export default function Endereco() {
             onBlur={buscarCep} // <--- IMPORTANTE: Isso ativa a busca do CEP
             placeholder="00000000"
           />
+
         </div>
 
         <div className={styles.inputGroup}>

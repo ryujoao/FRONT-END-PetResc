@@ -300,9 +300,11 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
         </div>
       </div>
 
-      {/* O restante do seu componente (banner nova campanha) */}
       <section className={styles.bannerNovaCampanha}>
         <div className={styles.textoEsquerda}>
+          <Link to="/doacoes" className={styles.botoes}>
+            Doe Agora
+          </Link>
           <p>
             Sua doação é muito mais do que um simples gesto de solidariedade —
             ela é o que nos permite alimentar, tratar e proteger cada um dos
@@ -318,7 +320,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
             tantos animais esperam: um futuro livre do abandono, da fome e do
             sofrimento.
           </p>
-          <Link to="/nova-campanha" className={styles.botaoNovaCampanha}>
+          <Link to="/novaCampanha" className={styles.botoes}>
             Nova Campanha
           </Link>
         </div>

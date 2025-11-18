@@ -160,7 +160,7 @@ export default function Perfil() {
           <div className={styles.btnContainer}>
             <button
               className={
-                activeView === "todos" ? styles.salvos : styles.editarPerfil
+                activeView === "todos" ? styles.tabUm : styles.tabDois
               }
               onClick={() => setActiveView("todos")}
             >
@@ -168,7 +168,7 @@ export default function Perfil() {
             </button>
             <button
               className={
-                activeView === "salvos" ? styles.salvos : styles.editarPerfil
+                activeView === "salvos" ? styles.tabUm : styles.tabDois
               }
               onClick={() => setActiveView("salvos")}
             >
@@ -180,7 +180,7 @@ export default function Perfil() {
             <h2 className={styles.petsTitulo}>
               {activeView === "todos" ? "Meus Pets" : "Pets Salvos"}
             </h2>
-            <Link to="/registrarAnimal" className={styles.addIcon}>
+            <Link to="/registrar-animal" className={styles.addIcon}>
               <BsPlus />
             </Link>
           </div>

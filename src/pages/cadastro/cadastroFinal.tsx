@@ -64,45 +64,45 @@ useEffect(() => {
   }
 }, [estado]);
 
-useEffect(() => {
-  const cepFormatado = cep.replace(/\D/g, "");
-  if (cepFormatado.length === 8) {
-    axios
-      .get(`https://viacep.com.br/ws/${cepFormatado}/json/`)
-      .then((response) => {
-        if (!response.data.erro) {
-          setRua(response.data.logradouro);
-          setBairro(response.data.bairro);
-          setEstado(response.data.uf);
-          setCidade(response.data.localidade);
-          setError("");
-        } else {
-          setError("CEP não encontrado.");
-        }
-      })
-      .catch(() => setError("Erro ao buscar o CEP."));
-  }
-}, [cep]);
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!cep || !rua || !numero || !bairro || !cidade || !estado) {
-      setError("Por favor, preencha todos os campos do endereço.");
-      return;
+  useEffect(() => {
+    const cepFormatado = cep.replace(/\D/g, "");
+    if (cepFormatado.length === 8) {
+      axios
+        .get(`https://viacep.com.br/ws/${cepFormatado}/json/`)
+        .then((response) => {
+          if (!response.data.erro) {
+            setRua(response.data.logradouro);
+            setBairro(response.data.bairro);
+            setEstado(response.data.uf);
+            setCidade(response.data.localidade);
+            setError("");
+          } else {
+            setError("CEP não encontrado.");
+          }
+        })
+        .catch(() => setError("Erro ao buscar o CEP."));
     }
+  }, [cep]);
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError("");
 
-    if (!dadosEtapaAnterior || !dadosEtapaAnterior.email || !dadosEtapaAnterior.password || !dadosEtapaAnterior.cpf) {
-      setError("Campos obrigatórios da etapa anterior estão faltando.");
-      return;
-    }
+      if (!cep || !rua || !numero || !bairro || !cidade || !estado) {
+        setError("Por favor, preencha todos os campos do endereço.");
+        return;
+      }
 
-    if (tipo === "ong" && !dadosEtapaAnterior.descricao) {
-      setError("Erro: A 'descrição' da ONG não foi encontrada.");
-      return;
-    }
+      if (!dadosEtapaAnterior || !dadosEtapaAnterior.email || !dadosEtapaAnterior.password || !dadosEtapaAnterior.cpf) {
+        setError("Campos obrigatórios da etapa anterior estão faltando.");
+        return;
+      }
 
-    setIsLoading(true);
+      if (tipo === "ong" && !dadosEtapaAnterior.descricao) {
+        setError("Erro: A 'descrição' da ONG não foi encontrada.");
+        return;
+      }
+
+      setIsLoading(true);
 
     const dadosCompletos = {
       nome: dadosEtapaAnterior.nome || dadosEtapaAnterior.name,

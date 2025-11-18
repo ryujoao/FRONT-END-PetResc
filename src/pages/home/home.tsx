@@ -50,7 +50,7 @@ function Home() {
         <section className={styles.bannerUm}>
           <div className={styles.homeTitulo}>
             <h1 className={styles.titulo}>Apresente um novo amigo ao mundo!</h1>
-            <Link to="/registrarAnimal" style={{ textDecoration: "none" }}>
+            <Link to="/registrar-animal" style={{ textDecoration: "none" }}>
               <button className={styles.subtitulo}>Cadastrar Animal</button>
             </Link>
           </div>
@@ -117,12 +117,12 @@ function Home() {
                 todas as suas campanhas anteriores, com relatórios e histórico
                 de contribuições.
               </p>
-              <div className={styles.buttonWrapper}>
-                <button>
-                  <a href="/nova-campanha">Nova Campanha</a>
+              <div className={styles.botaoWrapper}>
+                <button className={styles.botaoDoar}>
+                  <a href="/novaCampanha">Nova Campanha</a>
                 </button>
-                <button>
-                  <a href="/campanhas-anteriores">Campanhas Anteriores</a>
+                <button className={styles.botaoDoar}>
+                  <a href="/campanhasAnteriores">Campanhas Anteriores</a>
                 </button>
               </div>
             </div>

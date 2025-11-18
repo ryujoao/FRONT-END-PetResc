@@ -8,7 +8,6 @@ import { FaPaw } from "react-icons/fa";
 import { IoIosArrowForward, IoIosInformationCircle } from "react-icons/io";
 import { GoGift } from "react-icons/go";
 
-
 interface Notificacao {
   id: number;
   icon: React.ReactNode;
@@ -63,38 +62,33 @@ export default function Notificacoes() {
     <div className={listStyles.configContainer}>
       <h1 className={listStyles.titulo}>Notificações</h1>
 
-     
       <div className={tabStyles.btnContainer} style={{ marginBottom: '2.5rem' }}>
         <button
-          className={
-            activeView === "lida" ? tabStyles.salvos : tabStyles.editarPerfil
-          }
+          className={activeView === "lida" ? tabStyles.tabUm : tabStyles.tabDois}
           onClick={() => setActiveView("lida")}
         >
           Lidas
         </button>
         <button
-          className={
-            activeView === "nao_lida" ? tabStyles.salvos : tabStyles.editarPerfil
-          }
+          className={activeView === "nao_lida" ? tabStyles.tabUm : tabStyles.tabDois}
           onClick={() => setActiveView("nao_lida")}
         >
           Não lidas
         </button>
       </div>
-
       
       <section className={listStyles.configSection}>
         {notificacoesParaExibir.length > 0 ? (
           notificacoesParaExibir.map((notificacao) => (
             <Link to={notificacao.path || "#"} className={listStyles.configItem} key={notificacao.id}>
               <div className={listStyles.iconCircle}>{notificacao.icon}</div>
+              {/* O CSS atualizado do itemTexto vai empurrar a seta para a direita */}
               <span className={listStyles.itemTexto}>{notificacao.texto}</span>
               <IoIosArrowForward className={listStyles.seta} />
             </Link>
           ))
         ) : (
-          <p className={listStyles.itemTexto} style={{ textAlign: 'center' }}>
+          <p className={listStyles.itemTexto} style={{ textAlign: 'center', marginTop: '2rem' }}>
             Nenhuma notificação por aqui.
           </p>
         )}

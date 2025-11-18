@@ -1,92 +1,182 @@
-/* Container principal */
+/* Container principal para centralizar e limitar a largura */
 .container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-  font-family: 'Segoe UI', sans-serif;
-  color: #333;
-  background-color: #fff;
+    max-width: 1200px; /* Largura máxima do conteúdo */
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-/* Nome do pet */
-.nome {
-  font-size: 2.4rem;
-  margin-bottom: 0.5rem;
-  color: #222;
+/* ---------------------------------------------------- */
+/* --- 1. SEÇÃO PRINCIPAL (FOTO | INFO | COMENTÁRIO) --- */
+/* ---------------------------------------------------- */
+
+.profileWrapper {
+    display: grid;
+    /* 3 colunas: Foto (350px) | Info (flexível) | Comentário (flexível) */
+    grid-template-columns: 350px 1fr 1fr; 
+    gap: 30px;
+    margin-bottom: 40px;
 }
 
-/* Status de adoção */
-.status {
-  font-size: 1.2rem;
-  color: #4caf50;
-  margin-bottom: 2rem;
+/* --- COLUNA DA IMAGEM --- */
+
+.imagemContainer {
+    grid-column: 1 / 2;
+    display: flex;
+    justify-content: center;
 }
 
-/* Imagem do pet */
 .imagem {
-  text-align: center;
-  margin-bottom: 2.5rem;
+    width: 350px;
+    height: 350px;
+    border-radius: 15px; /* Bordas arredondadas */
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra suave */
 }
 
 .imagem img {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Seções de dados */
+/* --- COLUNA DE INFORMAÇÕES BÁSICAS --- */
+
+.infoContainer {
+    grid-column: 2 / 3; 
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+.nome {
+    font-size: 2.8em;
+    font-weight: 700;
+    color: #2b6b99; /* Cor principal (Azul PetResc) */
+    margin-bottom: 5px;
+}
+
+.status {
+    display: inline-block;
+    background-color: #ff9900; /* Laranja/Amarelo */
+    color: white;
+    padding: 6px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 25px;
+    width: fit-content;
+}
+
 .dados {
-  margin-bottom: 2.5rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
 }
 
-.dados h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  color: #444;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
+.infoLine {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 8px;
 }
 
-.dados ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* --- COLUNA DE COMENTÁRIO/DESCRIÇÃO --- */
+
+.comentarioContainer {
+    grid-column: 3 / 4; 
+    background-color: #f7f7f7; /* Fundo cinza claro */
+    padding: 30px;
+    border-radius: 15px;
+    height: fit-content;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.dados li {
-  font-size: 1rem;
-  margin-bottom: 0.6rem;
-  padding-left: 1rem;
-  position: relative;
+.comentarioContainer h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 0;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-.dados li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: #4caf50;
-  font-size: 1.2rem;
+.comentarioContainer p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
 }
 
-/* Comentário do anunciante */
-.comentario {
-  background-color: #f6f6f6;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+/* ---------------------------------------------------- */
+/* --- 2. SEÇÃO DE CARACTERÍSTICAS (GRID INFERIOR) --- */
+/* ---------------------------------------------------- */
+
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin: 40px 0;
 }
 
-.comentario h2 {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: #555;
+.caracteristicasGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
+    gap: 30px;
 }
 
-.comentario p {
-  font-style: italic;
-  line-height: 1.6;
-  color: #444;
+.caracteristicaColuna {
+    padding: 10px 0;
+}
+
+.caracteristicaColuna h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2b6b99;
+    margin-bottom: 20px;
+}
+
+.caracteristicaColuna ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.caracteristicaColuna ul li {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.tagsList li {
+    background-color: #e6f7ff; /* Cor de fundo suave para tags */
+    color: #2b6b99;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+/* ---------------------------------------------------- */
+/* --- BOTÃO DE AÇÃO --- */
+/* ---------------------------------------------------- */
+
+.botaoAdotar {
+    background: linear-gradient(to right, #ff9900, #ffc04d); 
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s;
+    width: 100%; /* Ocupa a largura da coluna de informações */
+    margin-top: auto; /* Empurra o botão para baixo na coluna 2 */
+}
+
+.botaoAdotar:hover {
+    background: linear-gradient(to right, #ffb347, #ff9900);
 }
