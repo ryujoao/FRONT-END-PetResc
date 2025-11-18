@@ -117,12 +117,12 @@ function Home() {
                 todas as suas campanhas anteriores, com relatórios e histórico
                 de contribuições.
               </p>
-              <div className={styles.buttonWrapper}>
-                <button>
-                  <a href="/nova-campanha">Nova Campanha</a>
+              <div className={styles.botaoWrapper}>
+                <button className={styles.botaoDoar}>
+                  <a href="/novaCampanha">Nova Campanha</a>
                 </button>
-                <button>
-                  <a href="/campanhas-anteriores">Campanhas Anteriores</a>
+                <button className={styles.botaoDoar}>
+                  <a href="/campanhasAnteriores">Campanhas Anteriores</a>
                 </button>
               </div>
             </div>
