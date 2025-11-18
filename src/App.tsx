@@ -22,6 +22,10 @@ import Conta from "./pages/configuracoes/conta";
 import Endereco from "./pages/configuracoes/endereco";
 import Notificacoes from "./pages/configuracoes/notificacoes";
 import Privacidade from "./pages/configuracoes/privacidade";
+import Seguranca from "./pages/configuracoes/seguranca";
+import AlterarSenha from "./pages/configuracoes/alterarSenha";
+import Historico from "./pages/configuracoes/historico";
+import HistoricoAnimais from "./pages/configuracoes/historicoAnimais";
 
 
 // ...existing code...
@@ -30,23 +34,23 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/adotar" element={<Adotar />} />
-      <Route path="/larTemporario" element={<LarTemporario />} />
+      <Route path="/lar-temporario" element={<LarTemporario />} />
       <Route path="/doar" element={<Doar />} />
       <Route path="/cadastro" element={<CadastroUsu />} />
-      <Route path="/cadastroNext" element={<CadastroNext />} />
+      <Route path="/cadastro-next" element={<CadastroNext />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/registrarAnimal" element={<RegistrarAnimal />} />
-      <Route path="/centralAdocao" element={<CentralAdocao />} />
+      <Route path="/registrar-animal" element={<RegistrarAnimal />} />
+      <Route path="/central-adocao" element={<CentralAdocao />} />
       <Route path="/perfil" element={<Perfil />} />
-      <Route path="/perfilAnimal/:id" element={<PerfilAnimal />} />
+      <Route path="/perfil-animal/:id" element={<PerfilAnimal />} />
       <Route path="/instituto/:id" element={<Institutos />} />
-      <Route path="/cadastroOng" element={<CadastroOng />} />
-      <Route path="/cadastroFinal" element={<CadastroFinal />} />
+      <Route path="/cadastro-ong" element={<CadastroOng />} />
+      <Route path="/cadastro-final" element={<CadastroFinal />} />
       <Route
-        path="/formularioLarTemporario"
+        path="/formulario-lar-temporario"
         element={<FormularioLarTemporario />}
       />
-      <Route path="/formularioAdotar" element={<FormularioAdotar />} />
+      <Route path="/formulario-adotar" element={<FormularioAdotar />} />
 
       <Route path="/config" element={<ConfigMenu />} />
 
@@ -55,6 +59,10 @@ function App() {
         <Route path="/config/endereco" element={<Endereco />} />
         <Route path="/config/notificacoes" element={<Notificacoes />} />
         <Route path="/config/privacidade" element={<Privacidade />} />
+        <Route path="/config/seguranca" element={<Seguranca />} />
+        <Route path="/config/alterar-senha" element={<AlterarSenha />} />
+        <Route path="/config/historico" element={<Historico />} />
+        <Route path="/config/historico-animais" element={<HistoricoAnimais />} />
         
       </Route>
     </Routes>

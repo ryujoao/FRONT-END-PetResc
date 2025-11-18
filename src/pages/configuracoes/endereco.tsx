@@ -4,6 +4,7 @@ import { useAuth } from "../../auth/AuthContext";
 
 export default function Endereco() {
   const { user, setUser } = useAuth();
+  
 
 
   const [cep, setCep] = useState(user?.cep || "");
@@ -14,11 +15,11 @@ export default function Endereco() {
   const [cidade, setCidade] = useState(user?.cidade || "");
   const [estado, setEstado] = useState(user?.estado || "");
   
-  // (Aqui você pode adicionar sua lógica de buscar CEP)
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // (Aqui virá sua lógica de salvar o endereço na API)
+    
     const enderecoData = { cep, rua, numero, complemento, bairro, cidade, estado };
     console.log("Salvando endereço:", enderecoData);
     alert("Endereço salvo!");
@@ -34,7 +35,7 @@ export default function Endereco() {
        
         <div className={styles.inputGroup}>
           <label htmlFor="cep">CEP</label>
-          <input id="cep" type="text" maxLength={8} value={cep} onChange={(e) => setCep(e.target.value)} />
+          <input id="cep" type="text" maxLength={9} value={cep} onChange={(e) => setCep(e.target.value)} />
         </div>
 
         <div className={styles.inputGroup}>

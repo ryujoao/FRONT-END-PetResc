@@ -11,10 +11,10 @@ export default function Adotar() {
       <div className={styles.bannerUm}>
         <div className={styles.homeTitulo}>
           <h1 className={styles.titulo}>Conheça seu novo melhor amigo!</h1>
-          <Link to="/formularioAdotar" style={{ textDecoration: "none" }}>
+          <Link to="/formulario-adotar" style={{ textDecoration: "none" }}>
             <button className={styles.subtitulo}>Formulário</button>
           </Link>
-          <Link to="/centralAdocao" style={{ textDecoration: "none" }}>
+          <Link to="/central-adocao" style={{ textDecoration: "none" }}>
             <button className={styles.subtitulo}>Pets Disponíveis</button>
           </Link>
         </div>

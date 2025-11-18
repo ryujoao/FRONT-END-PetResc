@@ -34,7 +34,7 @@ export default function CadastroOng() {
       descricao,
     };
 
-    navigate("/cadastroNext", {
+    navigate("/cadastro-next", {
       state: {
         tipo: "ong",
         dados: dadosDaPagina1,

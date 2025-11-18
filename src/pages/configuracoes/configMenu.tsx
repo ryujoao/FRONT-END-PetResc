@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "../configuracoes/config.module.css";
+import styles from "./config.module.css"
 import { useAuth } from "../../auth/AuthContext";
 import Logout from "../configuracoes/logout"; 
 import Layout from "../../components/layout";
@@ -15,7 +15,6 @@ export default function ConfigMenu() {
     setShowLogout(false);
   };
 
-  // Icones e rotas do menu de configurações
   const menuItems = [
     { to: "/config/conta", label: "Conta", icon: <BsPersonFill /> },
     { to: "/config/endereco", label: "Endereço", icon: <BsHouseFill />  },
@@ -36,22 +35,19 @@ export default function ConfigMenu() {
       <div className={styles.configContainer}>
         <h1 className={styles.titulo}>Configurações</h1>
 
-        
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Conta</h2>
-          <div>
-            {menuItems.map((item) => (
-              <Link key={item.to} to={item.to} className={styles.configItem}>
-                <div className={styles.iconCircle}>
-                  {item.icon}
-                </div>
-                <span className={styles.itemTexto}>{item.label}</span>
-                <BsChevronRight  className={styles.seta} />
-              </Link>
-            ))}
-          </div>
+          {/* Removi a <div> que estava aqui para padronizar com as outras páginas */}
+          {menuItems.map((item) => (
+            <Link key={item.to} to={item.to} className={styles.configItem}>
+              <div className={styles.iconCircle}>
+                {item.icon}
+              </div>
+              <span className={styles.itemTexto}>{item.label}</span>
+              <BsChevronRight  className={styles.seta} />
+            </Link>
+          ))}
         </section>
-
         
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Ajuda</h2>
