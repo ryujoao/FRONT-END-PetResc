@@ -8,9 +8,9 @@ interface User {
   nome: string;
   email: string;
   role: 'ADMIN' | 'ONG' | 'PUBLICO';
+  nomeOng?: string; 
   cpf?: string;
   cnpj?: string;
-
   cep?: string;
   rua?: string;
   numero?: string;
@@ -18,6 +18,7 @@ interface User {
   bairro?: string;
   cidade?: string;
   estado?: string;
+  telefone?: string;
 }
 
 interface AuthContextType {
@@ -52,51 +53,72 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const storedToken = localStorage.getItem('@AuthData:token');
       const storedUser = localStorage.getItem('@AuthData:user');
 
-      if (storedToken && storedUser) {
+      if (storedToken) {
+        // 1. Define o token no cabeçalho para poder fazer a requisição
+        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+
+        // 2. Valida se o token não expirou localmente
         if (!isTokenValid(storedToken)) {
           logout();
           return;
         }
 
-        const parsedUser = JSON.parse(storedUser);
-        console.log("Dados do usuário carregados:", parsedUser);
         
-        api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-        setUser(parsedUser);
+        try {
+            console.log("Buscando dados atualizados do usuário...");
+            const response = await api.get('/api/auth/me');
+
+            // Atualiza o estado com o que veio do servidor
+            setUser(response.data);
+            
+            // Atualiza o cache local
+            localStorage.setItem('@AuthData:user', JSON.stringify(response.data));
+
+        } catch (error) {
+            console.error("Erro ao validar token ou conectar com API:", error);
+            // Se falhar (ex: sem internet), tenta usar o cache antigo ou desloga
+            if (storedUser) {
+                setUser(JSON.parse(storedUser));
+            } else {
+                logout();
+            }
+        }
       }
       setIsLoading(false);
     }
+    
     loadStoragedData();
   }, []);
 
   const login = async (email: string, password: string) => {
-  try {
-    const response = await api.post('/api/auth/login', {
-      email,
-      password, 
-    });
+    try {
+      const response = await api.post('/api/auth/login', {
+        email,
+        password, 
+      });
 
-    const { token, usuario } = response.data;
+      const { token, usuario } = response.data;
 
-    localStorage.setItem('@AuthData:token', token);
-    localStorage.setItem('@AuthData:user', JSON.stringify(usuario));
+      localStorage.setItem('@AuthData:token', token);
+      localStorage.setItem('@AuthData:user', JSON.stringify(usuario));
 
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setUser(usuario);
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(usuario);
 
-    if (usuario.role === 'ADMIN') {
-      navigate('/api/admin/dashboard'); 
-    } else {
-      navigate('/'); 
+      if (usuario.role === 'ADMIN') {
+        navigate('/api/admin/dashboard'); 
+      } else {
+        navigate('/'); 
+      }
+
+    } catch (err) {
+      if (err instanceof AxiosError && err.response) {
+        throw new Error(err.response.data.error || 'E-mail ou senha inválidos.');
+      }
+      throw new Error('Erro de conexão. Tente novamente.');
     }
+  };
 
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      throw new Error(err.response.data.error || 'E-mail ou senha inválidos.');
-    }
-    throw new Error('Erro de conexão. Tente novamente.');
-  }
-};
   const logout = () => {
     localStorage.removeItem('@AuthData:token');
     localStorage.removeItem('@AuthData:user');
@@ -105,10 +127,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     navigate('/login');
   };
 
-
   if (isLoading) {
-  return <div>Carregando...</div>;
-}
+    
+    return <div>Carregando...</div>;
+  }
 
   const isAuthenticated = !!user; 
 
@@ -116,7 +138,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!user) return false;
     return requiredRoles.includes(user.role);
   };
-
 
   return (
     <AuthContext.Provider 
@@ -127,7 +148,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         login, 
         logout,
         hasPermission,
-         setUser 
+        setUser 
       }}
     >
       {children}
