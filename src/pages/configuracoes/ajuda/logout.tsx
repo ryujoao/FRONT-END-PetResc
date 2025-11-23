@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../configuracoes/logout.module.css'; 
+import styles from '../ajuda/logout.module.css'
 
 type Props = {
   isOpen: boolean;
@@ -10,7 +10,7 @@ type Props = {
 export default function Logout({ isOpen, onClose, onConfirm }: Props) {
   if (!isOpen) return null;
 
-  // Fecha se clicar fora da caixinha branca
+  
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();

@@ -42,7 +42,7 @@
   padding-left: 0.25rem;
 }
 
-.inputGroup input {
+.inputGroup input, .inputGroup textarea {
   
   width: 100%;
   padding: 0.75rem 0.9rem;
@@ -56,12 +56,12 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.inputGroup input:hover {
+.inputGroup input:hover, .inputGroup textarea:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(40, 102, 153, 0.1);
 }
 
-.inputGroup input:focus {
+.inputGroup input:focus, .inputGroup textarea:focus {
   outline: none;
   border-color: #286699; 
   box-shadow: 0 0 0 3px rgba(40, 102, 153, 0.2);
@@ -139,22 +139,17 @@
   align-self: initial; 
 }
 
-/* --- Mantenha todo o código anterior do conta.module.css --- */
-/* ... */
 
-/* --- NOVOS ESTILOS PARA SENHA E NAVEGAÇÃO (Adicione isso ao final) --- */
-
-/* Container do cabeçalho com o botão de voltar */
 .headerRow {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 750px; /* Mesma largura do .form para alinhar */
+  max-width: 750px; 
   margin-bottom: 2rem;
   position: relative;
 }
 
-/* Botão de voltar (Seta) */
+
 .btnVoltar {
   display: flex;
   align-items: center;
@@ -173,16 +168,15 @@
   transform: translateX(-5px);
 }
 
-/* Ajuste do título quando estiver dentro do headerRow */
+
 .headerRow .titulo {
-  margin-bottom: 0; /* Remove margem inferior pois o headerRow já tem */
-  flex: 1; /* Faz o título ocupar o espaço e empurrar a seta */
+  margin-bottom: 0; 
+  flex: 1; 
   text-align: center;
-  /* Pequeno ajuste para compensar visualmente a seta na esquerda */
   padding-right: 2rem; 
 }
 
-/* Wrapper para posicionar o ícone de olho dentro do input */
+
 .inputWrapper {
   position: relative;
   width: 100%;
@@ -190,10 +184,10 @@
   align-items: center;
 }
 
-/* Ajuste específico para input de senha: mais espaço na direita */
+
 .inputWrapper input {
   width: 100%;
-  padding: 0.75rem 3rem 0.75rem 0.9rem; /* 3rem na direita para o ícone */
+  padding: 0.75rem 3rem 0.75rem 0.9rem; 
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   color: #333;
   background-color: #f3f8fc;
@@ -209,7 +203,7 @@
   box-shadow: 0 0 0 3px rgba(40, 102, 153, 0.2);
 }
 
-/* Ícone do olho (botão transparente) */
+
 .eyeIcon {
   position: absolute;
   right: 1rem;

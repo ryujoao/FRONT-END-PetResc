@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import tabStyles from "../perfil/perfil.module.css"; 
-import listStyles from "./config.module.css"; 
+import tabStyles from "../../perfil/perfil.module.css"; 
+import listStyles from "../config.module.css"; 
 import { BsCheckCircleFill } from "react-icons/bs";
 import { FaPaw } from "react-icons/fa";
 import { IoIosArrowForward, IoIosInformationCircle } from "react-icons/io";
@@ -82,7 +82,6 @@ export default function Notificacoes() {
           notificacoesParaExibir.map((notificacao) => (
             <Link to={notificacao.path || "#"} className={listStyles.configItem} key={notificacao.id}>
               <div className={listStyles.iconCircle}>{notificacao.icon}</div>
-              {/* O CSS atualizado do itemTexto vai empurrar a seta para a direita */}
               <span className={listStyles.itemTexto}>{notificacao.texto}</span>
               <IoIosArrowForward className={listStyles.seta} />
             </Link>

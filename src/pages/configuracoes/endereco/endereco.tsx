@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import styles from "./conta.module.css"; 
-import { useAuth } from "../../auth/AuthContext";
+import styles from "../conta/conta.module.css"; 
+import { useAuth } from "../../../auth/AuthContext";
 
 export default function Endereco() {
   const { user, setUser } = useAuth();
@@ -41,7 +41,7 @@ export default function Endereco() {
     }
   };
 
-  // Salvar Endereço com Fetch
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -107,7 +107,7 @@ export default function Endereco() {
             maxLength={8} 
             value={cep} 
             onChange={(e) => setCep(e.target.value)}
-            onBlur={buscarCep} // <--- IMPORTANTE: Isso ativa a busca do CEP
+            onBlur={buscarCep} 
             placeholder="00000000"
           />
 

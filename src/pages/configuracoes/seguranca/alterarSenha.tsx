@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// IMPORTANTE: Usando o mesmo CSS da página de Conta
-import styles from "../configuracoes/conta.module.css"; 
+import styles from "../conta/conta.module.css"; 
 
 import { IoIosArrowBack } from "react-icons/io";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
@@ -49,7 +48,7 @@ export default function AlterarSenha() {
   return (
     <div className={styles.formContainer}>
       
-      {/* Cabeçalho Customizado (Seta + Título) */}
+     
       <div className={styles.headerRow}>
         <Link to="/config/seguranca" className={styles.btnVoltar}>
           <IoIosArrowBack />
@@ -59,7 +58,7 @@ export default function AlterarSenha() {
 
       <form className={styles.form} onSubmit={handleSubmit}>
         
-        {/* Campo 1 */}
+        
         <div className={styles.inputGroup}>
           <label htmlFor="senhaAtual">Senha atual</label>
           <div className={styles.inputWrapper}>
@@ -82,7 +81,7 @@ export default function AlterarSenha() {
           </div>
         </div>
 
-        {/* Campo 2 */}
+        
         <div className={styles.inputGroup}>
           <label htmlFor="novaSenha">Nova senha</label>
           <div className={styles.inputWrapper}>
@@ -106,7 +105,7 @@ export default function AlterarSenha() {
           </div>
         </div>
 
-        {/* Campo 3 */}
+        
         <div className={styles.inputGroup}>
           <label htmlFor="confirmarSenha">Confirmar nova senha</label>
           <div className={styles.inputWrapper}>
