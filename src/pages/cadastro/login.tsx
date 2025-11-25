@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import api from "../../services/api";
+import api from '../../services/api'; 
 import styles from "./cadastro.module.css";
 
 

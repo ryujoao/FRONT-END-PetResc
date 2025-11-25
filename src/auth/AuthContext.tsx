@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     async function loadStoragedData() {
       const storedToken = localStorage.getItem('@AuthData:token');
+      
       const storedUser = localStorage.getItem('@AuthData:user');
 
       if (storedToken) {
@@ -92,10 +93,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await api.post('/api/auth/login', {
-        email,
-        password, 
-      });
+     const response = await api({
+  method: 'post',
+  url: '/auth/login',
+  data: { email, password }
+});
+console.log("Resposta do login:", response);;
 
       const { token, usuario } = response.data;
 
