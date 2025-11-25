@@ -20,7 +20,7 @@ export default function StepTermo({ data, onChange, setCanProceed }: Props) {
       </h3>
 
       <p className={styles.termoText}>
-        Ao adotar um animal por meio da plataforma PetControl, declaro estar
+        Ao adotar um animal por meio da plataforma PetResc, declaro estar
         ciente de que a adoção é um compromisso sério e de longo prazo. Assim,
         comprometo-me a:
         <br />

@@ -7,18 +7,18 @@ export default function Privacidade() {
 
       <div className={styles.texto}>
         <h2 className={styles.subtitulo}>
-          Política de Privacidade e Termos de Serviço - PetControl
+          Política de Privacidade e Termos de Serviço - PetResc
         </h2>
 
         <section>
           <h3 className={styles.titulo}>1. Introdução</h3>
           <p>
-            O PetControl é uma plataforma digital desenvolvida com o objetivo de
+            O PetResc é uma plataforma digital desenvolvida com o objetivo de
             conectar ONGs, protetores independentes e a comunidade em prol da
             proteção e do bem-estar animal. Através dela, usuários podem
             registrar animais em situação de vulnerabilidade, oferecer abrigo
             temporário, apoiar iniciativas de adoção e realizar doações de
-            suprimentos. Ao acessar e utilizar o PetControl, você concorda com
+            suprimentos. Ao acessar e utilizar o PetResc, você concorda com
             os presentes Termos de Serviço e com a nossa Política de
             Privacidade, que estabelecem as regras para o uso da plataforma e o
             tratamento das informações fornecidas pelos usuários.
@@ -28,7 +28,7 @@ export default function Privacidade() {
         <section>
           <h3 className={styles.titulo}>2. Coleta de Informações</h3>
           <p>
-            Para garantir a melhor experiência possível, o PetControl poderá
+            Para garantir a melhor experiência possível, o PetResc poderá
             coletar os seguintes dados:
           </p>
           <ul className={styles.lista}>
@@ -93,7 +93,7 @@ export default function Privacidade() {
         <section>
           <h3 className={styles.titulo}>4. Compartilhamento de Informações</h3>
           <p>
-            O PetControl não vende, aluga ou comercializa dados pessoais. As
+            O PetResc não vende, aluga ou comercializa dados pessoais. As
             informações só poderão ser compartilhadas com:
           </p>
           <ul className={styles.lista}>
@@ -154,7 +154,7 @@ export default function Privacidade() {
               candidatos e decidir sobre a adoção.
             </li>
             <li>
-              O PetControl atua como intermediador digital, não sendo
+              O PetResc atua como intermediador digital, não sendo
               responsável direto por decisões de adoção ou disponibilidade dos
               animais.
             </li>
@@ -169,7 +169,7 @@ export default function Privacidade() {
           </p>
           <ul className={styles.lista}>
             <li>
-              O PetControl não retém doações indevidamente e garante
+              O PetResc não retém doações indevidamente e garante
               transparência no encaminhamento aos beneficiários.
             </li>
             <li>
@@ -182,7 +182,7 @@ export default function Privacidade() {
         <section>
           <h3 className={styles.titulo}>9. Alterações nos Termos</h3>
           <p>
-            O PetControl poderá atualizar esta Política de Privacidade e os
+            O PetResc poderá atualizar esta Política de Privacidade e os
             Termos de Serviço sempre que necessário. As alterações entrarão em
             vigor após sua publicação na plataforma.
           </p>
