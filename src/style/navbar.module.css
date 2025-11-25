@@ -1,7 +1,6 @@
 * {
-  font-family: 'Darker Grotesque', sans-serif;
+  font-family: "Darker Grotesque", sans-serif;
 }
-
 
 .navbar {
   display: flex;
@@ -11,10 +10,11 @@
   left: 0;
   background-color: white;
   align-items: center;
-  max-height: 90px;
+  height: 90px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   font-size: 18px;
+  padding: 0 1rem;
 }
 
 .topBar {
@@ -26,15 +26,22 @@
   left: 0;
   z-index: 1100;
 }
-
+/* Container da logo */
 .navLogo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-right: 4rem;
-  max-width: 20vw;
-  height: auto;
+  /* margin-right: 4rem; <-- Ajuste isso se precisar afastar os links */
+  margin-right: 2rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
+.logoImg {
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+  /* Se a logo for MUITO grande, você pode limitar a altura máxima para não estourar a navbar */
+  max-height: 90px;
+}
 .navCategorias {
   /* display: flex;
   gap: 5rem;
@@ -50,19 +57,27 @@
   padding: 0 2rem;
 }
 
-.navCategorias li a, button.navLink , .usernameText {
+.navCategorias li a,
+button.navLink, 
+.usernameText {
   text-decoration: none;
   color: #000;
   font-size: 1.5rem;
   font-weight: 700;
-  display: inline-block; 
-  transition: transform 0.2s ease, color 0.2s ease; 
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.navCategorias li a:hover, 
+.navCategorias li a,
+button.navLink {
+  font-size: 1.7rem;
+} 
+
+
+.navCategorias li a:hover,
 button.navLink:hover {
-  color: #286699; 
-  transform: translateY(-3px); 
+  color: #286699;
+  transform: translateY(-3px);
 }
 
 .botoesCadastro {
@@ -108,7 +123,6 @@ button.navLink:hover {
   background-color: #1976d2;
 }
 
-
 .navLink {
   background: none;
   border: none;
@@ -118,7 +132,6 @@ button.navLink:hover {
   padding: 0;
   transition: color 0.2s ease;
 }
-
 
 @media (max-width: 1513px) {
   .navCategorias {
@@ -158,16 +171,16 @@ button.navLink:hover {
 .perfilLink {
   display: flex;
   align-items: center;
-  gap: 0.6rem; 
+  gap: 0.6rem;
   text-decoration: none;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .perfilLink:hover {
   opacity: 0.8; /* Uma leve transparência (opcional) */
-  
+
   /* O PULINHO */
-  transform: translateY(-3px); 
+  transform: translateY(-3px);
 }
 
 .perfilUsuario {
@@ -192,8 +205,6 @@ button.navLink:hover {
   color: #000;
 }
 
-
-
 .notificacao {
   width: 40px;
   height: 40px;
@@ -204,7 +215,7 @@ button.navLink:hover {
   background-color: #fff;
   border-radius: 50%;
   cursor: pointer;
-  transition-duration: .3s;
+  transition-duration: 0.3s;
   border: none;
 }
 

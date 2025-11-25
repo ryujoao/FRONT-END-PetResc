@@ -34,14 +34,9 @@ export default function Nav() {
         <div className={styles.navLogo}>
           <Link to="/">
             <img
-              src="/logo.png"
+              src="/logo4.png"
               alt="Logo"
-              style={{
-                maxWidth: "90px",
-                height: "60px",
-                marginTop: "10px",
-                marginLeft: "10px",
-              }}
+              className={styles.logoImg} 
             />
           </Link>
         </div>
