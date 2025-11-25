@@ -18,14 +18,16 @@ import FormularioLarTemporario from "./pages/larTemporario/formularioLarTemporar
 import FormularioAdotar from "./pages/adotar/formularioAdotar";
 import ConfigLayout from "./pages/configuracoes/configLayout";
 import ConfigMenu from "./pages/configuracoes/configMenu";
-import Conta from "./pages/configuracoes/conta";
-import Endereco from "./pages/configuracoes/endereco";
-import Notificacoes from "./pages/configuracoes/notificacoes";
+import Conta from "./pages/configuracoes/conta/conta";
+import Endereco from "./pages/configuracoes/endereco/endereco";
+import Notificacoes from "./pages/configuracoes/notificacoes/notificacoes";
 import Privacidade from "./pages/configuracoes/privacidade";
-import Seguranca from "./pages/configuracoes/seguranca";
-import AlterarSenha from "./pages/configuracoes/alterarSenha";
-import Historico from "./pages/configuracoes/historico";
-import HistoricoAnimais from "./pages/configuracoes/historicoAnimais";
+import Seguranca from "./pages/configuracoes/seguranca/seguranca";
+import AlterarSenha from "./pages/configuracoes/seguranca/alterarSenha";
+import Historico from "./pages/configuracoes/seguranca/historico";
+import HistoricoAnimais from "./pages/configuracoes/seguranca/historicoAnimais";
+import FAQ from "./pages/configuracoes/ajuda/faq";
+import Contato from "./pages/configuracoes/ajuda/contato";
 
 
 // ...existing code...
@@ -63,6 +65,8 @@ function App() {
         <Route path="/config/alterar-senha" element={<AlterarSenha />} />
         <Route path="/config/historico" element={<Historico />} />
         <Route path="/config/historico-animais" element={<HistoricoAnimais />} />
+        <Route path="/config/faq" element={<FAQ />} />
+        <Route path="/config/contate-nos" element={<Contato />} />
         
       </Route>
     </Routes>

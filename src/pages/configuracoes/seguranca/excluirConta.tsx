@@ -1,4 +1,4 @@
-import styles from '../configuracoes/logout.module.css';
+import styles from '../ajuda/logout.module.css';
 
 type Props = {
   isOpen: boolean;

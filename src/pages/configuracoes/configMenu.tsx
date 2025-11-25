@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./config.module.css"
 import { useAuth } from "../../auth/AuthContext";
-import Logout from "../configuracoes/logout"; 
+import Logout from "./ajuda/logout"; 
 import Layout from "../../components/layout";
 import { BsBellFill, BsChevronRight, BsFillLockFill, BsFillShieldFill, BsHouseFill, BsPersonFill } from "react-icons/bs";
 
@@ -37,7 +37,7 @@ export default function ConfigMenu() {
 
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Conta</h2>
-          {/* Removi a <div> que estava aqui para padronizar com as outras páginas */}
+          
           {menuItems.map((item) => (
             <Link key={item.to} to={item.to} className={styles.configItem}>
               <div className={styles.iconCircle}>
@@ -52,10 +52,10 @@ export default function ConfigMenu() {
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Ajuda</h2>
           <div className={styles.ajudaLista}>
-            <Link to="/contate-nos" className={styles.ajudaLink}>
+            <Link to="/config/contate-nos" className={styles.ajudaLink}>
               Contate-nos
             </Link>
-            <Link to="/faq" className={styles.ajudaLink}>
+            <Link to="/config/faq" className={styles.ajudaLink}>
               FAQ
             </Link>
             

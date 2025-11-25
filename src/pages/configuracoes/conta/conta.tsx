@@ -1,6 +1,6 @@
 import styles from "./conta.module.css";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../auth/AuthContext";
+import { useAuth } from "../../../auth/AuthContext";
 
 export default function Conta() {
   const [nome, setNome] = useState("");

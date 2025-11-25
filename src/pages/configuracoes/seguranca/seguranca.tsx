@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./config.module.css"; 
+import styles from "../config.module.css"; 
 
 // Ícones
 import { IoIosArrowForward } from "react-icons/io";
@@ -8,7 +8,7 @@ import { MdKey } from "react-icons/md";
 import { FaHistory } from "react-icons/fa";
 import { BsTrashFill } from "react-icons/bs";
 
-import ExcluirConta from "../configuracoes/excluirConta";
+import ExcluirConta from "./excluirConta";
 
 export default function Seguranca() {
   const [showExcluir, setShowExcluir] = useState(false);
@@ -26,7 +26,7 @@ export default function Seguranca() {
       <section className={styles.configSection}>
       
         
-        {/* Link: Alterar Senha */}
+        
         <Link to="/config/alterar-senha" className={styles.configItem}>
           <div className={styles.iconCircle}>
             <MdKey />
@@ -35,7 +35,7 @@ export default function Seguranca() {
           <IoIosArrowForward className={styles.seta} />
         </Link>
 
-        {/* Link: Histórico */}
+        
         <Link to="/config/historico" className={styles.configItem}>
           <div className={styles.iconCircle}>
             <FaHistory />
@@ -44,8 +44,7 @@ export default function Seguranca() {
           <IoIosArrowForward className={styles.seta} />
         </Link>
 
-        {/* Botão: Excluir Conta */}
-        {/* Note que removi o style={{width, padding, border...}} pois o CSS já faz isso */}
+        
         <button 
           className={styles.configItem} 
           onClick={() => setShowExcluir(true)}
