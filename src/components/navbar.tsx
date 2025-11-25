@@ -48,7 +48,7 @@ export default function Nav() {
             <>
               <li>
                 <Link
-                  to={isAuthenticated ? "/adotar" : "/cadastro"}
+                  to={isAuthenticated ? "/adotar" : "/login"}
                   className={styles.navLink}
                 >
                   Adotar
@@ -56,7 +56,7 @@ export default function Nav() {
               </li>
               <li>
                 <Link
-                  to={isAuthenticated ? "/lar-temporario" : "/cadastro"}
+                  to={isAuthenticated ? "/lar-temporario" : "/login"}
                   className={styles.navLink}
                 >
                   Lar Temporário
@@ -68,7 +68,7 @@ export default function Nav() {
           {/* Links que aparecem para TODOS */}
           <li>
             <Link
-              to={isAuthenticated ? "/doar" : "/cadastro"}
+              to={isAuthenticated ? "/doar" : "/login"}
               className={styles.navLink}
             >
               {/* Se for ONG/Admin, mostra "Doação", senão, mostra "Doar" */}
@@ -86,7 +86,7 @@ export default function Nav() {
           </li>
           <li>
             <Link
-              to={isAuthenticated ? "/registrar-animal" : "/cadastro"}
+              to={isAuthenticated ? "/registrar-animal" : "/login"}
               className={styles.navLink}
             >
               Registrar Animal

@@ -25,6 +25,7 @@ import HistoricoAnimais from "./pages/configuracoes/seguranca/historicoAnimais";
 import FAQ from "./pages/configuracoes/ajuda/faq";
 import Contato from "./pages/configuracoes/ajuda/contato";
 import Cadastro from "./pages/cadastro/cadastro";
+import RecuperarSenha from "./pages/cadastro/recuperarSenha";
 
 
 // ...existing code...
@@ -37,20 +38,17 @@ function App() {
       <Route path="/doar" element={<Doar />} />
       <Route path="/cadastro" element={<Cadastro/>} />
       <Route path="/login" element={<Login />} />
+      <Route path="recuperar-senha" element={<RecuperarSenha/>} />
       <Route path="/registrar-animal" element={<RegistrarAnimal />} />
       <Route path="/central-adocao" element={<CentralAdocao />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/animal/:id" element={<PerfilAnimal />} />
       <Route path="/instituto/:id" element={<Institutos />} />
-      
-      <Route
-        path="/formulario-lar-temporario"
-        element={<FormularioLarTemporario />}
-      />
       <Route path="/formulario-adotar" element={<FormularioAdotar />} />
+      <Route path="/formulario-lar-temporario" element={<FormularioLarTemporario />} />
+      
 
       <Route path="/config" element={<ConfigMenu />} />
-
       <Route element={<ConfigLayout />}>
         <Route path="/config/conta" element={<Conta />} />
         <Route path="/config/endereco" element={<Endereco />} />
