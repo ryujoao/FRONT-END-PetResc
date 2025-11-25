@@ -997,26 +997,29 @@ const RegistrarAnimalOng = () => {
   );
 };
 
-// =================================================================
-// === COMPONENTE PRINCIPAL: GERENCIADOR DA PÁGINA ===
-// =================================================================
+
 const PaginaRegistrarAnimal = () => {
   const { user, isLoading } = useAuth();
+   
 
   if (isLoading) {
-    return <div className={styles.loading}>Carregando informações...</div>;
+    return (
+      <Layout>
+         <div className={styles.loading}>Carregando informações...</div>
+      </Layout>
+   );
   }
 
+  const isOng = user?.role === "ONG";
+
   return (
-    <>
     <Layout>
-      {user?.role === "ONG" ? (
-        <RegistrarAnimalOng />
+      {isOng ? (
+        <RegistrarAnimalOng /> 
       ) : (
-        <RegistrarAnimalUsuario />
+        <RegistrarAnimalUsuario /> 
       )}
-      </Layout>
-    </>
+    </Layout>
   );
 };
 
