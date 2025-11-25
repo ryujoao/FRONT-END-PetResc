@@ -1,95 +1,107 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from "../../components/layout";
 import styles from "./perfilAnimal.module.css";
 
-// --- DADOS E TIPOS MOCKADOS (REPETIDOS PARA GARANTIR FUNCIONALIDADE ISOLADA) ---
+// --- TIPOS DE DADOS REAIS ---
 interface OngInfo {
  id: number;
  nome: string;
  endereco: string;
 }
 
+// Interface Animal baseada nos dados do RegistrarAnimal
 interface Animal {
  id: number;
  nome: string;
  especie: string;
  raca: string | null;
- idade: number | null;
+ idade: string | null; // Alterado para string para refletir o input do Registro
  status: string;
  porte: string | null;
- sexo: string | null;
+ sexo: string;
  descricao: string | null;
  photoURL: string | null;
  createdAt: string;
  accountId: number;
  ong: OngInfo | null;
+ cor: string | null; // Campo 'cor' agora presente
+ // Adicionar outros campos relevantes que o backend retorna, se necessário
 }
-
-const MOCKED_ANIMALS: Animal[] = [
- {
-  id: 1,
-  nome: "Branquinho",
-  especie: "Gato",
-  raca: "SRD",
-  idade: 5,
-  status: "Disponível",
-  porte: "Médio",
-  sexo: "MACHO",
-  descricao: "O Branquinho é um gato muito calmo e adora tirar uma soneca no sofá. Ele é super adaptável e perfeito para quem mora em apartamento.",
-  photoURL: "https://placehold.co/400x400/e6f7ff/2b6b99?text=Branquinho", 
-  createdAt: new Date().toISOString(),
-  accountId: 101,
-  ong: { id: 1, nome: "ONG Amigos Patudos", endereco: "Rua A" }
- },
- {
-  id: 2,
-  nome: "Zeus",
-  especie: "Cachorro",
-  raca: "Pitbull",
-  idade: 3,
-  status: "Disponível",
-  porte: "Grande",
-  sexo: "MACHO",
-  descricao: "Zeus é um cão forte e leal, precisa de espaço para correr e socialização constante. Ideal para donos experientes.",
-  photoURL: "https://placehold.co/400x400/fff0e6/ff9900?text=Zeus",
-  createdAt: new Date().toISOString(),
-  accountId: 102,
-  ong: { id: 2, nome: "ONG Cão Feliz", endereco: "Rua B" }
- }
-];
 
 // --- COMPONENTE ---
 export default function PerfilAnimal() {
- // OBTENDO O PARÂMETRO 'id' DA ROTA
  const { id } = useParams<{ id: string }>();
+ const [animalData, setAnimalData] = useState<Animal | null>(null);
+ const [loading, setLoading] = useState(true);
+ const [error, setError] = useState<string | null>(null);
 
- const animalData = MOCKED_ANIMALS.find(
-  animal => animal.nome.toLowerCase() === id
- );
+ useEffect(() => {
+  const fetchAnimal = async () => {
+   if (!id) {
+    setLoading(false);
+    setError("ID do animal não fornecido na URL.");
+    return;
+   }
 
- if (!animalData) {
+   try {
+    // >>> CHAMADA REAL À API <<<
+    const response = await fetch(`https://petresc.onrender.com/api/animais/${id}`);
+    
+    if (!response.ok) {
+     throw new Error("Animal não encontrado ou erro na API.");
+    }
+
+    const data: Animal = await response.json();
+    setAnimalData(data);
+
+   } catch (err) {
+    if (err instanceof Error) {
+     setError(err.message);
+    } else {
+     setError("Erro desconhecido ao carregar animal.");
+    }
+   } finally {
+    setLoading(false);
+   }
+  };
+
+  fetchAnimal();
+ }, [id]);
+
+ if (loading) {
+  return (
+   <Layout>
+    <div className={styles.loading}>Carregando perfil do animal...</div>
+   </Layout>
+  );
+ }
+
+ if (error || !animalData) {
   return (
    <Layout>
     <div style={{ textAlign: "center", padding: "4rem" }}>
-     <h1 style={{ color: "#2b6b99" }}>Animal não encontrado</h1>
-     <p>Verifique o link. O animal **{id}** não está disponível.</p>
+     <h1 style={{ color: "#2b6b99" }}>{error || "Animal não encontrado"}</h1>
+     <p>Verifique o link. O animal de ID **{id}** não está disponível.</p>
     </div>
    </Layout>
   );
  }
- 
+
+ // Dados prontos, renderiza o perfil
  return (
   <Layout>
    <main className={styles.container}>
     
     {/* GRID PRINCIPAL: FOTO | INFO BÁSICA | COMENTÁRIO */}
     <div className={styles.profileWrapper}>
-     
+    
      {/* COLUNA 1: IMAGEM */}
      <div className={styles.imagemContainer}>
       <div className={styles.imagem}>
        <img
-        src={animalData.photoURL || "placeholder-url"}
+        // Assumindo que o campo retornado pela API para a imagem é 'photoURL'
+        src={animalData.photoURL || "placeholder-url"} 
         alt={animalData.nome}
         onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
          e.currentTarget.src = "https://placehold.co/400x400/f8f8f8/ccc?text=Sem+Foto";
@@ -101,14 +113,14 @@ export default function PerfilAnimal() {
      {/* COLUNA 2: DETALHES PRINCIPAIS e BOTÃO */}
      <div className={styles.infoContainer}>
       <h1 className={styles.nome}>{animalData.nome}</h1>
-      <p className={styles.status}>Para Adoção</p>
+      <p className={styles.status}>Status: **{animalData.status}**</p>
       
       <section className={styles.dados}>
        <p className={styles.infoLine}>
-        <strong>{animalData.sexo}</strong> • {animalData.idade} anos • {animalData.raca || 'SRD'}
+        <strong>{animalData.sexo}</strong> • {animalData.idade || 'Idade Desconhecida'} • {animalData.raca || 'SRD'}
        </p>
        <p className={styles.infoLine}>
-        Disponível na **{animalData.ong?.nome || 'N/A'}**
+        Anunciado pela **{animalData.ong?.nome || 'Usuário Comum'}**
        </p>
       </section>
 
@@ -117,10 +129,10 @@ export default function PerfilAnimal() {
       </button>
      </div>
     
-     {/* COLUNA 3: COMENTÁRIO/DESCRIÇÃO (ESTILIZADA COMO CAIXA) */}
+     {/* COLUNA 3: COMENTÁRIO/DESCRIÇÃO */}
      <div className={styles.comentarioContainer}>
-      <h2>Comentário do Anunciante</h2>
-      <p>{animalData.descricao}</p>
+      <h2>História / Descrição</h2>
+      <p>{animalData.descricao || "Nenhuma descrição detalhada fornecida."}</p>
      </div>
     </div>
 
@@ -128,7 +140,7 @@ export default function PerfilAnimal() {
 
     {/* GRID INFERIOR: CARACTERÍSTICAS (4 COLUNAS) */}
     <div className={styles.caracteristicasGrid}>
-     
+    
      {/* Coluna 1: Características */}
      <div className={styles.caracteristicaColuna}>
       <h3>Características</h3>
@@ -137,10 +149,12 @@ export default function PerfilAnimal() {
        <li><strong>Raça:</strong> {animalData.raca || "SRD"}</li>
        <li><strong>Porte:</strong> {animalData.porte}</li>
        <li><strong>Sexo:</strong> {animalData.sexo}</li>
+       <li><strong>Cor:</strong> {animalData.cor || "Não Informada"}</li> {/* COR INCLUÍDA */}
       </ul>
      </div>
 
-     {/* Coluna 2: Cuidados Veterinários (Mockado) */}
+     {/* As outras colunas (Cuidados, Temperamento, Sociabilidade) permanecem as mesmas por enquanto */}
+     {/* ... (coloque aqui o restante do seu JSX para Cuidados, Temperamento, Sociabilidade) */}
      <div className={styles.caracteristicaColuna}>
       <h3>Cuidados Veterinários</h3>
       <ul className={styles.tagsList}>
@@ -149,8 +163,6 @@ export default function PerfilAnimal() {
        <li>Vermifugado</li>
       </ul>
      </div>
-
-     {/* Coluna 3: Temperamento (Mockado) */}
      <div className={styles.caracteristicaColuna}>
       <h3>Temperamento</h3>
       <ul className={styles.tagsList}>
@@ -159,8 +171,6 @@ export default function PerfilAnimal() {
        <li>Calmo</li>
       </ul>
      </div>
-
-     {/* Coluna 4: Sociabilidade (Mockado) */}
      <div className={styles.caracteristicaColuna}>
       <h3>Sociabilidade</h3>
       <ul className={styles.tagsList}>
