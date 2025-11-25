@@ -27,7 +27,7 @@ export default function Contato() {
           
           <div className={styles.contatoItem}>
             <h3 className={styles.contatoSubtitle}>1. E-mail</h3>
-            <span className={styles.contatoText}>• petcontrol@email.com</span>
+            <span className={styles.contatoText}>• petresc@email.com</span>
           </div>
 
           <div className={styles.contatoItem}>

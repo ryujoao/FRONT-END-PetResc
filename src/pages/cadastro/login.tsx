@@ -57,13 +57,18 @@ export default function Login() {
           <div>
             <label className={styles.grupoInput}>Senha</label>
             <input
-              className={styles.inputLogin}
+            className={`${styles.inputLogin} ${styles.inputLoginSenha}`}
               type="password"
               placeholder="Digite sua senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <div className={styles.esqueciSenhaContainer}>
+              <a href="/recuperar-senha" className={styles.esqueciSenhaLink}>
+                Esqueci minha senha
+              </a>
+            </div>
           </div>
 
           {error && (
