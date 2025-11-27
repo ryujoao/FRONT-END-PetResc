@@ -29,6 +29,7 @@ import RecuperarSenha from "./pages/cadastro/recuperarSenha";
 import NovaCampanha from "./pages/novaCampanha/novaCampanha";
 
 
+
 // ...existing code...
 function App() {
   return (

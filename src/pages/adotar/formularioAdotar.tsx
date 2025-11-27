@@ -1,4 +1,5 @@
-import React, { useState } from "react"; 
+import React, { useState, useEffect } from "react"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./formularioAdotar.module.css";
 import Layout from "../../components/layout"; 
 import Sucesso from "../../components/sucesso";
@@ -7,18 +8,18 @@ import StepPersonal from "./stepPersonal";
 import StepQuestionsGroup from "./stepQuestionsGroup";
 import StepFinal from "./stepFinal";
 import StepTermo from "./stepTermo";
+import { useAuth } from "../../auth/AuthContext";
 
-// 1. REMOVI o IconWrap antigo
-// import { IconWrap } from "../../components/icons";
+// AJUSTE DE IMPORT: Se der erro, tente remover um "../" ou adicionar mais um.
+import api from "../../services/api"; 
+import { AxiosError } from "axios";
 
-// 2. ADICIONEI os ícones do react-icons
 import { 
   FaRegCircle, 
   FaRegDotCircle, 
   FaRegCheckCircle 
 } from "react-icons/fa";
 
-// 3. DEFINI O NOVO IconWrap AQUI DENTRO
 type IconWrapProps = {
   state: "done" | "active" | "idle";
 };
@@ -33,7 +34,6 @@ const IconWrap = ({ state }: IconWrapProps) => {
     case "done":
       return <FaRegCheckCircle style={progressIconStyle} />;
     case "active":
-      // Aqui está o ícone que você pediu
       return <FaRegDotCircle style={progressIconStyle} />;
     case "idle":
     default:
@@ -41,7 +41,6 @@ const IconWrap = ({ state }: IconWrapProps) => {
   }
 };
 
-// O resto do seu arquivo começa aqui
 export type FormData = {
   nome: string;
   email: string;
@@ -68,14 +67,38 @@ export type FormData = {
   };
   alergia?: string;
   aceitaTermo?: boolean;
+  
+  // Campos extras para o backend
+  quintalTelado?: string;
+  janelasTeladas?: string;
+  moradiaPropria?: string;
+  todosConcordam?: string;
+  criancasEmCasa?: string;
+  horasSozinho?: string;
+  rotinaPasseios?: string;
+  quemCuidara?: string;
+  teveAnimaisAntes?: string;
+  temVeterinario?: string;
+  cienteCustos?: string;
+  motivoAdocao?: string;
+  observacoes?: string;
 };
 
 export default function FormularioAdotar() {
-  
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
+
+  // Tenta pegar o ID, mas não bloqueia se não achar agora
+  const queryParams = new URLSearchParams(location.search);
+  const animalId = location.state?.animalId || queryParams.get("animalId");
+
   const [sucessoOpen, setSucessoOpen] = useState(false);
   const [majorStep, setMajorStep] = useState(0);
   const [subStep, setSubStep] = useState(0);
   const [canProceed, setCanProceed] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [data, setData] = useState<FormData>({
     nome: "",
     email: "",
@@ -91,6 +114,20 @@ export default function FormularioAdotar() {
     quintal: "",
     aceitaTermo: false,
   });
+
+  // Preencher dados do usuário logado (Facilitador)
+  useEffect(() => {
+    if (user) {
+      setData((prev) => ({
+        ...prev,
+        nome: user.nome || "",
+        email: user.email || "",
+        telefone: user.telefone || "",
+      }));
+    }
+  }, [user]);
+
+  
 
   const majorSteps = [
     { id: 0, title: "Introdução", pages: 1 },
@@ -108,6 +145,15 @@ export default function FormularioAdotar() {
   const goNext = () => {
     if (!canProceed) return;
     const block = majorSteps[majorStep];
+    
+    // REMOVA OU COMENTE ESTE BLOCO ANTIGO:
+    /* if (majorStep === majorSteps.length - 2 && subStep === block.pages - 1) {
+        handleSubmit();
+        return;
+    } 
+    */
+
+    // LÓGICA PADRÃO (Apenas avança, o submit será chamado pelo botão no JSX)
     if (subStep < block.pages - 1) {
       setSubStep((s) => s + 1);
     } else {
@@ -115,7 +161,8 @@ export default function FormularioAdotar() {
         setMajorStep((m) => m + 1);
         setSubStep(0);
       } else {
-        handleSubmit();
+         // Se estivermos na ÚLTIMA etapa (StepFinal), aí sim envia
+         handleSubmit();
       }
     }
     setCanProceed(true);
@@ -132,14 +179,75 @@ export default function FormularioAdotar() {
     setCanProceed(true);
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  // ENVIO DE DADOS PARA O BACKEND
+  const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    
     if (!data.aceitaTermo) {
       alert("Você precisa aceitar o termo para finalizar.");
       return;
     }
-    console.log("Enviar dados:", data);
-    setSucessoOpen(true);
+
+    // AQUI verificamos se temos o animalId. 
+    // Como é um pedido de adoção, precisamos saber QUAL animal o usuário quer.
+    if (!animalId) {
+        alert("Erro: O sistema não identificou qual animal você quer adotar. Por favor, volte ao perfil do animal e clique em 'Quero Adotar' novamente.");
+        return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+        const payload = {
+            animalId: parseInt(animalId),
+            respostasFormulario: {
+                tipoMoradia: data.tipoMoradiaChoice || data.tipoMoradia || "Não informado",
+                possuiQuintal: data.quintal === 'sim' ? 'sim' : 'nao', 
+                quintalTelado: data.quintalTelado || 'nao',
+                janelasTeladas: data.janelasTeladas || 'nao',
+                moradiaPropria: data.moradiaPropria || 'nao',
+                
+                pessoasNaCasa: data.pessoasNoLar || "1",
+                todosConcordam: data.todosConcordam || 'sim',
+                criancasEmCasa: data.criancasEmCasa || 'nao',
+                alergias: data.alergia === 'sim' ? 'sim' : 'nao',
+
+                horasSozinho: data.horasSozinho || "0",
+                rotinaPasseios: data.rotinaPasseios || "Não informado",
+                quemCuidara: data.quemCuidara || "Eu mesmo",
+
+                possuiOutrosAnimais: data.outrosAnimaisLocal?.Quantidade !== "0" && data.outrosAnimaisLocal?.Quantidade !== undefined ? 'sim' : 'nao',
+                historicoAnimais: JSON.stringify(data.outrosAnimaisLocal),
+
+                teveAnimaisAntes: data.teveAnimaisAntes || 'nao',
+                temVeterinario: data.temVeterinario || 'nao',
+
+                cienteCustos: data.cienteCustos || 'sim',
+
+                motivoAdocao: data.motivoAdocao || "Interesse em adoção",
+                observacoes: data.observacoes || ""
+            }
+        };
+
+        console.log("Enviando pedido com dados do usuário:", payload);
+        
+        await api.post('/pedidos-adocao', payload);
+
+        setSucessoOpen(true);
+        // Avança visualmente para a etapa de "Concluído"
+        setMajorStep(6); 
+        setSubStep(0);
+
+    } catch (error) {
+        console.error("Erro ao enviar formulário:", error);
+        if (error instanceof AxiosError && error.response) {
+            alert(error.response.data.error || "Erro ao processar pedido.");
+        } else {
+            alert("Erro de conexão ao enviar formulário.");
+        }
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   const progressPercent = (majorStep / (majorSteps.length - 1)) * 100;
@@ -200,9 +308,9 @@ export default function FormularioAdotar() {
 
   return (
     <Layout>
-      
       <div className={styles.pageFormularioAdotar}>
         
+        {/* BARRA DE PROGRESSO */}
         <div className={`${styles.barraProgresso} topBar`}>
           <div className={styles.progressoContainer}>
             <div className={styles.progressoLinha} />
@@ -223,7 +331,6 @@ export default function FormularioAdotar() {
                 return (
                   <div key={s.id} className={`${styles.step} ${stateClass}`}>
                     <div className={styles.iconWrap} aria-hidden>
-                      {/* O NOVO IconWrap local será usado aqui */}
                       <IconWrap state={state} />
                     </div>
                     <div className={styles.stepTitle}>{s.title}</div>
@@ -246,12 +353,7 @@ export default function FormularioAdotar() {
           {majorStep === 0 && subStep === 0 && (
             <p className={styles.introducaoFormulario}>
               Bem-vindo(a) ao nosso Formulário de Interesse. Ficamos muito
-              felizes por você ter dado o primeiro passo para adotar um pet.
-              Aqui você irá responder algumas perguntas iniciais para que a
-              ONG/protetor parceiro possa te conhecer melhor e dar agilidade ao
-              processo de adoção. Precisaremos de alguns dados pessoais para que
-              possamos entrar em contato com você, além de saber um pouco sobre
-              a sua casa, sua família e estrutura.
+              felizes por você ter dado o primeiro passo para adotar um pet...
             </p>
           )}
 
@@ -264,32 +366,42 @@ export default function FormularioAdotar() {
           >
             {renderCurrent()}
             
-            <div className={styles.controls}>
-              <button
-                type="button"
-                onClick={goPrev}
-                disabled={majorStep === 0 && subStep === 0}
-                className={styles.botoesVoltar}
-              >
-                Voltar
-              </button>
-              <button
-                type="button"
-                onClick={goNext}
-                className={styles.botoesAvancar}
-                disabled={!canProceed}
-              >
-                {majorStep === majorSteps.length - 1 &&
-                subStep === majorSteps[majorStep].pages - 1
-                  ? "Enviar"
-                  : "Próximo"}
-              </button>
-            </div>
+            {/* CONTROLES (BOTÕES) */}
+            {majorStep < 6 && ( // Esconde botões na etapa Final (Concluído)
+                <div className={styles.controls}>
+                <button
+                    type="button"
+                    onClick={goPrev}
+                    disabled={majorStep === 0 && subStep === 0}
+                    className={styles.botoesVoltar}
+                >
+                    Voltar
+                </button>
+                
+                {/* Botão Próximo / Enviar */}
+                <button
+                    type="button"
+                    onClick={goNext}
+                    className={styles.botoesAvancar}
+                    disabled={!canProceed || isSubmitting}
+                >
+                    {isSubmitting ? "Enviando..." : (
+                        majorStep === 5 ? "Enviar" : "Próximo"
+                    )}
+                </button>
+                </div>
+            )}
           </form>
         </main>
       </div>
       
-      <Sucesso isOpen={sucessoOpen} onClose={() => setSucessoOpen(false)} />
+      <Sucesso 
+        isOpen={sucessoOpen} 
+        onClose={() => { 
+            setSucessoOpen(false); 
+            navigate('/central-adocao'); 
+        }} 
+      />
     </Layout>
   );
 }
