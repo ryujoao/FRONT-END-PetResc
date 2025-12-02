@@ -402,7 +402,7 @@ export default function Cadastro() {
 
             <label className={styles.grupoInput}>Estado (UF)</label>
             <input
-              className={styles.inputShort}
+              className={styles.inputLogin}
               name="estado"
               value={dados.estado}
               onChange={handleChange}

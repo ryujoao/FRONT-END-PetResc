@@ -1,26 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // Import REAL
-import styles from "../style/navbar.module.css"; // Import REAL
-import Denuncie from "./denuncie"; // Import REAL
-import Notificacoes from "./notificacao"; // Import REAL
-import { useAuth } from "../auth/AuthContext"; // Import REAL
+import { Link } from "react-router-dom";
+import styles from "../style/navbar.module.css";
+import Denuncie from "./denuncie";
+import Notificacoes from "./notificacao";
+import { useAuth } from "../auth/AuthContext";
 import { BsPersonCircle } from "react-icons/bs";
 
 export default function Nav() {
-  const { isAuthenticated, login, logout, user } = useAuth(); // Hook REAL
-
-  // Este console.log é para VOCÊ checar no seu navegador (F12)
-  // Verifique o que aparece em 'role' e 'nome' ao logar como ONG
-  console.log("DADOS REAIS DO AUTHCONTEXT:", user);
+  const { isAuthenticated, user } = useAuth();
 
   const [showModal, setShowModal] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  // Lógica para checar se é ONG ou Admin
-  const isOngOrAdmin =
-    isAuthenticated &&
-    user &&
-    (user.role === "ONG" || user.role === "ADMIN");
+  // --- LÓGICA DE ROLES ---
+
+  // Verifica se é ONG
+  const isOng = isAuthenticated && user && user.role === "ONG";
+
+  // Verifica se é ADMIN (Nova lógica adicionada)
+  const isAdmin = isAuthenticated && user && user.role === "ADMIN";
 
   const toggleNotifications = () => {
     setIsNotificationsOpen(!isNotificationsOpen);
@@ -33,18 +31,15 @@ export default function Nav() {
       <div className={`${styles.navbar} navbar`}>
         <div className={styles.navLogo}>
           <Link to="/">
-            <img
-              src="/logo4.png"
-              alt="Logo"
-              className={styles.logoImg} 
-            />
+            <img src="/logo4.png" alt="Logo" className={styles.logoImg} />
           </Link>
         </div>
 
-        {/* Links de navegação que mudam com base no login E na role */}
         <ul className={styles.navCategorias}>
-          {/* Links que somem se for ONG/Admin */}
-          {!isOngOrAdmin && (
+          {/* Links de "Adotar" e "Lar Temporário"
+             Só aparecem se NÃO for ONG e NÃO for Admin 
+          */}
+          {!isOng && !isAdmin && (
             <>
               <li>
                 <Link
@@ -71,8 +66,8 @@ export default function Nav() {
               to={isAuthenticated ? "/doar" : "/login"}
               className={styles.navLink}
             >
-              {/* Se for ONG/Admin, mostra "Doação", senão, mostra "Doar" */}
-              {isOngOrAdmin ? "Doação" : "Doar"}
+              {/* Se for ONG ou Admin mostra "Doação", caso contrário "Doar" */}
+              {isOng || isAdmin ? "Doação" : "Doar"}
             </Link>
           </li>
           <li>
@@ -96,29 +91,19 @@ export default function Nav() {
 
         {/* Lógica de Login/Logout */}
         {isAuthenticated ? (
-          // Se LOGADO
           <ul className={styles.perfilUsuario}>
-            
-            
-
             <li>
               <Link to="/perfil" className={styles.perfilLink}>
                 <BsPersonCircle className={styles.perfilIcon} />
-                {/*
-                  LÓGICA DO NOME CORRIGIDA (baseado no seu AuthContext):
-                  Usando 'user.nome' porque 'user.nomeOng' não existe no seu context.
-                */}
                 <span className={styles.usernameText}>
-                  @
-                  {user?.nome || (isOngOrAdmin ? "ONG" : "Usuário")}
+                  @{/* Exibe o nome do usuário, ou o cargo se o nome falhar */}
+                  {user?.nome ||
+                    (isOng ? "ONG" : isAdmin ? "Admin" : "Usuário")}
                 </span>
               </Link>
             </li>
-
-
           </ul>
         ) : (
-          // Se DESLOGADO
           <ul className={styles.botoesCadastro}>
             <Link to={"/login"} style={{ textDecoration: "none" }}>
               <button className={styles.cadastroONG}>Faça Login</button>
