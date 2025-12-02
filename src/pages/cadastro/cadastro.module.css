@@ -16,24 +16,21 @@
   position: relative;
 }
 
-.containerForms2 {
-  width: 50%;
-  overflow: hidden;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("../../../public/banners/cadastroBanner2.png") no-repeat
-    center center;
-  padding: 2rem;
-  background-size: cover;
-  position: relative;
-}
-
-.bannerCadastro {
+.bannerPadrao {
   width: 50%;
   background: #f0f9ff url("../../../public/banners/cadastroImagem.png")
     no-repeat right;
+}
+
+.bannerUsuario {
+  width: 50%;
+  background: #f0f9ff url("../../../public/banners/cadastroUsuario.png")
+    no-repeat right;
+}
+
+.bannerOng {
+  width: 50%;
+  background: #f0f9ff url("../../../public/banners/cadastroOng.png");
 }
 
 .bannerLogin {

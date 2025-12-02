@@ -1,10 +1,8 @@
 import styles from "./formularioAdotar.module.css";
-// Importe o tipo de dados que você acabou de exportar
 import type { FormData } from "./formularioAdotar";
 import { BsCheckCircleFill } from "react-icons/bs";
 
 // Componente auxiliar para renderizar cada item da lista
-// (Definido fora para ser mais limpo)
 const ReviewItem = ({ label, value }: { label: string; value?: string | null }) => {
   // Não renderiza o item se o valor for nulo, indefinido ou vazio
   if (!value) {
@@ -19,14 +17,12 @@ const ReviewItem = ({ label, value }: { label: string; value?: string | null }) 
   );
 };
 
-// Props agora espera receber 'data'
 type Props = {
   data: FormData;
 };
 
 export default function StepFinal({ data }: Props) {
   
-  // Função para o botão "Revisar dados" rolar a tela
   const handleReviewClick = () => {
     document.getElementById("review-list")?.scrollIntoView({
       behavior: "smooth",
@@ -34,8 +30,19 @@ export default function StepFinal({ data }: Props) {
     });
   };
 
+  
+  const formatOutrosAnimais = () => {
+    if (
+      data.outrosAnimaisLocal && 
+      data.outrosAnimaisLocal.Quantidade && 
+      data.outrosAnimaisLocal.Quantidade !== "0"
+    ) {
+        return `${data.outrosAnimaisLocal.Quantidade} - ${data.outrosAnimaisLocal["Tipo de Animal"] || ''}`;
+    }
+    return "Não possui";
+  };
+
   return (
-    // section não precisa mais do stepSection, pois o header já centraliza
     <section> 
       <div className={styles.finalHeader}>
         <BsCheckCircleFill className={styles.finalIcon} />
@@ -43,17 +50,15 @@ export default function StepFinal({ data }: Props) {
         <h2 className={styles.finalTitle}>Tudo pronto!</h2>
 
         <p className={styles.finalSubtitle}>
-          Revise seus dados. Se estiver tudo certo, basta clicar em "Enviar" no
-          final da página.
+          Revise seus dados abaixo.
         </p>
 
-        {/* Botão agora rola a tela para a lista de revisão */}
         <button
           type="button"
           className={styles.finalReviewButton}
           onClick={handleReviewClick}
         >
-          Revisar dados
+          Revisar dados enviados
         </button>
       </div>
 
@@ -61,7 +66,7 @@ export default function StepFinal({ data }: Props) {
 
       {/* --- LISTA DE REVISÃO DOS DADOS --- */}
       <div className={styles.reviewContainer} id="review-list">
-        <h2 className={styles.reviewTitle}>Seus Dados</h2>
+        <h2 className={styles.reviewTitle}>Resumo do Pedido</h2>
 
         <div className={styles.reviewList}>
           {/* Dados Pessoais */}
@@ -82,9 +87,9 @@ export default function StepFinal({ data }: Props) {
 
           {/* Sobre o Espaço */}
           <h3 className={styles.reviewSubheader}>Sobre o Espaço</h3>
-          <ReviewItem label="Tipo de moradia" value={data.tipoMoradia} />
+          {/* Usa o 'choice' se existir, senão usa o padrão */}
+          <ReviewItem label="Tipo de moradia" value={data.tipoMoradiaChoice || data.tipoMoradia} />
           <ReviewItem label="Possui quintal?" value={data.quintal} />
-          <ReviewItem label="Sua moradia é..." value={data.tipoMoradiaChoice} />
           
           {/* Preferências */}
           <h3 className={styles.reviewSubheader}>Preferências</h3>
@@ -99,7 +104,8 @@ export default function StepFinal({ data }: Props) {
           <ReviewItem label="Pessoas no lar" value={data.pessoasNoLar} />
           <ReviewItem label="Alguém alérgico?" value={data.alergia} />
           
-          {/* Adicione aqui os outros campos do seu 'data' se necessário */}
+          {/* 🛠️ AQUI: Usando a função formatada para não quebrar o React */}
+          <ReviewItem label="Outros animais" value={formatOutrosAnimais()} />
           
         </div>
       </div>
