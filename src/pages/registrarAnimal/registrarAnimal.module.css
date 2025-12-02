@@ -11,7 +11,7 @@
 /* ========================================= */
 .colunaUm {
   flex: 1;
-  padding: 3  rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;

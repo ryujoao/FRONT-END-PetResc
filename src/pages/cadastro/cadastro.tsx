@@ -113,6 +113,17 @@ export default function Cadastro() {
     }
   };
 
+  const getBannerClass = () => {
+    if (etapa === 1) {
+      return styles.bannerPadrao; // Mostra imagem padrão na escolha inicial
+    }
+    // Se passou da etapa 1, verifica o tipo
+    if (dados.tipo === "ONG") {
+      return styles.bannerOng;
+    }
+    return styles.bannerUsuario;
+  };
+
 
   return (
     <div className={styles.pagCadastro}>
@@ -421,7 +432,7 @@ export default function Cadastro() {
         )}
       </div>
 
-      <div className={styles.bannerCadastro}></div>
+      <div className={getBannerClass()}></div>
     </div>
   );
 }
