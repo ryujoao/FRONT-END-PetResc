@@ -28,6 +28,15 @@ import RecuperarSenha from "./pages/cadastro/recuperarSenha";
 import NovaCampanha from "./pages/campanhas/novaCampanha";
 import GerenciarAdocao from "./pages/gerenciarAdocao/gerenciarAdocao";
 import CampanhasAnteriores from "./pages/campanhas/campanhasAnteriores";
+import AdminGerenciamento from "./pages/admin/adminGerenciamento";
+import AdminHome from "./pages/admin/admin";
+import AdminOngs from "./pages/admin/adminOngs";
+import AdminPets from "./pages/admin/adminPets";
+import AdminUsuarios from "./pages/admin/adminUsuarios";
+import AdminPeriodoCadastro from "./pages/admin/adminPetsHistorico";
+import AdminOngsDetalhes from "./pages/admin/adminOngDetalhes";
+import AdminGerenciarPetsOng from "./pages/admin/adminOngPets";
+import AdminHistoricoPets from "./pages/admin/adminPetsHistorico";
 
 function App() {
   return (
@@ -36,22 +45,32 @@ function App() {
       <Route path="/adotar" element={<Adotar />} />
       <Route path="/lar-temporario" element={<LarTemporario />} />
       <Route path="/doar" element={<Doar />} />
-      <Route path="/cadastro" element={<Cadastro/>} />
+      <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/login" element={<Login />} />
-      <Route path="recuperar-senha" element={<RecuperarSenha/>} />
+      <Route path="recuperar-senha" element={<RecuperarSenha />} />
       <Route path="/registrar-animal" element={<RegistrarAnimal />} />
       <Route path="/central-adocao" element={<CentralAdocao />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/campanhas-anteriores" element={<CampanhasAnteriores />} />
-      
       <Route path="/animal/:id" element={<PerfilAnimal />} />
       <Route path="/instituto/:id" element={<Institutos />} />
       <Route path="/formulario-adotar" element={<FormularioAdotar />} />
       <Route path="/formulario-adotar/:id" element={<FormularioAdotar />} />
-      
-      <Route path="/formulario-lar-temporario" element={<FormularioLarTemporario />} />
+      <Route
+        path="/formulario-lar-temporario"
+        element={<FormularioLarTemporario />}
+      />
       <Route path="/nova-campanha" element={<NovaCampanha />} />
       <Route path="/gerenciar-adocao/:id" element={<GerenciarAdocao />} />
+      /* Admin */
+      <Route path="/admin" element={<AdminHome />} />
+      <Route path="/admin/gerenciamento" element={<AdminGerenciamento />} />
+      <Route path="/admin/pets" element={<AdminPets />} />
+      <Route path="/admin/ongs" element={<AdminOngs />} />
+      <Route path="/admin/ongs/:id" element={<AdminOngsDetalhes />} />
+      <Route path="/admin/ongs/:id/pets" element={<AdminGerenciarPetsOng />} />
+      <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+      <Route path="/admin/historico-pets" element={<AdminHistoricoPets />} />
       
       <Route path="/config" element={<ConfigMenu />} />
       <Route element={<ConfigLayout />}>
@@ -62,7 +81,10 @@ function App() {
         <Route path="/config/seguranca" element={<Seguranca />} />
         <Route path="/config/alterar-senha" element={<AlterarSenha />} />
         <Route path="/config/historico" element={<Historico />} />
-        <Route path="/config/historico-animais" element={<HistoricoAnimais />} />
+        <Route
+          path="/config/historico-animais"
+          element={<HistoricoAnimais />}
+        />
         <Route path="/config/faq" element={<FAQ />} />
         <Route path="/config/contate-nos" element={<Contato />} />
       </Route>

@@ -45,6 +45,7 @@
   max-height: 400px;
   overflow-y: auto;
   padding-right: 5px; /* Espaço para scrollbar */
+  font-size: 1.3rem;
 }
 
 /* Estiliza scrollbar fina */
@@ -132,7 +133,7 @@
   padding: 0.6rem 2rem;
   border-radius: 20px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.3rem;
   margin-top: 1.5rem;
   display: inline-block;
   transition: background 0.2s;

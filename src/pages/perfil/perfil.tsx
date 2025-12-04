@@ -299,7 +299,7 @@ export default function Perfil() {
           // Lógica MOCK para distribuir nas abas da ONG
           status: p.status || (index % 2 === 0 ? "Visita Agendada" : "Adotado"),
           codigo: index % 2 === 0 ? "AD." : "FI.",
-          dataAdocao: p.status === "Adotado" ? "10/10/2023" : null,
+          dataAdocao: p.status === "Adotado" ? "10/10/2025" : null,
         }));
         setMeusPets(meusFormatados);
 
