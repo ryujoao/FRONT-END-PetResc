@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./cadastro.module.css"; // Reutilizando o CSS de cadastro
+import styles from "./cadastro.module.css";
 import api from "../../services/api";
 
 export default function RecuperarSenha() {
@@ -18,6 +18,7 @@ export default function RecuperarSenha() {
   const [error, setError] = useState("");
 
   // Referências para focar nos inputs de código
+  // Inicializamos com um array vazio, mas tipado corretamente
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // --- ETAPA 1: ENVIAR EMAIL ---
@@ -30,9 +31,10 @@ export default function RecuperarSenha() {
       await api.post("/auth/forgot-password", { email });
 
       console.log("Enviando código para:", email);
+      // Simulação de tempo de espera (opcional)
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      setEtapa(2); 
+      setEtapa(2);
     } catch (err) {
       setError("E-mail não encontrado ou erro no servidor.");
     } finally {
@@ -98,14 +100,11 @@ export default function RecuperarSenha() {
 
     setIsLoading(true);
     try {
-        await api.post("/auth/reset-password", { 
-         email, 
-         code: codigo.join(""), 
-          newPassword: novaSenha 
-         });  
-
-
-
+      await api.post("/auth/reset-password", {
+        email,
+        code: codigo.join(""),
+        newPassword: novaSenha,
+      });
 
       console.log("Alterando senha...");
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -182,7 +181,10 @@ export default function RecuperarSenha() {
               {codigo.map((digit, index) => (
                 <input
                   key={index}
-                  ref={(el) => (inputRefs.current[index] = el)}
+                  // CORREÇÃO AQUI: Uso correto do ref com callback e chaves
+                  ref={(el) => {
+                    if (el) inputRefs.current[index] = el;
+                  }}
                   className={styles.otpInput}
                   type="text"
                   maxLength={1}
@@ -208,7 +210,7 @@ export default function RecuperarSenha() {
             <button
               type="button"
               className={styles.reenviarLink}
-              onClick={() => alert("Reenviando código...")} // Adicione lógica real aqui
+              onClick={() => alert("Reenviando código...")} // Adicione lógica real aqui se tiver endpoint
             >
               Reenviar código
             </button>

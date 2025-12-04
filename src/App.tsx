@@ -33,7 +33,6 @@ import AdminHome from "./pages/admin/admin";
 import AdminOngs from "./pages/admin/adminOngs";
 import AdminPets from "./pages/admin/adminPets";
 import AdminUsuarios from "./pages/admin/adminUsuarios";
-import AdminPeriodoCadastro from "./pages/admin/adminPetsHistorico";
 import AdminOngsDetalhes from "./pages/admin/adminOngDetalhes";
 import AdminGerenciarPetsOng from "./pages/admin/adminOngPets";
 import AdminHistoricoPets from "./pages/admin/adminPetsHistorico";

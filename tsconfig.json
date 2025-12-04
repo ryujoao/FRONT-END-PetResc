@@ -8,5 +8,8 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "compilerOptions": {}
+  "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+  }
 }
