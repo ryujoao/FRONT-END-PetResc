@@ -33,6 +33,13 @@ const RegistrarAnimalUsuario = () => {
   const [imagemPreview, setImagemPreview] = useState<string | null>(null);
   const [imagemArquivo, setImagemArquivo] = useState<File | null>(null);
 
+<<<<<<< HEAD
+=======
+  // IA
+  const [gerandoIA, setGerandoIA] = useState(false);
+
+  // Campos
+>>>>>>> 9ae4a98f9df617527311292cd84dd95fa5c55b33
   const [nome, setNome] = useState("");
   const [historia, setHistoria] = useState("");
   const [cuidado, setCuidado] = useState("");
@@ -70,6 +77,46 @@ const RegistrarAnimalUsuario = () => {
       const reader = new FileReader();
       reader.onload = () => setImagemPreview(reader.result as string);
       reader.readAsDataURL(file);
+    }
+  };
+
+  const gerarDescricaoIA = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!nome || !especie) {
+      alert("Preencha Nome e Espécie antes de gerar a história!");
+      return;
+    }
+
+    setGerandoIA(true);
+    try {
+      const token = localStorage.getItem("@AuthData:token");
+      
+      // Pega dados específicos do Usuário
+      const listaCaracteristicas = [
+        raca, porte, cor, genero, 
+        `Cuidados: ${cuidado}`, 
+        `Sociabilidade: ${sociabilidade}`
+      ].filter(Boolean).join(", ");
+
+      const response = await fetch("https://petresc.onrender.com/api/animais/ia-descricao", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ nome, especie, caracteristicas: listaCaracteristicas })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Erro IA");
+      if (data.texto) setHistoria(data.texto);
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao gerar descrição com IA.");
+    } finally {
+      setGerandoIA(false);
     }
   };
 
@@ -160,7 +207,23 @@ const RegistrarAnimalUsuario = () => {
           <input className={styles.barraInfos} type="text" placeholder="Nome do pet" value={nome} onChange={(e) => setNome(e.target.value)} />
         </div>
         <div className={styles.campoForm}>
-          <label className={styles.label}>História</label>
+          <div className={styles.campoForm}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', width:'100%', marginBottom:'5px'}}>
+              <label className={styles.label} style={{margin:0}}>História</label>
+              <button 
+                  type="button"
+                  onClick={gerarDescricaoIA}
+                  disabled={gerandoIA}
+                  style={{
+                      backgroundColor: '#8a2be2', color: 'white', border: 'none', borderRadius: '20px',
+                      padding: '5px 15px', fontSize: '0.85rem', fontWeight: 'bold', cursor: gerandoIA ? 'wait' : 'pointer'
+                  }}
+              >
+                 {gerandoIA ? "✨ Criando..." : "✨ Gerar com IA"}
+              </button>
+          </div>
+          <textarea className={styles.barraInfos} placeholder="História..." value={historia} onChange={(e) => setHistoria(e.target.value)} />
+        </div>
           <textarea className={styles.barraInfos} placeholder="História..." value={historia} onChange={(e) => setHistoria(e.target.value)} />
         </div>
         <div className={styles.campoForm}>
@@ -245,6 +308,9 @@ const RegistrarAnimalUsuario = () => {
 const RegistrarAnimalOng = () => {
   const navigate = useNavigate();
 
+  // IA
+  const [gerandoIA, setGerandoIA] = useState(false);
+
   // Imagens
   const [imgResgatePreview, setImgResgatePreview] = useState<string | null>(null);
   const [imgResgateArquivo, setImgResgateArquivo] = useState<File | null>(null);
@@ -319,6 +385,46 @@ const RegistrarAnimalOng = () => {
       const reader = new FileReader();
       reader.onload = () => setImgAtualPreview(reader.result as string);
       reader.readAsDataURL(file);
+    }
+  };
+
+  const gerarDescricaoIA = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!nome || !especie) {
+      alert("Preencha Nome e Espécie antes de gerar a história!");
+      return;
+    }
+
+    setGerandoIA(true);
+    try {
+      const token = localStorage.getItem("@AuthData:token");
+      
+      // Pega dados específicos da ONG
+      const listaCaracteristicas = [
+        raca, porte, cor, genero, obs, 
+        castrado === "sim" ? "castrado" : "",
+        vacinado === "sim" ? "vacinado" : ""
+      ].filter(Boolean).join(", ");
+
+      const response = await fetch("https://petresc.onrender.com/api/animais/ia-descricao", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ nome, especie, caracteristicas: listaCaracteristicas })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Erro IA");
+      if (data.texto) setHistoria(data.texto);
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao gerar descrição com IA.");
+    } finally {
+      setGerandoIA(false);
     }
   };
 
@@ -613,7 +719,21 @@ const RegistrarAnimalOng = () => {
           </div>
 
           <div className={styles.campoForm}>
-            <label className={styles.label}>História</label>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', width:'100%', marginBottom:'5px'}}>
+              <label className={styles.label} style={{margin:0}}>História</label>
+              <button 
+                  type="button"
+                  onClick={gerarDescricaoIA}
+                  disabled={gerandoIA}
+                  style={{
+                      backgroundColor: '#8a2be2', color: 'white', border: 'none', borderRadius: '20px',
+                      padding: '5px 15px', fontSize: '0.85rem', fontWeight: 'bold', cursor: gerandoIA ? 'wait' : 'pointer'
+                  }}
+              >
+                 {gerandoIA ? "✨ Criando..." : "✨ Gerar com IA"}
+              </button>
+          </div>
+          {/* Mantenha o textarea aqui embaixo */}
             <textarea className={styles.barraInfos} value={historia} onChange={(e) => setHistoria(e.target.value)} />
           </div>
 
