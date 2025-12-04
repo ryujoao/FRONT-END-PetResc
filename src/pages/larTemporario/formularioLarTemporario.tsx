@@ -5,6 +5,7 @@ import Layout from "../../components/layout";
 
 /** Tipagens */
 type YesNo = "sim" | "nao" | "";
+
 interface FormData {
   nomeCompleto: string;
   cpf: string;
@@ -23,8 +24,8 @@ interface FormData {
   // moradia / animais
   tipoMoradia: string;
   quintal: YesNo;
-  porteAnimal: string;
-  tipoAnimal: string;
+  porteAnimal: string[]; // MUDANÇA: Agora é uma lista de strings
+  tipoAnimal: string[];  // MUDANÇA: Agora é uma lista de strings
 
   // experiencia / condicoes
   outrosAnimais: YesNo;
@@ -61,6 +62,7 @@ Ao marcar "Li e concordo", você aceita as condições acima descritas.
 
 export default function FormularioLarTemporario() {
   const [sucessoOpen, setSucessoOpen] = useState(false);
+  
   const [formData, setFormData] = useState<FormData>({
     nomeCompleto: "",
     cpf: "",
@@ -75,8 +77,8 @@ export default function FormularioLarTemporario() {
     estado: "",
     tipoMoradia: "",
     quintal: "" as YesNo,
-    porteAnimal: "",
-    tipoAnimal: "",
+    porteAnimal: [], // Inicializa como lista vazia
+    tipoAnimal: [],  // Inicializa como lista vazia
     outrosAnimais: "" as YesNo,
     administraMedicamentos: "" as YesNo,
     levarVeterinario: "" as YesNo,
@@ -87,25 +89,42 @@ export default function FormularioLarTemporario() {
     declaroVerdade: false,
   });
 
+  // Handler genérico para campos simples
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name: rawName, value, type, checked } = e.target;
     const name = rawName as keyof FormData;
 
     if (type === "checkbox") {
-      setFormData((prev) => ({ ...prev, [name]: checked }));
+      // Cuidado: aqui tratamos apenas os checkboxes booleanos (declarações)
+      // Os checkboxes de array usam a função handleMultiSelect abaixo
+      if (name === "declaroLido" || name === "declaroVerdade") {
+          setFormData((prev) => ({ ...prev, [name]: checked }));
+      }
       return;
     }
 
     setFormData((prev) => ({ ...prev, [name]: value } as FormData));
   };
 
+  // --- NOVA FUNÇÃO: MÚLTIPLA ESCOLHA ---
+  const handleMultiSelect = (field: "porteAnimal" | "tipoAnimal", value: string) => {
+    setFormData((prev) => {
+      const currentList = prev[field];
+      if (currentList.includes(value)) {
+        // Se já tem, remove
+        return { ...prev, [field]: currentList.filter((item) => item !== value) };
+      } else {
+        // Se não tem, adiciona
+        return { ...prev, [field]: [...currentList, value] };
+      }
+    });
+  };
+
   // --- FUNÇÃO: BUSCAR CEP ---
   const buscarCep = async (e: React.FocusEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/\D/g, "");
 
-    if (cep.length !== 8) {
-      return;
-    }
+    if (cep.length !== 8) return;
 
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -169,8 +188,9 @@ export default function FormularioLarTemporario() {
         tipoResidencia: formData.tipoMoradia,
         espacoDisponivel: formData.quintal === "sim",
 
-        porteAnimal: formData.porteAnimal,
-        tipoAnimalInteresse: formData.tipoAnimal,
+        // Converte as listas para string separada por vírgula para enviar ao banco
+        porteAnimal: formData.porteAnimal.join(", "),
+        tipoAnimalInteresse: formData.tipoAnimal.join(", "),
 
         possuiAnimais: formData.outrosAnimais === "sim",
         experiencia: formData.administraMedicamentos === "sim",
@@ -386,16 +406,17 @@ export default function FormularioLarTemporario() {
               ))}
             </div>
 
-            <h3 className={styles.tituloQuestao}>Quais portes aceita?</h3>
+            {/* --- MÚLTIPLA ESCOLHA: PORTES --- */}
+            <h3 className={styles.tituloQuestao}>Quais portes aceita? (Pode marcar vários)</h3>
             <div className={styles.grupoOpcoes}>
               {["pequeno", "medio", "grande"].map((v) => (
                 <label key={v} className={styles.checkboxCustomizado}>
                   <input
-                    type="radio"
+                    type="checkbox" 
                     name="porteAnimal"
                     value={v}
-                    onChange={handleChange}
-                    checked={formData.porteAnimal === v}
+                    onChange={() => handleMultiSelect("porteAnimal", v)}
+                    checked={formData.porteAnimal.includes(v)}
                   />
                   <span className={styles.checkmark}></span>
                   {v}
@@ -403,16 +424,16 @@ export default function FormularioLarTemporario() {
               ))}
             </div>
 
-            <h3 className={styles.tituloQuestao}>Quais animais aceita?</h3>
+            <h3 className={styles.tituloQuestao}>Quais animais aceita? (Pode marcar vários)</h3>
             <div className={styles.grupoOpcoes}>
               {["gato", "cachorro", "todos"].map((v) => (
                 <label key={v} className={styles.checkboxCustomizado}>
                   <input
-                    type="radio"
+                    type="checkbox"  
                     name="tipoAnimal"
                     value={v}
-                    onChange={handleChange}
-                    checked={formData.tipoAnimal === v}
+                    onChange={() => handleMultiSelect("tipoAnimal", v)}
+                    checked={formData.tipoAnimal.includes(v)}
                   />
                   <span className={styles.checkmark}></span>
                   {v}
@@ -489,7 +510,7 @@ export default function FormularioLarTemporario() {
               overflowY: 'auto',
               fontSize: '0.9rem',
               lineHeight: '1.5',
-              whiteSpace: 'pre-wrap' // Mantém as quebras de linha do texto
+              whiteSpace: 'pre-wrap' 
             }}>
               {termoTexto}
             </div>
@@ -521,4 +542,4 @@ export default function FormularioLarTemporario() {
       />
     </Layout>
   );
-} 
+}

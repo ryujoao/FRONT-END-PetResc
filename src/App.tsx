@@ -38,6 +38,7 @@ import AdminGerenciarPetsOng from "./pages/admin/adminOngPets";
 import AdminHistoricoPets from "./pages/admin/adminPetsHistorico";
 import AdminLogs from "./pages/admin/adminLogs";
 import AdminMonitoramento from "./pages/admin/adminMonitoramento";
+import AvaliarAnimal from "./pages/avaliarAnimal/avaliarAnimal";
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
       />
       <Route path="/nova-campanha" element={<NovaCampanha />} />
       <Route path="/gerenciar-adocao/:id" element={<GerenciarAdocao />} />
+      <Route path="/avaliar-animal" element={<AvaliarAnimal />} />
       /* Admin */
       <Route path="/admin" element={<AdminHome />} />
       <Route path="/admin/gerenciamento" element={<AdminGerenciamento />} />

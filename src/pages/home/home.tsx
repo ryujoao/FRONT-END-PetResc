@@ -96,10 +96,8 @@ export default function Home() {
       return (
         <>
           <AnimaisCadastrados />
-          {/* BANNER DOIS (ONDE O GATINHO DEVE FICAR) */}
           <section className={styles.bannerDois}>
             
-            {/* IMAGEM DO GATINHO (Movi para cá) */}
             <img 
               src="/banners/banner2.png" 
               alt="Gatinho Curioso" 

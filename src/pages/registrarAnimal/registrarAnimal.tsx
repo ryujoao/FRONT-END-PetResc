@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 import { BsCloudArrowUpFill } from "react-icons/bs";
 import Layout from "../../components/layout";
+import Modal from "../../components/modal"; 
 
-// --- CONSTANTES DE OPÇÕES ---
+// --- CONSTANTES ---
 const OPCOES_ESPECIE = ["CACHORRO", "GATO", "OUTRO"];
 const OPCOES_PORTE = ["PEQUENO", "MEDIO", "GRANDE"];
 const OPCOES_GENERO = ["MACHO", "FEMEA"];
@@ -14,8 +15,6 @@ const OPCOES_COR = ["PRETO", "BRANCO", "MARROM", "CARAMELO", "CINZA", "RAJADO", 
 const OPCOES_STATUS_USUARIO = ["PERDIDO", "ENCONTRADO", "DISPONIVEL"]; 
 const OPCOES_LOCAL_ATUAL = ["ABRIGO", "CLINICA", "CASA_PROTETOR"];
 
-// --- NOVAS OPÇÕES DE STATUS PARA A ONG (AQUI ESTÁ O SEGREDO) ---
-// Isso permite separar quem vai para a coluna de Adoção e quem vai para Lar Temporário
 const OPCOES_STATUS_ONG = [
   { valor: "DISPONIVEL", label: "Disponível para Adoção" },
   { valor: "LAR_TEMPORARIO", label: "Precisa de Lar Temporário" },
@@ -34,7 +33,6 @@ const RegistrarAnimalUsuario = () => {
   const [imagemPreview, setImagemPreview] = useState<string | null>(null);
   const [imagemArquivo, setImagemArquivo] = useState<File | null>(null);
 
-  // Campos
   const [nome, setNome] = useState("");
   const [historia, setHistoria] = useState("");
   const [cuidado, setCuidado] = useState("");
@@ -48,9 +46,22 @@ const RegistrarAnimalUsuario = () => {
   const [idade, setIdade] = useState(""); 
 
   const [loadingEnvio, setLoadingEnvio] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [novoAnimalId, setNovoAnimalId] = useState<string | null>(null);
+  
+  // Modal State
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "", msg: "", type: "success" as "success" | "error", redirect: "" as string | null
+  });
+
+  const showModal = (title: string, msg: string, type: "success" | "error", redirect: string | null = null) => {
+    setModalConfig({ title, msg, type, redirect });
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    if (modalConfig.redirect) navigate(modalConfig.redirect);
+  };
 
   const handleSelecaoDeArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,16 +76,15 @@ const RegistrarAnimalUsuario = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoadingEnvio(true);
-    setError(null);
 
     const token = localStorage.getItem("@AuthData:token"); 
     if (!token) {
-      setError("Usuário não autenticado. Faça login novamente.");
+      showModal("Erro", "Sessão expirada. Faça login novamente.", "error", "/login");
       setLoadingEnvio(false);
       return;
     }
     if (!imagemArquivo) {
-      setError("Por favor, selecione uma imagem.");
+      showModal("Atenção", "Por favor, selecione uma imagem do animal.", "error");
       setLoadingEnvio(false);
       return;
     }
@@ -100,39 +110,30 @@ const RegistrarAnimalUsuario = () => {
         body: formData,
       });
 
-      setLoadingEnvio(false);
+      const data = await response.json();
+
       if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "Falha ao registrar animal");
+        throw new Error(data.error || "Falha ao registrar animal");
       }
 
-      const novoAnimal = await response.json();
-      setNovoAnimalId(novoAnimal.id);
-      setShowModal(true);
+      showModal("Sucesso!", "O animal foi registrado com sucesso.", "success", `/animal/${data.id}`);
 
     } catch (err) {
       setLoadingEnvio(false);
-      if (err instanceof Error) setError(err.message);
-      else setError("Erro desconhecido");
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      showModal("Erro", msg, "error");
     }
-  };
-
-  const handleFecharModal = () => {
-    setShowModal(false);
-    if (novoAnimalId) navigate(`/animal/${novoAnimalId}`);
   };
 
   return (
     <div className={styles.pageRegistroAnimal}>
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2 className={styles.modalTitulo}>Registro Enviado!</h2>
-            <p className={styles.modalTexto}>O animal foi cadastrado com sucesso.</p>
-            <button className={styles.modalBotao} onClick={handleFecharModal}>OK</button>
-          </div>
-        </div>
-      )}
+      <Modal 
+        isOpen={modalOpen}
+        title={modalConfig.title}
+        message={modalConfig.msg}
+        type={modalConfig.type}
+        onClose={handleCloseModal}
+      />
 
       <div className={styles.colunaUm}>
         <div className={styles.campoForm}>
@@ -232,7 +233,6 @@ const RegistrarAnimalUsuario = () => {
           <button type="submit" className={styles.botao} disabled={loadingEnvio}>
             {loadingEnvio ? "Enviando..." : "Enviar Formulário"}
           </button>
-          {error && <p className={styles.erro}>{error}</p>}
         </form>
       </div>
     </div>
@@ -240,7 +240,7 @@ const RegistrarAnimalUsuario = () => {
 };
 
 // =================================================================
-// === COMPONENTE 2: FORMULÁRIO DA ONG (ATUALIZADO COM STATUS CORRETO) ===
+// === COMPONENTE 2: FORMULÁRIO DA ONG ===
 // =================================================================
 const RegistrarAnimalOng = () => {
   const navigate = useNavigate();
@@ -252,7 +252,7 @@ const RegistrarAnimalOng = () => {
   const [imgAtualArquivo, setImgAtualArquivo] = useState<File | null>(null);
 
   // Status e Localização
-  const [statusOng, setStatusOng] = useState("DISPONIVEL"); // AQUI ESTÁ A CHAVE DA DIFERENCIAÇÃO
+  const [statusOng, setStatusOng] = useState("DISPONIVEL"); 
   const [estado, setEstado] = useState("");
   const [cidade, setCidade] = useState("");
   const [numero, setNumero] = useState("");
@@ -285,9 +285,22 @@ const RegistrarAnimalOng = () => {
   const [resultados, setResultados] = useState("");
 
   const [loadingEnvio, setLoadingEnvio] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [novoAnimalId, setNovoAnimalId] = useState<string | null>(null);
+  
+  // Modal State
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    title: "", msg: "", type: "success" as "success" | "error", redirect: "" as string | null
+  });
+
+  const showModal = (title: string, msg: string, type: "success" | "error", redirect: string | null = null) => {
+    setModalConfig({ title, msg, type, redirect });
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    if (modalConfig.redirect) navigate(modalConfig.redirect);
+  };
 
   // Handlers Imagens
   const handleImgResgate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -312,100 +325,115 @@ const RegistrarAnimalOng = () => {
   const handleSubmitOng = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoadingEnvio(true);
-    setError(null);
 
     const token = localStorage.getItem("@AuthData:token"); 
     if (!token) {
-      setError("Usuário não autenticado.");
+      showModal("Erro", "Usuário não autenticado.", "error", "/login");
       setLoadingEnvio(false);
       return;
     }
     if (!imgAtualArquivo) {
-      setError("A foto atual do animal é obrigatória.");
+      showModal("Atenção", "A foto atual do animal é obrigatória.", "error");
       setLoadingEnvio(false);
       return;
     }
 
     const formData = new FormData();
+    
+    // --- ARQUIVOS ---
     formData.append("imagem", imgAtualArquivo);
     if (imgResgateArquivo) formData.append("imagem_resgate", imgResgateArquivo);
 
-    // Campos
-    formData.append("nome", nome);
-    formData.append("especie", especie);
-    formData.append("sexo", genero);
-    formData.append("raca", raca);
-    formData.append("idade", idadeAprox);
-    formData.append("data_resgate", dataResgate);
-    formData.append("porte", porte);
-    formData.append("cor", cor);
-    formData.append("observacoes", obs);
-    formData.append("descricao", historia);
+    // --- FUNÇÃO PARA TRATAR NULOS ---
+    const appendIf = (key: string, value: string) => {
+        if (value !== undefined && value !== null) {
+            formData.append(key, value);
+        }
+    };
+
+    // --- CAMPOS ---
+    appendIf("nome", nome);
+    appendIf("especie", especie);
+    appendIf("sexo", genero);
+    appendIf("raca", raca);
+    
+    // VERIFICAR: Se o banco espera INT, isso pode dar erro 500 se enviar String
+    appendIf("idade", idadeAprox); 
+    
+    appendIf("data_resgate", dataResgate);
+    appendIf("porte", porte);
+    appendIf("cor", cor);
+    appendIf("observacoes", obs);
+    appendIf("descricao", historia);
 
     // Local e Status
-    formData.append("local_estado", estado);
-    formData.append("local_cidade", cidade);
-    formData.append("local_numero", numero);
-    formData.append("tinha_filhotes", filhotes);
-    formData.append("tinha_coleira", coleira);
-    formData.append("motivo_nao_disponivel", motivo);
-    formData.append("local_atual", atualmente);
+    appendIf("local_estado", estado);
+    appendIf("local_cidade", cidade);
     
-    // IMPORTANTE: Envia o status escolhido no dropdown específico da ONG
-    // Isso garante que "LAR_TEMPORARIO" seja salvo corretamente no banco
-    formData.append("status", statusOng); 
+    // VERIFICAR: Se o banco espera INT, enviar string aqui dá erro
+    appendIf("local_numero", numero); 
+    
+    appendIf("tinha_filhotes", filhotes);
+    appendIf("tinha_coleira", coleira);
+    appendIf("motivo_nao_disponivel", motivo);
+    appendIf("local_atual", atualmente);
+    
+    // Status do select
+    appendIf("status", statusOng); 
 
     // Saúde
-    formData.append("vermifugado", vermifugado);
-    formData.append("data_vermifugado", dataVermifugado);
-    formData.append("vacinado", vacinado);
-    formData.append("vacinas_texto", txtVacinado);
-    formData.append("castrado", castrado);
-    formData.append("data_castrado", dataCastrado);
-    formData.append("testado_doencas", testado);
-    formData.append("testes_texto", txtTestado);
-    formData.append("resultados_testes", resultados);
+    appendIf("vermifugado", vermifugado);
+    appendIf("data_vermifugado", dataVermifugado);
+    appendIf("vacinado", vacinado);
+    appendIf("vacinas_texto", txtVacinado);
+    appendIf("castrado", castrado);
+    appendIf("data_castrado", dataCastrado);
+    appendIf("testado_doencas", testado);
+    appendIf("testes_texto", txtTestado);
+    appendIf("resultados_testes", resultados);
+
+    // --- DEBUG: LOG NO CONSOLE ---
+    console.log("📤 Enviando os seguintes dados:");
+    for (const pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
 
     try {
         const response = await fetch("https://petresc.onrender.com/api/animais", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+            body: formData,
+        });
 
-      setLoadingEnvio(false);
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || "Falha ao registrar animal");
-      }
+        const data = await response.json();
 
-      const novoAnimal = await response.json();
-      setNovoAnimalId(novoAnimal.id);
-      setShowModal(true);
+        if (!response.ok) {
+            console.error("❌ Erro do Backend:", data);
+            throw new Error(data.error || data.message || "Erro 500: Verifique os dados enviados");
+        }
+
+        const novoAnimal = data;
+        showModal("Sucesso!", "O animal foi cadastrado com sucesso!", "success", `/animal/${novoAnimal.id}`);
 
     } catch (err) {
       setLoadingEnvio(false);
-      if (err instanceof Error) setError(err.message);
-      else setError("Erro desconhecido");
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      console.error("Erro no Frontend:", err);
+      showModal("Erro no Envio", `O servidor retornou erro. \nDetalhe: ${msg}`, "error");
+    } finally {
+        setLoadingEnvio(false);
     }
-  };
-
-  const handleFecharModal = () => {
-    setShowModal(false);
-    if (novoAnimalId) navigate(`/animal/${novoAnimalId}`);
   };
 
   return (
     <>
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2 className={styles.modalTitulo}>Formulário enviado</h2>
-            <p className={styles.modalTexto}>O animal foi cadastrado com sucesso!</p>
-            <button className={styles.modalBotao} onClick={handleFecharModal}>OK</button>
-          </div>
-        </div>
-      )}
+      <Modal 
+        isOpen={modalOpen}
+        title={modalConfig.title}
+        message={modalConfig.msg}
+        type={modalConfig.type}
+        onClose={handleCloseModal}
+      />
 
       <form className={`${styles.formOng} ${styles.pageRegistroAnimal}`} onSubmit={handleSubmitOng}>
         
@@ -473,7 +501,32 @@ const RegistrarAnimalOng = () => {
             </div>
           </div>
 
-          {/* NOVO CAMPO: FINALIDADE DO CADASTRO (AQUI VOCÊ ESCOLHE SE É ADOÇÃO OU LAR TEMPORÁRIO) */}
+          <div className={styles.campoForm}>
+            <label className={styles.label}>Estava com coleira?</label>
+            <div className={styles.grupoOpcoes}>
+              <label className={styles.checkboxCustomizado}>
+                <input type="radio" name="coleira" value="sim" checked={coleira === "sim"} onChange={() => setColeira("sim")} />
+                <span className={styles.checkmark}></span>Sim
+              </label>
+              <label className={styles.checkboxCustomizado}>
+                <input type="radio" name="coleira" value="nao" checked={coleira === "nao"} onChange={() => setColeira("nao")} />
+                <span className={styles.checkmark}></span>Não
+              </label>
+            </div>
+          </div>
+
+          <div className={styles.campoForm}>
+            <label className={styles.label}>Motivo (Se indisponível)</label>
+            <input 
+              className={styles.barraInfos} 
+              type="text" 
+              placeholder="Ex: Em tratamento, muito agressivo..." 
+              value={motivo} 
+              onChange={(e) => setMotivo(e.target.value)} 
+            />
+          </div>
+
+          {/* FINALIDADE DO CADASTRO */}
           <div className={styles.campoForm}>
             <label className={styles.label} style={{color:'#286699', fontWeight:'bold'}}>Finalidade do Cadastro</label>
             <select 
@@ -617,7 +670,6 @@ const RegistrarAnimalOng = () => {
             )}
           </div>
 
-          {/* Testado (FIV/FeLV/Parvo)? */}
           <div className={styles.campoForm}>
             <label className={styles.label}>Testado para doenças?</label>
             <div className={styles.grupoOpcoes}>
@@ -639,7 +691,6 @@ const RegistrarAnimalOng = () => {
           <button type="submit" className={styles.botao} disabled={loadingEnvio}>
             {loadingEnvio ? "Salvando..." : "Finalizar Cadastro"}
           </button>
-          {error && <p className={styles.erro}>{error}</p>}
         </div>
       </form>
     </>

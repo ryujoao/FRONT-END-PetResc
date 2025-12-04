@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import styles from "./conta.module.css"; 
-import { useAuth } from "../../auth/AuthContext";
+import styles from "../conta/conta.module.css"; 
+import { useAuth } from "../../../auth/AuthContext";
+import Modal from "../../../components/modal"; // <--- IMPORTADO
 
 export default function Endereco() {
   const { user, setUser } = useAuth();
   
-  // Inicializa os estados com os dados do usuário ou string vazia
   const [cep, setCep] = useState(user?.cep || "");
   const [rua, setRua] = useState(user?.rua || "");
   const [numero, setNumero] = useState(user?.numero || "");
@@ -15,7 +15,15 @@ export default function Endereco() {
   const [estado, setEstado] = useState(user?.estado || "");
   const [loading, setLoading] = useState(false);
 
-  // Referência para focar no campo "Número" automaticamente
+  // Modal State
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({ title: "", msg: "", type: "success" as "success" | "error" });
+
+  const showModal = (title: string, msg: string, type: "success" | "error" = "success") => {
+    setModalData({ title, msg, type });
+    setModalOpen(true);
+  };
+
   const numeroRef = useRef<HTMLInputElement>(null);
 
   const buscarCep = async (e: React.FocusEvent<HTMLInputElement>) => {
@@ -31,14 +39,13 @@ export default function Endereco() {
           setBairro(data.bairro);
           setCidade(data.localidade);
           setEstado(data.uf);
-          // Joga o cursor para o campo número automaticamente
           numeroRef.current?.focus();
         } else {
-          alert("CEP não encontrado.");
+          showModal("Erro", "CEP não encontrado.", "error");
         }
       } catch (error) {
         console.error("Erro ao buscar CEP:", error);
-        alert("Erro de conexão ao buscar CEP.");
+        showModal("Erro", "Falha de conexão ao buscar CEP.", "error");
       }
     }
   };
@@ -50,13 +57,13 @@ export default function Endereco() {
     const token = localStorage.getItem('@AuthData:token'); 
 
     if (!user?.id) {
-      alert("Usuário não encontrado.");
+      showModal("Erro", "Usuário não encontrado.", "error");
       setLoading(false);
       return;
     }
 
     if (!token) {
-      alert("Token não encontrado. Faça login novamente.");
+      showModal("Erro", "Sessão expirada. Faça login novamente.", "error");
       setLoading(false);
       return;
     }
@@ -64,7 +71,6 @@ export default function Endereco() {
     const enderecoData = { cep, rua, numero, complemento, bairro, cidade, estado };
 
     try {
-      // Ajuste a URL conforme sua API
       const response = await fetch(`https://petresc.onrender.com/api/usuarios/${user.id}`, {
         method: 'PUT',
         headers: {
@@ -79,17 +85,16 @@ export default function Endereco() {
         throw new Error(errorData.error || 'Erro na atualização');
       }
 
-      // Atualiza o contexto global do usuário com os novos dados
       setUser({
         ...user,
         ...enderecoData
       });
 
-      alert("Endereço atualizado com sucesso!");
+      showModal("Sucesso", "Endereço atualizado com sucesso!", "success");
 
     } catch (error) {
       console.error("Erro ao salvar:", error);
-      alert("Erro ao atualizar endereço. Tente novamente.");
+      showModal("Erro", "Erro ao atualizar endereço. Tente novamente.", "error");
     } finally {
       setLoading(false);
     }
@@ -97,6 +102,14 @@ export default function Endereco() {
 
   return (
     <div className={styles.formContainer}>
+      <Modal 
+        isOpen={modalOpen} 
+        title={modalData.title} 
+        message={modalData.msg} 
+        type={modalData.type} 
+        onClose={() => setModalOpen(false)} 
+      />
+
       <h1 className={styles.titulo}>Endereço</h1>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -130,7 +143,7 @@ export default function Endereco() {
             <input 
               id="numero" 
               type="text" 
-              ref={numeroRef} // <--- ADICIONADO AQUI: Conecta a referência
+              ref={numeroRef} 
               value={numero} 
               onChange={(e) => setNumero(e.target.value)} 
             />
