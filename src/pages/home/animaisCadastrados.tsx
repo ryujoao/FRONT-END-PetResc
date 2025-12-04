@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import styles from "./animaisCadastrados.module.css";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useNavigate } from "react-router-dom";
 
 interface Animal {
   id: number;
@@ -12,8 +12,15 @@ interface Animal {
   photoURL?: string;
 }
 
+// Interface auxiliar para cruzar dados
+interface Pedido {
+    id: number;
+    animalId: number;
+    status: string; // 'PENDENTE', 'APROVADO', 'RECUSADO'
+}
+
 export default function AnimaisCadastrados() {
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
   
   const [listas, setListas] = useState({
     adocao: [] as Animal[],
@@ -23,79 +30,94 @@ export default function AnimaisCadastrados() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Normalizador de texto
   const normalizar = (texto: string) => {
     if (!texto) return "";
     return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('@AuthData:token'); // Confirme se a chave é 'token' ou '@AuthData:token'
+    const token = localStorage.getItem('@AuthData:token'); // Verifique se sua chave é 'token' ou '@AuthData:token'
     
-    api.get("/animais/gerenciar/lista", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => {
-        const todos: Animal[] = res.data;
-        
-        const adocaoArr: Animal[] = [];
-        const larArr: Animal[] = [];
-        const pedidosArr: Animal[] = [];
-        const concluidasArr: Animal[] = [];
+    // Função assíncrona para buscar tudo junto
+    async function fetchData() {
+        try {
+            // 1. Buscamos Animais E Pedidos
+            const [resAnimais, resPedidos] = await Promise.all([
+                api.get("/animais/gerenciar/lista", { headers: { Authorization: `Bearer ${token}` } }),
+                api.get("/pedidos-adocao/gerenciar", { headers: { Authorization: `Bearer ${token}` } })
+            ]);
 
-        todos.forEach(animal => {
-            const s = normalizar(animal.status);
+            const todosAnimais: Animal[] = resAnimais.data;
+            const todosPedidos: Pedido[] = resPedidos.data;
+            
+            const adocaoArr: Animal[] = [];
+            const larArr: Animal[] = [];
+            const pedidosArr: Animal[] = [];
+            const concluidasArr: Animal[] = [];
 
-            // 1. Concluídas (Adotado)
-            if (s.includes('adotado') || s.includes('concluido')) {
-                concluidasArr.push(animal);
-            } 
-            // 2. Pedidos Pendentes (Status Pendente ou Aguardando)
-            else if (s.includes('pendente') || s.includes('aguardando') || s.includes('solicitado')) {
-                pedidosArr.push(animal);
-            }
-            // 3. Lar Temporário
-            else if (s.includes('lar') || s.includes('temporario')) {
-                larArr.push(animal);
-            }
-            // 4. Disponível (Adoção)
-            else {
-                adocaoArr.push(animal);
-            }
-        });
+            todosAnimais.forEach(animal => {
+                const s = normalizar(animal.status);
+                
+                // Verifica se existe algum pedido PENDENTE para este animal específico
+                const temPedidoPendente = todosPedidos.some(p => p.animalId === animal.id && p.status === 'PENDENTE');
 
-        setListas({
-            adocao: adocaoArr,
-            lar: larArr,
-            pedidos: pedidosArr,
-            concluidas: concluidasArr
-        });
-      })
-      .catch(err => console.error("Erro ao buscar animais:", err))
-      .finally(() => setLoading(false));
+                // LÓGICA DE DISTRIBUIÇÃO
+                
+                // 1. Concluídas (Prioridade máxima: se já foi adotado, sai das outras listas)
+                if (s.includes('adotado') || s.includes('concluido')) {
+                    concluidasArr.push(animal);
+                } 
+                // 2. Pedidos Pendentes (Se tem pedido no banco OU se o status diz pendente)
+                else if (temPedidoPendente || s.includes('pendente') || s.includes('solicitado')) {
+                    pedidosArr.push(animal);
+                }
+                // 3. Lar Temporário
+                else if (s.includes('lar') || s.includes('temporario')) {
+                    larArr.push(animal);
+                }
+                // 4. Disponível para Adoção (Caso não tenha caido em nenhum acima)
+                else {
+                    adocaoArr.push(animal);
+                }
+            });
+
+            setListas({
+                adocao: adocaoArr,
+                lar: larArr,
+                pedidos: pedidosArr,
+                concluidas: concluidasArr
+            });
+
+        } catch (err) {
+            console.error("Erro ao buscar dados:", err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    fetchData();
   }, []);
 
-  // Função para navegar ao clicar no card
   const handleCardClick = (id: number) => {
       navigate(`/gerenciar-adocao/${id}`);
   };
 
   if (loading) return <p style={{textAlign:'center', padding:'2rem'}}>Carregando animais...</p>;
 
-  // Card do Animal (Agora clicável)
+  // Card do Animal (Design inalterado, apenas onClick)
   const renderCard = (animal: Animal, labelStatus: string, corStatus: string) => (
     <div 
         key={animal.id} 
         className={styles.card} 
-        onClick={() => handleCardClick(animal.id)} // 🎯 AQUI: Torna o card funcional
-        style={{ cursor: 'pointer' }} // Indica visualmente que é clicável
-        title="Clique para gerenciar este animal"
+        onClick={() => handleCardClick(animal.id)} 
+        style={{ cursor: 'pointer' }}
+        title="Clique para gerenciar"
     >
         <div className={styles.imgCard}>
             <img
                 src={animal.photoURL || "https://placehold.co/300x300/f8f8f8/ccc?text=Sem+Foto"}
                 alt={animal.nome || "Sem Nome"}
-                onError={(e) => (e.currentTarget.src = "https://placehold.co/300x300/f8f8f8/ccc?text=Erro+Img")}
+                onError={(e) => (e.currentTarget.src = "https://placehold.co/300")}
             />
         </div>
 
@@ -138,10 +160,10 @@ export default function AnimaisCadastrados() {
         <div className={styles.listaScroll}>
             {listas.lar.length > 0 ? listas.lar.map(a => renderCard(a, 'Em Lar', '#fff3e0')) : <EmptyList msg="Nenhum animal em LT." />}
         </div>
-        {/* Link removido pois o clique no card já gerencia */}
+        {/* Link pode ser removido ou mantido conforme seu design original */}
       </div>
 
-      {/* 3. PEDIDOS DE ADOÇÃO (Animais com status 'Pendente' no banco) */}
+      {/* 3. PEDIDOS DE ADOÇÃO */}
       <div className={styles.containerSection}>
         <h2 className={styles.titulo}>Pedidos de Adoção ({listas.pedidos.length})</h2>
         <div className={styles.listaScroll}>

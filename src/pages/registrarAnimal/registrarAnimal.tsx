@@ -33,13 +33,10 @@ const RegistrarAnimalUsuario = () => {
   const [imagemPreview, setImagemPreview] = useState<string | null>(null);
   const [imagemArquivo, setImagemArquivo] = useState<File | null>(null);
 
-<<<<<<< HEAD
-=======
   // IA
   const [gerandoIA, setGerandoIA] = useState(false);
 
   // Campos
->>>>>>> 9ae4a98f9df617527311292cd84dd95fa5c55b33
   const [nome, setNome] = useState("");
   const [historia, setHistoria] = useState("");
   const [cuidado, setCuidado] = useState("");
@@ -689,13 +686,10 @@ const RegistrarAnimalOng = () => {
             <input className={styles.barraInfos} type="text" value={raca} onChange={(e) => setRaca(e.target.value)} />
           </div>
 
-          <div className={styles.campoForm}>
-            <label className={styles.label}>Idade Aproximada</label>
-            <select className={styles.barraInfos} value={idadeAprox} onChange={(e) => setIdadeAprox(e.target.value)}>
-              <option value="" disabled>Selecione</option>
-              {OPCOES_IDADE.map(opt => <option key={opt} value={opt}>{formatOption(opt)}</option>)}
-            </select>
-          </div>
+             <div className={styles.campoForm}>
+                <label className={styles.label}>Idade Aproximada</label>
+                <input  type="text"  className={styles.barraInfos}  value={idadeAprox}  onChange={(e) => setIdadeAprox(e.target.value)} placeholder="Ex: 2 anos, 5 meses, Adulto..." />
+             </div>
 
           <div className={styles.campoForm}>
             <label className={styles.label}>Data Resgate</label>
