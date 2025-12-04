@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./cadastro.module.css";
 import api from "../../services/api";
+import Modal from "../../components/modal"; // <--- IMPORTAR MODAL
 
 export default function Cadastro() {
   const navigate = useNavigate();
 
   const [etapa, setEtapa] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Estados do Modal
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalInfo, setModalInfo] = useState({ title: "", msg: "", type: "success" as "success" | "error" });
 
   const [dados, setDados] = useState({
     tipo: "ONG",
@@ -33,25 +38,20 @@ export default function Cadastro() {
     setDados({ ...dados, [e.target.name]: e.target.value });
   };
 
-  // --- NOVA FUNÇÃO: BUSCAR CEP ---
   const buscarCep = async (e: React.FocusEvent<HTMLInputElement>) => {
-    const cep = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-
-    if (cep.length !== 8) {
-      return; // Não faz nada se o CEP não tiver 8 dígitos
-    }
+    const cep = e.target.value.replace(/\D/g, ''); 
+    if (cep.length !== 8) return;
 
     try {
-      // Faz a chamada para a API do ViaCEP
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
 
       if (data.erro) {
-        alert("CEP não encontrado.");
+        setModalInfo({ title: "Erro", msg: "CEP não encontrado.", type: "error" });
+        setModalOpen(true);
         return;
       }
 
-      // Atualiza o estado com os dados retornados
       setDados((prevDados) => ({
         ...prevDados,
         rua: data.logradouro,
@@ -62,10 +62,8 @@ export default function Cadastro() {
 
     } catch (error) {
       console.error("Erro ao buscar CEP:", error);
-      alert("Não foi possível buscar o endereço automaticamente.");
     }
   };
-  // -------------------------------
 
   const proximaEtapa = (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,12 +78,14 @@ export default function Cadastro() {
     e.preventDefault();
 
     if (!dados.nome || !dados.cpf || !dados.email || !dados.telefone || !dados.senha) {
-      alert("Preencha todos os campos obrigatórios!");
+      setModalInfo({ title: "Atenção", msg: "Preencha todos os campos obrigatórios!", type: "error" });
+      setModalOpen(true);
       return;
     }
 
     if (dados.senha !== dados.confirmarSenha) {
-      alert("As senhas não coincidem!");
+      setModalInfo({ title: "Erro", msg: "As senhas não coincidem!", type: "error" });
+      setModalOpen(true);
       return;
     }
 
@@ -132,20 +132,33 @@ export default function Cadastro() {
     }
 
     if (!url) {
-      alert("Tipo de cadastro inválido.");
-      setIsLoading(false);
-      return;
+        setModalInfo({ title: "Erro", msg: "Tipo de cadastro inválido.", type: "error" });
+        setModalOpen(true);
+        setIsLoading(false);
+        return;
     }
 
     try {
-      const response = await api.post(url, payload);
-      alert("Cadastro realizado com sucesso!");
-      navigate("/login");
+      await api.post(url, payload);
+      
+      // SUCESSO! Abre o modal
+      setModalInfo({ title: "Sucesso!", msg: "Cadastro realizado com sucesso! Faça login para continuar.", type: "success" });
+      setModalOpen(true);
+
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar. Verifique os dados e tente novamente.");
+      setModalInfo({ title: "Erro", msg: "Erro ao cadastrar. Verifique os dados.", type: "error" });
+      setModalOpen(true);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    // Se for sucesso, redireciona para login
+    if (modalInfo.type === "success") {
+        navigate("/login");
     }
   };
 
@@ -157,6 +170,15 @@ export default function Cadastro() {
 
   return (
     <div className={styles.pagCadastro}>
+      {/* MODAL COMPONENT */}
+      <Modal 
+        isOpen={modalOpen} 
+        title={modalInfo.title} 
+        message={modalInfo.msg} 
+        type={modalInfo.type}
+        onClose={handleCloseModal} 
+      />
+
       <div className={styles.containerForms}>
         <div className={styles.logoHeader}>
           <a href="/">PetResc</a>
@@ -242,7 +264,6 @@ export default function Cadastro() {
           </form>
         )}
 
-        {/* ETAPA 4 - AQUI ESTÃO AS MUDANÇAS DO CEP */}
         {etapa === 4 && (
           <form className={styles.form} onSubmit={finalizarCadastro}>
             <h1 className={styles.titulo}>Endereço</h1>
@@ -254,7 +275,7 @@ export default function Cadastro() {
               name="cep"
               value={dados.cep}
               onChange={handleChange}
-              onBlur={buscarCep} // <--- ADICIONADO: Dispara quando sair do campo
+              onBlur={buscarCep}
               placeholder="00000-000"
               required
             />
