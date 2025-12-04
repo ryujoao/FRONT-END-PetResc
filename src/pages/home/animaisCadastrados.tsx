@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import styles from "./animaisCadastrados.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface Animal {
   id: number;
   nome?: string;
   raca?: string;
   idade?: number;
-  status: string; // 'Disponível', 'Lar Temporário', 'Pendente', 'Adotado'
+  status: string;
   photoURL?: string;
 }
 
 export default function AnimaisCadastrados() {
+  const navigate = useNavigate(); // Hook para navegação
+  
   const [listas, setListas] = useState({
     adocao: [] as Animal[],
     lar: [] as Animal[],
@@ -21,14 +23,14 @@ export default function AnimaisCadastrados() {
   });
   const [loading, setLoading] = useState(true);
 
-  // Função para normalizar texto (remove acentos e minúsculas)
+  // Normalizador de texto
   const normalizar = (texto: string) => {
     if (!texto) return "";
     return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('@AuthData:token'); // Confirme se a chave é 'token' ou '@AuthData:token'
     
     api.get("/animais/gerenciar/lista", {
       headers: { Authorization: `Bearer ${token}` }
@@ -36,7 +38,6 @@ export default function AnimaisCadastrados() {
       .then(res => {
         const todos: Animal[] = res.data;
         
-        // Arrays temporários
         const adocaoArr: Animal[] = [];
         const larArr: Animal[] = [];
         const pedidosArr: Animal[] = [];
@@ -45,20 +46,20 @@ export default function AnimaisCadastrados() {
         todos.forEach(animal => {
             const s = normalizar(animal.status);
 
-            // 1. Concluídas
+            // 1. Concluídas (Adotado)
             if (s.includes('adotado') || s.includes('concluido')) {
                 concluidasArr.push(animal);
             } 
-            // 2. Pedidos Pendentes
+            // 2. Pedidos Pendentes (Status Pendente ou Aguardando)
             else if (s.includes('pendente') || s.includes('aguardando') || s.includes('solicitado')) {
                 pedidosArr.push(animal);
             }
-            // 3. Lar Temporário (CORREÇÃO: Verifica se o status diz que está em LT)
+            // 3. Lar Temporário
             else if (s.includes('lar') || s.includes('temporario')) {
                 larArr.push(animal);
             }
-            // 4. Adoção (Resto)
-            else if (!s || s.includes('disponivel') || s.includes('adocao') || s.includes('ativo')) {
+            // 4. Disponível (Adoção)
+            else {
                 adocaoArr.push(animal);
             }
         });
@@ -74,16 +75,27 @@ export default function AnimaisCadastrados() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Função para navegar ao clicar no card
+  const handleCardClick = (id: number) => {
+      navigate(`/gerenciar-adocao/${id}`);
+  };
+
   if (loading) return <p style={{textAlign:'center', padding:'2rem'}}>Carregando animais...</p>;
 
-  // Card do Animal
+  // Card do Animal (Agora clicável)
   const renderCard = (animal: Animal, labelStatus: string, corStatus: string) => (
-    <div key={animal.id} className={styles.card}>
+    <div 
+        key={animal.id} 
+        className={styles.card} 
+        onClick={() => handleCardClick(animal.id)} // 🎯 AQUI: Torna o card funcional
+        style={{ cursor: 'pointer' }} // Indica visualmente que é clicável
+        title="Clique para gerenciar este animal"
+    >
         <div className={styles.imgCard}>
             <img
-                src={animal.photoURL || "/animais/animalSemNome.png"}
+                src={animal.photoURL || "https://placehold.co/300x300/f8f8f8/ccc?text=Sem+Foto"}
                 alt={animal.nome || "Sem Nome"}
-                onError={(e) => (e.currentTarget.src = "/animais/animalSemNome.png")}
+                onError={(e) => (e.currentTarget.src = "https://placehold.co/300x300/f8f8f8/ccc?text=Erro+Img")}
             />
         </div>
 
@@ -120,23 +132,21 @@ export default function AnimaisCadastrados() {
         <Link to="/registrar-animal" className={styles.verMais}>Cadastrar Novo</Link>
       </div>
 
-      {/* 2. LAR TEMPORÁRIO (CORRIGIDO) */}
+      {/* 2. LAR TEMPORÁRIO */}
       <div className={styles.containerSection}>
         <h2 className={styles.titulo}>Em Lar Temporário ({listas.lar.length})</h2>
         <div className={styles.listaScroll}>
-            {listas.lar.length > 0 ? listas.lar.map(a => renderCard(a, 'Em Lar', '#fff3e0')) : <EmptyList msg="Nenhum animal em LT no momento." />}
+            {listas.lar.length > 0 ? listas.lar.map(a => renderCard(a, 'Em Lar', '#fff3e0')) : <EmptyList msg="Nenhum animal em LT." />}
         </div>
-        {/* Agora leva para a gestão geral, apenas mudando o texto para indicar a ação de ver */}
-        <Link to="/gerenciar-adocao" className={styles.verMais}>Ver Animais em Lar</Link>
+        {/* Link removido pois o clique no card já gerencia */}
       </div>
 
-      {/* 3. PEDIDOS DE ADOÇÃO */}
+      {/* 3. PEDIDOS DE ADOÇÃO (Animais com status 'Pendente' no banco) */}
       <div className={styles.containerSection}>
         <h2 className={styles.titulo}>Pedidos de Adoção ({listas.pedidos.length})</h2>
         <div className={styles.listaScroll}>
             {listas.pedidos.length > 0 ? listas.pedidos.map(a => renderCard(a, 'Pendente', '#fff8e1')) : <EmptyList msg="Nenhuma solicitação pendente." />}
         </div>
-        <Link to="/gerenciar-adocao/" className={styles.verMais}>Ver Solicitações</Link>
       </div>
 
       {/* 4. ADOÇÕES CONCLUÍDAS */}
@@ -145,7 +155,6 @@ export default function AnimaisCadastrados() {
         <div className={styles.listaScroll}>
             {listas.concluidas.length > 0 ? listas.concluidas.map(a => renderCard(a, 'Adotado', '#e8f5e9')) : <EmptyList msg="Nenhuma adoção concluída ainda." />}
         </div>
-        <div className={styles.verMaisDisable}>Histórico Completo</div>
       </div>
 
     </div>
