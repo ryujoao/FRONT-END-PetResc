@@ -116,11 +116,18 @@ export default function Cadastro() {
     } else if (dados.tipo === "USUARIO") {
       url = "/auth/register";
       payload = {
-        nome: dados.nome,
-        cpf: dados.cpf,
-        email: dados.email,
-        telefone: dados.telefone,
-        password: dados.senha
+       nome: dados.nome,
+       cpf: dados.cpf,
+       email: dados.email,
+       telefone: dados.telefone,
+       password: dados.senha,
+       cep: dados.cep,
+       rua: dados.rua,
+       numero: dados.numero,
+       complemento: dados.complemento,
+       bairro: dados.bairro,
+       cidade: dados.cidade,
+       estado: dados.estado
       };
     }
 
