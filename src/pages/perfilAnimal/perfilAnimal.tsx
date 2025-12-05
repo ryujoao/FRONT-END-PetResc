@@ -220,7 +220,7 @@ export default function PerfilAnimal() {
                   {/* --- MUDANÇA 1: PONTO NA IDADE --- */}
                   • {animal.idade ? (isNaN(Number(animal.idade)) ? animal.idade : `${animal.idade} anos`) : 'Idade não inf.'}
                   
-                  • {animal.raca || 'SRD'}
+                  • {animal.raca }
               </p>
               <p className={styles.infoLine}>Responsável: <strong>{animal.account.nome}</strong></p>
               

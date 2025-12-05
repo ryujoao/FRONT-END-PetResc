@@ -43,7 +43,7 @@ const PetCard = ({
       style={{ cursor: "pointer" }}
     />
     <p className={styles.petNome}>{pet.nome}</p>
-    <p className={styles.petRaca}>{pet.raca || "SRD"}</p>
+    <p className={styles.petRaca}>{pet.raca}</p>
     <p className={styles.petSexo}>
       {pet.sexo === "MACHO" ? "Macho" : pet.sexo === "FEMEA" ? "Fêmea" : "?"}
     </p>
@@ -83,13 +83,14 @@ const OngPetRow = ({
         onClick={() => onClickCard(pet.id)}
       />
       <div className={styles.ongCardContent}>
-        <p className={styles.ongCardName}>{pet.nome}</p>
+        <p className={styles.ongCardName}>{pet.nome},{pet.raca}</p>
+
         <div className={styles.ongCardInfo}>
-          <span>{pet.raca || "Sem raça definida (SRD)"}</span>
+          <span>{pet.raca }</span>
           {/* Mostra código mockado ou ID real */}
           <span className={styles.ongCode}>{pet.codigo || `#${pet.id}`}</span>
           <br />
-          <span>(SRD)</span>
+          <span> {pet.raca}</span>
         </div>
       </div>
       <div className={styles.ongCardActions}>
