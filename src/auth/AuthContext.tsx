@@ -115,7 +115,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setToken(token); // <--- 4. ATUALIZA O TOKEN NO LOGIN
 
       if (usuario.role === 'ADMIN') {
-        navigate('/api/admin/dashboard'); 
+        navigate('/admin'); 
       } else {
         navigate('/'); 
       }
