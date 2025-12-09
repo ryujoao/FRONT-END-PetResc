@@ -53,7 +53,7 @@ function App() {
   return (
     <Routes>
       {/* ====================================================== */}
-      {/* 🟢 ROTAS PÚBLICAS                                     */}
+      {/* ROTAS PÚBLICAS                                     */}
       {/* ====================================================== */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
@@ -70,7 +70,7 @@ function App() {
       <Route path="/instituto/:id" element={<Institutos />} />
 
       {/* ====================================================== */}
-      {/* 🔒 ROTAS PRIVADAS (Requer Login)                       */}
+      {/* ROTAS PRIVADAS (Requer Login)                       */}
       {/* ====================================================== */}
       <Route element={<PrivateRoute />}>
         
@@ -107,7 +107,7 @@ function App() {
       </Route>
 
       {/* ====================================================== */}
-      {/* 🛡️ ROTAS DE ADMIN (Só entra se role === 'ADMIN')       */}
+      {/* /ROTAS DE ADMIN (Só entra se role === 'ADMIN')       */}
       {/* ====================================================== */}
       <Route element={<AdminRoute />}>
         <Route path="/admin" element={<AdminHome />} />

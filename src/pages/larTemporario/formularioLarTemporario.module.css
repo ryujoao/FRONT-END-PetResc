@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  max-width: 900px; /* Largura ideal para formulários de leitura confortável */
+  max-width: 900px; 
   margin: 0 auto;
   padding: 2rem 1rem;
   box-sizing: border-box;
@@ -24,8 +24,7 @@
 .secao {
   margin-bottom: 2.5rem;
   background-color: #fff;
-  /* Opcional: se quiser um card branco com sombra */
-  /* padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
+  
 }
 
 .tituloSecao {
@@ -61,8 +60,7 @@
 }
 
 .input:hover {
-  transform: translateY(-3px); /* O pulinho */
-  /* Sombra suave azulada para combinar com o tema */
+  transform: translateY(-3px); 
   box-shadow: 0 4px 8px rgba(40, 102, 153, 0.1); 
 }
 
@@ -74,8 +72,8 @@
 }
 
 .col {
-  flex: 1; /* Cada coluna ocupa espaço igual */
-  min-width: 0; /* Evita quebra de layout flex */
+  flex: 1; 
+  min-width: 0; 
 }
 
 /* Estilo para Perguntas e Checkboxes */
@@ -110,7 +108,7 @@
 }
 
 .checkboxCustomizado input {
-  display: none; /* Esconde o input padrão feio */
+  display: none; 
 }
 
 /* O quadrado desenhado */

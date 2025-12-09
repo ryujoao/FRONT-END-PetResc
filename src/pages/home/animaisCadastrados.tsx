@@ -125,7 +125,7 @@ export default function AnimaisCadastrados() {
             <div className={styles.cardNome}>
                 <h1>{animal.nome || "Sem Nome"}</h1>
                 <p className={styles.descricaoCard}>
-                    {animal.raca || "Raça n/d"} • {animal.idade ? `${animal.idade} anos` : "?"}
+                    {animal.raca || "Raça n/d"} &bull; {animal.idade ? `${animal.idade} anos` : "?"}
                 </p>
             </div>
         </div>

@@ -205,7 +205,7 @@ export default function FormularioLarTemporario() {
         declaroVerdade: formData.declaroVerdade,
       };
 
-      console.log("🔵 ENVIANDO PAYLOAD:", payload);
+      console.log(" ENVIANDO PAYLOAD:", payload);
 
       const response = await fetch(
         "https://petresc.onrender.com/api/lares-temporarios",
@@ -221,7 +221,7 @@ export default function FormularioLarTemporario() {
 
       if (!response.ok) {
         const erro = await response.json();
-        console.error("❌ Erro do servidor:", erro);
+        console.error("Erro do servidor:", erro);
         alert("Erro ao enviar formulário: " + erro.error);
         return;
       }
