@@ -2,8 +2,8 @@
   width: 100%;
   min-height: 90vh;
   background: url("../../../public/banners/animaisAdocao.png") no-repeat bottom;
-  background-size: cover;
-  background-position: center;
+  background-size: contain;
+  background-position: right;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
