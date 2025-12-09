@@ -158,7 +158,6 @@ export default function GerenciarAdocao() {
               Atualizado em: {new Date(animal.updatedAt).toLocaleDateString()}
             </div>
             
-            <button className={styles.btnMudarStatus}>Mudar Status</button>
             <span className={styles.codigoAnimal}>ID: #{animal.id}</span>
           </div>
         </div>

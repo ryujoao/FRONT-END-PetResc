@@ -24,8 +24,8 @@ interface FormData {
   // moradia / animais
   tipoMoradia: string;
   quintal: YesNo;
-  porteAnimal: string[]; // MUDANÇA: Agora é uma lista de strings
-  tipoAnimal: string[];  // MUDANÇA: Agora é uma lista de strings
+  porteAnimal: string[];
+  tipoAnimal: string[];
 
   // experiencia / condicoes
   outrosAnimais: YesNo;
@@ -77,8 +77,8 @@ export default function FormularioLarTemporario() {
     estado: "",
     tipoMoradia: "",
     quintal: "" as YesNo,
-    porteAnimal: [], // Inicializa como lista vazia
-    tipoAnimal: [],  // Inicializa como lista vazia
+    porteAnimal: [], 
+    tipoAnimal: [],  
     outrosAnimais: "" as YesNo,
     administraMedicamentos: "" as YesNo,
     levarVeterinario: "" as YesNo,
@@ -89,14 +89,11 @@ export default function FormularioLarTemporario() {
     declaroVerdade: false,
   });
 
-  // Handler genérico para campos simples
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name: rawName, value, type, checked } = e.target;
     const name = rawName as keyof FormData;
 
     if (type === "checkbox") {
-      // Cuidado: aqui tratamos apenas os checkboxes booleanos (declarações)
-      // Os checkboxes de array usam a função handleMultiSelect abaixo
       if (name === "declaroLido" || name === "declaroVerdade") {
           setFormData((prev) => ({ ...prev, [name]: checked }));
       }
@@ -106,21 +103,17 @@ export default function FormularioLarTemporario() {
     setFormData((prev) => ({ ...prev, [name]: value } as FormData));
   };
 
-  // --- NOVA FUNÇÃO: MÚLTIPLA ESCOLHA ---
   const handleMultiSelect = (field: "porteAnimal" | "tipoAnimal", value: string) => {
     setFormData((prev) => {
       const currentList = prev[field];
       if (currentList.includes(value)) {
-        // Se já tem, remove
         return { ...prev, [field]: currentList.filter((item) => item !== value) };
       } else {
-        // Se não tem, adiciona
         return { ...prev, [field]: [...currentList, value] };
       }
     });
   };
 
-  // --- FUNÇÃO: BUSCAR CEP ---
   const buscarCep = async (e: React.FocusEvent<HTMLInputElement>) => {
     const cep = e.target.value.replace(/\D/g, "");
 
@@ -152,6 +145,15 @@ export default function FormularioLarTemporario() {
     e.preventDefault();
 
     try {
+      if (formData.porteAnimal.length === 0) {
+        alert("Por favor, selecione pelo menos um porte de animal.");
+        return;
+      }
+      if (formData.tipoAnimal.length === 0) {
+        alert("Por favor, selecione pelo menos um tipo de animal.");
+        return;
+      }
+
       if (!formData.periodoDisponibilidade) {
         alert("Informe o período de disponibilidade.");
         return;
@@ -174,7 +176,6 @@ export default function FormularioLarTemporario() {
         cpf: formData.cpf,
         email: formData.email,
         telefone: formData.telefone,
-
         endereco: {
           cep: formData.cep,
           rua: formData.rua,
@@ -184,23 +185,16 @@ export default function FormularioLarTemporario() {
           cidade: formData.cidade,
           estado: formData.estado,
         },
-
         tipoResidencia: formData.tipoMoradia,
         espacoDisponivel: formData.quintal === "sim",
-
-        // Converte as listas para string separada por vírgula para enviar ao banco
         porteAnimal: formData.porteAnimal.join(", "),
         tipoAnimalInteresse: formData.tipoAnimal.join(", "),
-
         possuiAnimais: formData.outrosAnimais === "sim",
         experiencia: formData.administraMedicamentos === "sim",
-
         levarVeterinario: formData.levarVeterinario === "sim",
         arcarCustos: formData.arcarCustos === "sim",
         ajudaSuprimentos: formData.ajudaSuprimentos === "sim",
-
         periodoDisponibilidade: formData.periodoDisponibilidade,
-
         declaroLido: formData.declaroLido,
         declaroVerdade: formData.declaroVerdade,
       };
@@ -237,29 +231,37 @@ export default function FormularioLarTemporario() {
     <Layout>
       <div className={styles.container}>
         <h1 className={styles.titulo}>Seja um lar temporário</h1>
-        <p className={styles.subtitulo}>Preencha o formulário para se candidatar.</p>
+        <p className={styles.subtitulo}>
+          Preencha o formulário para se candidatar. 
+          <br />
+          <span className={styles.avisoObrigatorio}>
+            * Campos obrigatórios
+          </span>
+        </p>
 
         <form onSubmit={handleSubmit}>
           {/* --- DADOS PESSOAIS --- */}
           <div className={styles.secao}>
             <h2 className={styles.tituloSecao}>Informações Pessoais</h2>
 
-            <label className={styles.label}>Nome Completo</label>
+            <label className={styles.label}>Nome Completo *</label>
             <input
               name="nomeCompleto"
               className={styles.input}
               type="text"
+              required
               onChange={handleChange}
               value={formData.nomeCompleto}
             />
 
             <div className={styles.row}>
               <div className={styles.col}>
-                <label className={styles.label}>CPF</label>
+                <label className={styles.label}>CPF *</label>
                 <input
                   name="cpf"
                   className={styles.input}
                   type="text"
+                  required
                   onChange={handleChange}
                   placeholder="000.000.000-00"
                   value={formData.cpf}
@@ -267,21 +269,23 @@ export default function FormularioLarTemporario() {
               </div>
             </div>
 
-            <label className={styles.label}>Email</label>
+            <label className={styles.label}>Email *</label>
             <input
               name="email"
               className={styles.input}
               type="email"
+              required
               onChange={handleChange}
               placeholder="user@gmail.com"
               value={formData.email}
             />
 
-            <label className={styles.label}>Telefone</label>
+            <label className={styles.label}>Telefone *</label>
             <input
               name="telefone"
               className={styles.input}
               type="text"
+              required
               onChange={handleChange}
               placeholder="(00) 00000-0000"
               value={formData.telefone}
@@ -292,32 +296,35 @@ export default function FormularioLarTemporario() {
           <div className={styles.secao}>
             <h2 className={styles.tituloSecao}>Endereço</h2>
 
-            <label className={styles.label}>CEP</label>
+            <label className={styles.label}>CEP *</label>
             <input
               name="cep"
               className={styles.input}
               type="text"
+              required
               onChange={handleChange}
               onBlur={buscarCep} 
               value={formData.cep}
             />
 
-            <label className={styles.label}>Rua/Avenida</label>
+            <label className={styles.label}>Rua/Avenida *</label>
             <input
               name="rua"
               className={styles.input}
               type="text"
+              required
               onChange={handleChange}
               value={formData.rua}
             />
 
             <div className={styles.row}>
               <div className={styles.col}>
-                <label className={styles.label}>Número</label>
+                <label className={styles.label}>Número *</label>
                 <input
                   name="numero"
                   className={styles.input}
                   type="text"
+                  required
                   onChange={handleChange}
                   value={formData.numero}
                 />
@@ -335,32 +342,35 @@ export default function FormularioLarTemporario() {
               </div>
             </div>
 
-            <label className={styles.label}>Bairro</label>
+            <label className={styles.label}>Bairro *</label>
             <input
               name="bairro"
               className={styles.input}
               type="text"
+              required
               onChange={handleChange}
               value={formData.bairro}
             />
 
             <div className={styles.row}>
               <div className={styles.col}>
-                <label className={styles.label}>Cidade</label>
+                <label className={styles.label}>Cidade *</label>
                 <input
                   name="cidade"
                   className={styles.input}
                   type="text"
+                  required
                   onChange={handleChange}
                   value={formData.cidade}
                 />
               </div>
               <div className={styles.col}>
-                <label className={styles.label}>Estado</label>
+                <label className={styles.label}>Estado *</label>
                 <input
                   name="estado"
                   className={styles.input}
                   type="text"
+                  required
                   onChange={handleChange}
                   value={formData.estado}
                 />
@@ -372,7 +382,7 @@ export default function FormularioLarTemporario() {
           <div className={styles.secao}>
             <h2 className={styles.tituloSecao}>Sobre o Espaço e Preferências</h2>
 
-            <h3 className={styles.tituloQuestao}>Tipo de Moradia:</h3>
+            <h3 className={styles.tituloQuestao}>Tipo de Moradia: *</h3>
             <div className={styles.grupoOpcoes}>
               {["casa", "apartamento", "sitio", "outro"].map((tipo) => (
                 <label key={tipo} className={styles.checkboxCustomizado}>
@@ -380,6 +390,7 @@ export default function FormularioLarTemporario() {
                     type="radio"
                     name="tipoMoradia"
                     value={tipo}
+                    required
                     onChange={handleChange}
                     checked={formData.tipoMoradia === tipo}
                   />
@@ -389,7 +400,7 @@ export default function FormularioLarTemporario() {
               ))}
             </div>
 
-            <h3 className={styles.tituloQuestao}>Possui quintal?</h3>
+            <h3 className={styles.tituloQuestao}>Possui quintal? *</h3>
             <div className={styles.grupoOpcoes}>
               {["sim", "nao"].map((v) => (
                 <label key={v} className={styles.checkboxCustomizado}>
@@ -397,6 +408,7 @@ export default function FormularioLarTemporario() {
                     type="radio"
                     name="quintal"
                     value={v}
+                    required
                     onChange={handleChange}
                     checked={formData.quintal === v}
                   />
@@ -406,8 +418,7 @@ export default function FormularioLarTemporario() {
               ))}
             </div>
 
-            {/* --- MÚLTIPLA ESCOLHA: PORTES --- */}
-            <h3 className={styles.tituloQuestao}>Quais portes aceita? (Pode marcar vários)</h3>
+            <h3 className={styles.tituloQuestao}>Quais portes aceita? * (Pode marcar vários)</h3>
             <div className={styles.grupoOpcoes}>
               {["pequeno", "medio", "grande"].map((v) => (
                 <label key={v} className={styles.checkboxCustomizado}>
@@ -424,7 +435,7 @@ export default function FormularioLarTemporario() {
               ))}
             </div>
 
-            <h3 className={styles.tituloQuestao}>Quais animais aceita? (Pode marcar vários)</h3>
+            <h3 className={styles.tituloQuestao}>Quais animais aceita? * (Pode marcar vários)</h3>
             <div className={styles.grupoOpcoes}>
               {["gato", "cachorro", "todos"].map((v) => (
                 <label key={v} className={styles.checkboxCustomizado}>
@@ -444,11 +455,11 @@ export default function FormularioLarTemporario() {
             <h2 className={styles.tituloSecao}>Experiência e Condições</h2>
 
             {[
-              { label: "Possui outros animais em casa?", name: "outrosAnimais" },
-              { label: "Está disposto a administrar medicamentos?", name: "administraMedicamentos" },
-              { label: "Tem disponibilidade para levar o animal ao veterinário?", name: "levarVeterinario" },
-              { label: "Pode arcar com custos básicos?", name: "arcarCustos" },
-              { label: "Precisa de ajuda com suprimentos?", name: "ajudaSuprimentos" },
+              { label: "Possui outros animais em casa? *", name: "outrosAnimais" },
+              { label: "Está disposto a administrar medicamentos? *", name: "administraMedicamentos" },
+              { label: "Tem disponibilidade para levar o animal ao veterinário? *", name: "levarVeterinario" },
+              { label: "Pode arcar com custos básicos? *", name: "arcarCustos" },
+              { label: "Precisa de ajuda com suprimentos? *", name: "ajudaSuprimentos" },
             ].map((q) => (
               <div key={q.name}>
                 <h3 className={styles.tituloQuestao}>{q.label}</h3>
@@ -459,6 +470,7 @@ export default function FormularioLarTemporario() {
                         type="radio"
                         name={q.name}
                         value={v}
+                        required
                         onChange={handleChange}
                         checked={formData[q.name as keyof FormData] === v}
                       />
@@ -471,11 +483,12 @@ export default function FormularioLarTemporario() {
             ))}
 
             <h2 className={styles.tituloQuestao}>Tempo de Disponibilidade</h2>
-            <label className={styles.label}>Por quanto tempo você pode abrigar o animal?</label>
+            <label className={styles.label}>Por quanto tempo você pode abrigar o animal? *</label>
             <input
               name="periodoDisponibilidade"
               className={styles.input}
               type="text"
+              required
               placeholder="Ex: 15 dias, 1 mês..."
               onChange={handleChange}
               value={formData.periodoDisponibilidade}
@@ -486,32 +499,23 @@ export default function FormularioLarTemporario() {
           <div className={styles.secao}>
             <h2 className={styles.tituloSecao}>Declarações</h2>
 
-            <label className={styles.checkboxCustomizado} style={{ alignItems: "flex-start" }}>
+            {/* Apliquei as novas classes checkboxTop e checkmarkTop para alinhar no topo */}
+            <label className={`${styles.checkboxCustomizado} ${styles.checkboxTop}`}>
               <input
                 type="checkbox"
                 name="declaroVerdade"
+                required
                 checked={formData.declaroVerdade}
                 onChange={handleChange}
               />
-              <span className={styles.checkmark} style={{ marginTop: "3px" }}></span>
+              <span className={`${styles.checkmark} ${styles.checkmarkTop}`}></span>
               <span className={styles.spanCheckmark}>
-                Declaro que as informações acima são verdadeiras.
+                Declaro que as informações acima são verdadeiras. *
               </span>
             </label>
 
-            {/* CAIXA DE TEXTO COM O TERMO */}
-            <div style={{
-              margin: '20px 0',
-              padding: '15px',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              backgroundColor: '#f9f9f9',
-              height: '200px',
-              overflowY: 'auto',
-              fontSize: '0.9rem',
-              lineHeight: '1.5',
-              whiteSpace: 'pre-wrap' 
-            }}>
+            {/* CAIXA DE TEXTO COM O TERMO - Agora usa classe CSS */}
+            <div className={styles.termosBox}>
               {termoTexto}
             </div>
 
@@ -519,11 +523,12 @@ export default function FormularioLarTemporario() {
               <input
                 type="checkbox"
                 name="declaroLido"
+                required
                 checked={formData.declaroLido}
                 onChange={handleChange}
               />
               <span className={styles.checkmark}></span>
-              <span className={styles.spanCheckmark}>Li e concordo com os termos.</span>
+              <span className={styles.spanCheckmark}>Li e concordo com os termos. *</span>
             </label>
           </div>
 

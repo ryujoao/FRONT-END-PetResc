@@ -48,9 +48,13 @@ import AvaliarAnimal from "./pages/avaliarAnimal/avaliarAnimal";
 import GerenciarRegistro from "./pages/gerenciar/gerenciarRegistro";
 import VoluntariosLar from "./pages/voluntarios";
 import AdminOngTemperatura from "./pages/admin/adminOngTemperatura";
+import VLibras from "./components/vlibras";
 
 function App() {
   return (
+    <>
+    <VLibras />
+
     <Routes>
       {/* ====================================================== */}
       {/* 🟢 ROTAS PÚBLICAS                                     */}
@@ -124,6 +128,7 @@ function App() {
       </Route>
 
     </Routes>
+    </>
   );
 }
 

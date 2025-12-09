@@ -1,182 +1,194 @@
 .containerPrincipal {
-  background: #fff;
-  min-height: 70vh;
-  display: flex;
-  flex-wrap: wrap; 
-  gap: 2rem;
-  padding: 4rem 2rem 4rem 2rem;
-
-  justify-content: center; 
-  width: 100%;
-  box-sizing: border-box
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    gap: 3rem; 
+    padding: 3rem; 
+    justify-content: center;
+    flex-wrap: wrap; /* Importante: permite quebrar para a linha de baixo */
+    align-items: flex-start;
 }
 
-/* Cada um dos 4 Blocos */
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    font-size: 1.5rem;
+    color: #666;
+}
+
+/* --- MUDANÇA AQUI PARA O LAYOUT 2x2 --- */
 .containerSection {
-  flex: 1 1 450px; 
-  max-width: 800px;
-  width: 48%;
-  background-color: #F0F9FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 15px;
-  padding: 1.5rem 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  min-height: 400px;
+    /* flex: grow shrink basis;
+       Define que o item base é 50% da largura menos metade do gap (1.5rem).
+       Isso força 2 itens por linha em telas grandes.
+    */
+    flex: 0 0 calc(50% - 1.5rem);
+    
+    /* Mantém um tamanho mínimo para telas menores não esmagarem o conteúdo */
+    min-width: 450px; 
+    
+    min-height: 700px; /* Altura fixa grande */
+    
+    background-color: #F0F9FF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    padding-bottom: 2rem;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+/* (O restante do CSS permanece idêntico ao anterior) */
+.headerSection {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 92%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background-color: #B5D2E9; 
+    border-radius: 10px;
+    height: 70px;
 }
 
 .titulo {
-  color: #000;
-  font-size: 1.4rem;
-  background-color: #B5D2E9;
-  border-radius: 8px;
-  width: 90%;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  padding: 0.5rem;
-  font-weight: 700;
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
+    text-align: center;
 }
 
-/* Área de rolagem para os animais */
+.btnAdd {
+    position: absolute;
+    right: 25px;        
+    background: none;
+    border: none;
+    color: #2D68A6;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.btnAdd:hover {
+    transform: scale(1.2);
+}
+
 .listaScroll {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  max-height: 400px;
-  overflow-y: auto;
-  padding-right: 5px; 
-  font-size: 1.3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-height: 100%;
 }
 
-/* Estiliza scrollbar fina */
-.listaScroll::-webkit-scrollbar {
-  width: 6px;
-}
-.listaScroll::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 3px;
-}
-
-/* CARD DO ANIMAL */
 .card {
-  display: flex;
-  align-items: center;
-  gap: 1rem; 
-  background-color: #fff;
-  border-radius: 12px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  border: 1px solid #e0e0e0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background-color: #fff;
+    border: 1px solid #B5D2E9;
+    border-radius: 16px;
+    width: 92%; 
+    height: 160px; 
+    padding: 0 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
 }
 
-.imgCard {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-  background-color: #eee;
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 8px 16px rgba(0,0,0,0.12);
 }
 
-.imgCard img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.imgWrapper {
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #eee;
+}
+
+.imgWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .infoCard {
-  flex: 1;
-  min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    flex: 1;
+    overflow: hidden;
 }
 
-.cardNome h1 {
-  font-size: 1.1rem;
-  margin-bottom: 0.2rem;
-  color: #286699;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.cardNome {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .descricaoCard {
-  font-size: 0.9rem;
-  color: #666;
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0;
 }
 
-/* Badge de Status */
-.statusBadge {
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  color: #444;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.tagId {
+    font-size: 0.9rem;
+    color: #999;
 }
 
-/* Estado Vazio */
+.statusSuperior {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #2b6b99;
+    background: #e6f2ff;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.statusInferior {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #666;
+}
+
 .emptyBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100px;
-  width: 100%;
-  color: #888;
-  font-style: italic;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    opacity: 0.7;
+    gap: 10px;
 }
 
-/* Botões do Rodapé */
-.verMais {
-  background-color: #286699;
-  color: white;
-  text-decoration: none;
-  padding: 0.6rem 2rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1.3rem;
-  margin-top: 1.5rem;
-  display: inline-block;
-  transition: background 0.2s;
-}
-
-.verMais:hover {
-  background-color: #1a4f75;
-}
-
-.verMaisDisable {
-  background-color: #ccc;
-  color: #fff;
-  padding: 0.6rem 2rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1rem;
-  margin-top: 1.5rem;
-  cursor: default;
-}
-
-@media (max-width: 1200px) {
-  .containerSection {
-    flex: 1 1 100%; 
-    width: 100%; 
-  }
-}
-
-@media (max-width: 900px) {
-  .containerPrincipal {
-    padding: 1rem;
-  }
-  
-  .containerSection {
-    width: 100%; 
-    margin-bottom: 1rem;
-  }
+.mensagemVazio {
+    color: #666;
+    font-style: italic;
+    font-size: 1.2rem;
+    margin: 0;
 }

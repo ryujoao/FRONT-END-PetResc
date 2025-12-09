@@ -86,8 +86,6 @@ export default function GerenciarRegistro() {
               Última atualização: {dados.animal.ultimaAtualizacao}
             </div>
 
-            <button className={styles.btnMudarStatus}>Mudar Status</button>
-
             <span className={styles.codigoAnimal}>
               Código: {dados.animal.codigo}
             </span>

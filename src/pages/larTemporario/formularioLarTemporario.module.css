@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  max-width: 900px; /* Largura ideal para formulários de leitura confortável */
+  max-width: 900px;
   margin: 0 auto;
   padding: 2rem 1rem;
   box-sizing: border-box;
@@ -24,8 +24,6 @@
 .secao {
   margin-bottom: 2.5rem;
   background-color: #fff;
-  /* Opcional: se quiser um card branco com sombra */
-  /* padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); */
 }
 
 .tituloSecao {
@@ -55,18 +53,16 @@
   margin-bottom: 0.75rem;
   font-size: clamp(1rem, 2.2vw, 1.2rem);
   color: #123347;
-  transition: border-color 150ms, box-shadow 150ms;
-  box-sizing: border-box;
   transition: border-color 150ms, box-shadow 150ms, transform 0.2s ease;
+  box-sizing: border-box;
 }
 
 .input:hover {
-  transform: translateY(-3px); /* O pulinho */
-  /* Sombra suave azulada para combinar com o tema */
+  transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(40, 102, 153, 0.1); 
 }
 
-/* Grid para colocar campos lado a lado (ex: CPF e Data) */
+/* Grid */
 .row {
   display: flex;
   gap: 1.5rem;
@@ -74,8 +70,8 @@
 }
 
 .col {
-  flex: 1; /* Cada coluna ocupa espaço igual */
-  min-width: 0; /* Evita quebra de layout flex */
+  flex: 1;
+  min-width: 0;
 }
 
 /* Estilo para Perguntas e Checkboxes */
@@ -110,7 +106,7 @@
 }
 
 .checkboxCustomizado input {
-  display: none; /* Esconde o input padrão feio */
+  display: none;
 }
 
 /* O quadrado desenhado */
@@ -124,6 +120,7 @@
   justify-content: center;
   transition: all 0.2s;
   background: #fff;
+  flex-shrink: 0; /* Impede que o quadrado amasse se o texto for grande */
 }
 
 /* Quando marcado */
@@ -131,7 +128,7 @@
   background-color: #286699;
 }
 
-/* O "check" dentro do quadrado (feito com CSS) */
+/* O "check" dentro do quadrado */
 .checkmark::after {
   content: "";
   display: none;
@@ -169,6 +166,38 @@
 
 .botaoEnviar:hover {
   background-color: #1e5a85;
+}
+
+/* --- NOVAS CLASSES (Substituindo Inline Styles) --- */
+
+/* Texto vermelho "* Campos obrigatórios" */
+.avisoObrigatorio {
+  color: #d9534f;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Caixa de texto com rolagem para os Termos */
+.termosBox {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  height: 200px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Ajustes de alinhamento para checkboxes com muito texto */
+.checkboxTop {
+  align-items: flex-start;
+}
+
+.checkmarkTop {
+  margin-top: 3px;
 }
 
 /* Responsividade */

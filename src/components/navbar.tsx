@@ -52,6 +52,7 @@ export default function Nav() {
               <li><Link to="/central-adocao" className={styles.navLink}>Central de Adoção</Link></li>
               <li><button onClick={() => setShowModal(true)} className={styles.navLink}>Denuncie</button></li>
               <li><Link to="/registrar-animal" className={styles.navLink}>Registrar Animal</Link></li>
+              <li><Link to="/voluntarios" className={styles.navLink}>Voluntários</Link></li>
             </>
           )}
 

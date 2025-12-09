@@ -29,4 +29,9 @@ select, input, textarea {
   font-weight: 500;
 }
 
-
+.vlibras {
+  z-index: 2147483647 !important; /* Valor máximo de z-index */
+  position: fixed !important;     /* Garante que fique fixo na tela */
+  right: 0;
+  top: 50%;                       /* Tenta centralizar verticalmente */
+}
