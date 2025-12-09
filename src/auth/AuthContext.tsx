@@ -40,12 +40,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  // const isTokenValid = (token: string): boolean => {
+  //   try {
+  //     const [, payload] = token.split('.');
+  //     const decodedPayload = JSON.parse(atob(payload));
+  //     return decodedPayload.exp * 1000 > Date.now();
+  //   } catch {
+  //     return false;
+  //   }
+  // };
+
   const isTokenValid = (token: string): boolean => {
     try {
       const [, payload] = token.split('.');
-      const decodedPayload = JSON.parse(atob(payload));
+      
+      // Correção para suportar caracteres UTF-8 (acentos)
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+
+      const decodedPayload = JSON.parse(jsonPayload);
       return decodedPayload.exp * 1000 > Date.now();
-    } catch {
+    } catch (error) {
+      console.error("Erro na validação do token:", error);
       return false;
     }
   };
