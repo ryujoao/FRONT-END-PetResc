@@ -219,13 +219,13 @@ export default function AdminHome() {
                 <div className={styles.donutLegenda}>
                   <div className={styles.legendaItem}>
                     <div className={`${styles.ponto} ${styles.pontoPix}`}></div>
-                    PIX: 65%
+                    PIX: 0%
                   </div>
                   <div className={styles.legendaItem}>
                     <div
                       className={`${styles.ponto} ${styles.pontoCredito}`}
                     ></div>
-                    Cartão: 25%
+                    Cartão: 0%
                   </div>
                 </div>
                 <div className={styles.graficoDonut}></div>

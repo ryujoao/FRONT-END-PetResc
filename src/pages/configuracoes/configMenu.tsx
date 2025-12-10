@@ -7,7 +7,7 @@ import Layout from "../../components/layout";
 import { BsBellFill, BsChevronRight, BsFillLockFill, BsFillShieldFill, BsHouseFill, BsPersonFill } from "react-icons/bs";
 
 export default function ConfigMenu() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [showLogout, setShowLogout] = useState(false);
 
   const handleConfirmLogout = () => {
@@ -18,10 +18,14 @@ export default function ConfigMenu() {
   const menuItems = [
     { to: "/config/conta", label: "Conta", icon: <BsPersonFill /> },
     { to: "/config/endereco", label: "Endereço", icon: <BsHouseFill />  },
-    { to: "/config/notificacoes", label: "Notificação", icon: <BsBellFill /> },
+    { to: "/config/notificacoes", label: "Notificações", icon: <BsBellFill /> },
     { to: "/config/privacidade", label: "Privacidade", icon: <BsFillShieldFill /> },
     { to: "/config/seguranca", label: "Segurança", icon: <BsFillLockFill />},
   ];
+
+  const itemsParaExibir = user?.role === "ADMIN"
+    ? menuItems.filter((item) => item.label === "Notificações")
+    : menuItems;
 
   return (
     <>
@@ -38,7 +42,7 @@ export default function ConfigMenu() {
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Conta</h2>
           
-          {menuItems.map((item) => (
+          {itemsParaExibir.map((item) => (
             <Link key={item.to} to={item.to} className={styles.configItem}>
               <div className={styles.iconCircle}>
                 {item.icon}
@@ -52,13 +56,16 @@ export default function ConfigMenu() {
         <section className={styles.configSection}>
           <h2 className={styles.subtitulo}>Ajuda</h2>
           <div className={styles.ajudaLista}>
+            {user?.role !== "ADMIN" && (
+            <>
             <Link to="/config/contate-nos" className={styles.ajudaLink}>
               Contate-nos
             </Link>
             <Link to="/config/faq" className={styles.ajudaLink}>
               FAQ
             </Link>
-            
+            </>
+            )}
             <button 
               onClick={() => setShowLogout(true)} 
               className={`${styles.ajudaLink} ${styles.botaoLogout}`}

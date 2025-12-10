@@ -223,7 +223,7 @@ button.navLink:hover {
 }
 
 /* Para Notebooks padrão e telas menores que Full HD */
-@media (max-width: 1380px) {
+@media (max-width: 1444px) {
   .navbar {
     padding: 0 1.5rem;
   }
@@ -234,7 +234,7 @@ button.navLink:hover {
 
   .navCategorias li a,
   button.navLink {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .botoesCadastro button {
@@ -245,7 +245,7 @@ button.navLink:hover {
 
   .perfilUsuario,
   .usernameText {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     gap: 0.8rem;
     margin-right: 0;
   }

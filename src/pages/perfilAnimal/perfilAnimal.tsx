@@ -222,10 +222,10 @@ export default function PerfilAnimal() {
                   
                   &bull; {animal.raca }
               </p>
-              <p className={styles.infoLine}>Responsável: <strong>{animal.account.nome}</strong></p>
+              <p className={styles.infoLine}><strong>Responsável:</strong> {animal.account.nome}</p>
               
               <p className={styles.infoLine}>
-                  Local: {animal.local_cidade ? `${animal.local_cidade}/${animal.local_estado}` : (animal.account.ong?.cidade || "Não informado")}
+                  <strong>Local:</strong> {animal.local_cidade ? `${animal.local_cidade}/${animal.local_estado}` : (animal.account.ong?.cidade || "Não informado")}
               </p>
             </section>
 
@@ -264,10 +264,10 @@ export default function PerfilAnimal() {
              <div className={styles.caracteristicaColuna}>
                 <h3>Perfil</h3>
                 <ul>
-                    <li>Espécie: {animal.especie}</li>
-                    <li>Raça: {animal.raca || 'Não definida'}</li>
-                    <li>Porte: {animal.porte || 'Não informado'}</li>
-                    <li>Cor: {animal.corPredominante || 'Não informada'}</li>
+                    <li><strong>Espécie:</strong> {animal.especie}</li>
+                    <li><strong>Raça:</strong> {animal.raca || 'Não definida'}</li>
+                    <li><strong>Porte:</strong> {animal.porte || 'Não informado'}</li>
+                    <li><strong>Cor:</strong> {animal.corPredominante || 'Não informada'}</li>
                     {/* --- MUDANÇA 2: REMOVIDO CAMPO TEMPERAMENTO DAQUI --- */}
                 </ul>
              </div>
@@ -277,10 +277,10 @@ export default function PerfilAnimal() {
                  <div className={styles.caracteristicaColuna}>
                     <h3>Saúde</h3>
                     <ul>
-                        <li>Castrado: {animal.ficha.castrado ? "Sim" : "Não"}</li>
-                        <li>Vacinado: {animal.ficha.vacinado ? "Sim" : "Não"}</li>
-                        <li>Vermifugado: {animal.ficha.vermifugado ? "Sim" : "Não"}</li>
-                        {animal.ficha.vacinas && <li>Vacinas: {animal.ficha.vacinas}</li>}
+                        <li><strong>Castrado:</strong> {animal.ficha.castrado ? "Sim" : "Não"}</li>
+                        <li><strong>Vacinado:</strong> {animal.ficha.vacinado ? "Sim" : "Não"}</li>
+                        <li><strong>Vermifugado:</strong> {animal.ficha.vermifugado ? "Sim" : "Não"}</li>
+                        {animal.ficha.vacinas && <li><strong>Vacinas:</strong> {animal.ficha.vacinas}</li>}
                     </ul>
                  </div>
              )}
