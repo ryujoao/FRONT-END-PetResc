@@ -21,7 +21,9 @@ body {
   width: 100%;
   height: 100vh;
   background: url("/banners/banner1.png") no-repeat bottom;
-  background-size: cover;
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -32,40 +34,28 @@ body {
 }
 
 .bannerDois {
-  position: relative; /* Contexto para o position absolute */
+  position: relative; 
   width: 100%;
   height: 80vh;
   background: url("/banners/banner2.png") no-repeat center bottom;
-  background-size: cover;
+  background-size: contain; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* Conteúdo alinhado à direita */
+  justify-content: flex-end; 
   overflow: hidden;
   padding-right: 20vw;
-}
-
-/* --- IMAGEM DO GATINHO --- */
-.catImage {
-  position: absolute;
-  bottom: 0;
-  left: 2%;
-
-  /* MUDANÇA: De 1800px para relativo. 
-     Isso impede que ele engula a tela em monitores 1920px */
-  width: 50vw;
-  max-width: 900px; /* Trava num tamanho máximo seguro */
-
-  height: auto;
-  z-index: 1;
-  pointer-events: none;
-  transition: all 0.3s ease;
 }
 
 .bannerTres {
   width: 100%;
   height: 100vh;
   background: url("../../../public/banners/banner3.png") no-repeat center center;
-  background-size: cover;
+  background-size: contain; 
+  background-position: right; 
+  background-repeat: no-repeat; 
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -130,7 +120,7 @@ body {
   margin-right: 2vw;
   font-size: 1.2rem;
   min-height: 350px;
-  z-index: 10; /* Garante que fique acima se o gato encostar */
+  z-index: 10; 
   position: relative;
 }
 
