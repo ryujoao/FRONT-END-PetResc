@@ -223,6 +223,19 @@
   margin-bottom: 8px;
 }
 
+.petHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.petHeader button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
 /* RESPONSIVIDADE PARA TELAS MENORES */
 @media (max-width: 1024px) {
   .profileWrapper {

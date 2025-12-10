@@ -202,7 +202,7 @@ export default function PerfilAnimal() {
           </div>
 
           <div className={styles.infoContainer}>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <div className={styles.petHeader}>
                 <h1 className={styles.nome}>{animal.nome}</h1>
                 <button onClick={handleToggleFavorito} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
                     {isFavorito ? <FaHeart size={32} color="#FF3B30" /> : <FaRegHeart size={32} color="#2D68A6" />}

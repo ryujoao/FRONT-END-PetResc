@@ -46,8 +46,8 @@ export default function Contato() {
           <div className={styles.contatoItem}>
             <h3 className={styles.contatoSubtitle}>4. Redes sociais</h3>
             <div className={styles.contatoItem}>
-              <span className={styles.contatoText}>&bull; Instagram: @petco</span>
-              <span className={styles.contatoText}>&bull; Facebook: /petco</span>
+              <span className={styles.contatoText}>&bull; Instagram: @petresc</span>
+              <span className={styles.contatoText}>&bull; Facebook: /petresc</span>
             </div>
           </div>
 

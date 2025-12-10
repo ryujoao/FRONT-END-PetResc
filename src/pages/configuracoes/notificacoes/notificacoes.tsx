@@ -28,7 +28,7 @@ const getIcon = (type: string) => {
 };
 
 const dadosIniciais: Notificacao[] = [
-  { id: 1, iconType: "paw", texto: "Bem-vindo ao PetCo!", status: "lida" },
+  { id: 1, iconType: "paw", texto: "Bem-vindo ao PetResc!", status: "lida" },
   { id: 2, iconType: "check", texto: "Seu cadastro foi concluído", status: "lida" },
   { id: 3, iconType: "info", texto: "Termos de uso e privacidade atualizados", status: "nao_lida", path: "/config/privacidade" },
   { id: 4, iconType: "paw", texto: "Uma nova ONG parceira entrou na plataforma!", status: "nao_lida" },
@@ -110,16 +110,8 @@ export default function Notificacoes() {
       {/* Botão extra para limpar notificações pendentes */}
       {activeView === "nao_lida" && notificacoesParaExibir.length > 0 && (
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-            <button 
+            <button className={listStyles.limparBtn}
                 onClick={marcarTodasComoLidas}
-                style={{
-                    background: 'none', 
-                    border: 'none', 
-                    color: '#286699', 
-                    cursor: 'pointer', 
-                    textDecoration: 'underline',
-                    fontSize: '0.9rem'
-                }}
             >
                 Marcar todas como lidas
             </button>
