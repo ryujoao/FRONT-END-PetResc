@@ -23,10 +23,6 @@ export default function CampanhasAnteriores() {
   const [termoBusca, setTermoBusca] = useState("");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
     async function fetchMinhasCampanhas() {
       if (!user) {
         setCampanhas([]);

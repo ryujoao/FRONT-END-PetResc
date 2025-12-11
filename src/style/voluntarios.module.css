@@ -132,35 +132,62 @@
   accent-color: #2b6b99;
 }
 
+.actionsContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  max-width: 1000px; /* Mesma largura da tabela para alinhar visualmente */
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+/* O estilo EXATO que você pediu */
+.botao {
+  background: #2b6b99;
+  color: white;
+  margin: 1.5rem 0;
+  padding: 0.8rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px;
+  width: 250px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.botao:hover {
+  background-color: #0f4979;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.botaoAprovar {
+  background-color: #28a745; /* Verde padrão de sucesso */
+}
+
+.botaoAprovar:hover {
+  background-color: #218838; /* Verde mais escuro ao passar o mouse */
+}
+
+/* Estilo específico para o botão de Rejeitar (Vermelho) */
+/* Ele herda tudo do .botao, só muda a cor */
+.botaoRejeitar {
+  background-color: #dc3545; /* Vermelho */
+}
+
+.botaoRejeitar:hover {
+  background-color: #a71d2a; /* Vermelho escuro */
+}
+
+
+
+
 /* Responsividade */
 @media (max-width: 768px) {
   .tableHeader {
     display: none; 
   }
-
-  .tableRow {
-    grid-template-columns: 1fr; 
-    border-radius: 20px;
-    text-align: center;
-    padding: 20px;
-    gap: 5px;
-  }
-
-  .colCheck {
-    justify-content: flex-end;
-  }
-
-  .titulo {
-    font-size: 1.8rem;
-  }
-  
-  .floatingIcon {
-    transform: translateX(120px);
-  }
-}
-
-@media (max-width: 768px) {
-  .tableHeader { display: none; }
 
   .tableRow {
     display: flex; 
@@ -172,6 +199,25 @@
     text-align: left;
     margin-bottom: 1rem;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+  }
+
+  .titulo {
+    font-size: 1.8rem;
+  }
+  
+  .floatingIcon {
+    transform: translateX(120px);
+  }
+
+  .actionsContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  
+  .botao {
+    width: 100%;
+    margin: 0.5rem 0;
   }
 
   /* TRUQUE DOS RÓTULOS (Labels) */

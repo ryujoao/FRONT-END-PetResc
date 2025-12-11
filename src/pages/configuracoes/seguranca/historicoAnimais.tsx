@@ -23,17 +23,17 @@ const MOCK_ANIMAIS: Animal[] = [
     detalhes: ["F • 3 anos • SRD", `• Atualizado em: ${new Date().toLocaleDateString()}`],
     estagioTitulo: "Adoção Concluída",
     estagioDesc: "Luna encontrou um novo lar recentemente.",
-    img: "https://placehold.co/400x400?text=Luna",
+    img: "/public/animais/luna.jpg",
     categoria: "adotados"
   },
   {
     id: 9002,
     nome: "Thor",
     status: "Em Lar Temporário",
-    detalhes: ["M • 1 ano • Vira-lata", `• Atualizado em: ${new Date().toLocaleDateString()}`],
+    detalhes: ["M • 1 ano • Yorkshire", `• Atualizado em: ${new Date().toLocaleDateString()}`],
     estagioTitulo: "Lar Temporário",
     estagioDesc: "Thor está em um lar temporário.",
-    img: "https://placehold.co/400x400?text=Thor",
+    img: "/public/animais/thor.jpg",
     categoria: "lar"
   },
   {
@@ -43,7 +43,7 @@ const MOCK_ANIMAIS: Animal[] = [
     detalhes: ["F • 6 meses • SRD", `• Visto em: ${new Date().toLocaleDateString()}`],
     estagioTitulo: "Visto Recentemente",
     estagioDesc: "Perfil visualizado recentemente.",
-    img: "https://placehold.co/400x400?text=Mimi",
+    img: "/public/animais/mimi.jpg",
     categoria: "vistos"
   }
 ];
