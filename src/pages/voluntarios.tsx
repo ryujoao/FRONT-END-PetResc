@@ -1,186 +1,231 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../style/voluntarios.module.css";
 import Layout from "../components/layout";
-import { FaPaw } from "react-icons/fa"; // Para as patinhas de fundo (opcional)
-import Modal from "../components/modal";
+// Adicionamos FaCheck e FaTimes para os botões de ação
+import { FaPaw, FaWhatsapp, FaCheck, FaTimes } from "react-icons/fa";
 
-// --- TIPAGEM ---
+// --- TIPAGEM (Baseada na API) ---
 interface Voluntario {
-  id: string;
-  nome: string;
-
-  data: string;
+  id: number;
+  nomeCompleto: string;
+  telefone: string;
+  tipoMoradia: string;
+  createdAt: string; 
 }
 
-// --- DADOS MOCKADOS (Baseado na imagem) ---
-const MOCK_VOLUNTARIOS: Voluntario[] = [
-  { id: "01", nome: "Lucas Moreira da Silva", data: "03/09/2025" },
-  { id: "02", nome: "Beatriz Fernandes Costa", data: "11/09/2025" },
-  { id: "03", nome: "Rafael Cardoso Menezes", data: "18/09/2025" },
-  { id: "04", nome: "Juliana Nogueira Prado", data: "26/09/2025" },
-  { id: "05", nome: "Thiago Almeida Ramos", data: "04/10/2025" },
-  { id: "06", nome: "Marina Duarte Ribeiro", data: "13/10/2025" },
-  { id: "07", nome: "Gabriel Antunes Ferreira", data: "21/10/2025" },
-  { id: "08", nome: "Camila Rocha Martins", data: "29/10/2025" },
-  { id: "09", nome: "Eduardo Pires Amaral", data: "06/11/2025" },
-];
-
 export default function VoluntariosLar() {
-  // Estado para controlar os checkboxes (quais IDs estão selecionados)
-  const [selecionados, setSelecionados] = useState<string[]>([]);
+  // Estados
+  const [voluntarios, setVoluntarios] = useState<Voluntario[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selecionados, setSelecionados] = useState<number[]>([]);
 
-  // Estado para o modal
-  const [modalConfig, setModalConfig] = useState({
-    isOpen: false,
-    title: "",
-    message: "",
-    type: "success" as "success" | "error",
-  });
+  // --- BUSCA DE DADOS ---
+  useEffect(() => {
+    const fetchVoluntarios = async () => {
+      try {
+        // 1. CORREÇÃO: Nome exato da chave do token no Local Storage
+        const token = localStorage.getItem("@AuthData:token");
+        
+        console.log("Token sendo enviado:", token); 
+        
+        if (!token) {
+           // Se não tiver token, nem tenta buscar (evita erro 401/403 desnecessário)
+           console.warn("Usuário não logado.");
+           setLoading(false);
+           return;
+        }
 
-  const toggleSelect = (id: string) => {
+        const baseUrl = "https://petresc.onrender.com"; 
+        
+        // 2. CORREÇÃO: Rota com 'Temporarios' (T maiúsculo)
+        const response = await fetch(`${baseUrl}/api/lares-Temporarios/feed`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        // Tratamento específico para erro 403 (Permissão)
+        if (response.status === 403) {
+            alert("Acesso Negado: Seu usuário não tem permissão de ONG ou ADMIN.");
+            throw new Error("Permissão insuficiente (403)");
+        }
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar voluntários");
+        }
+
+        const data = await response.json();
+
+        // 3. Tratamento de segurança (Map)
+        const dadosFormatados = data.map((item: any) => ({
+          id: item.id,
+          nomeCompleto: item.nomeCompleto || item.usuario?.nome || "Sem nome",
+          telefone: item.telefone || item.usuario?.telefone || "",
+          tipoMoradia: item.tipoMoradia,
+          createdAt: item.createdAt || new Date().toISOString()
+        }));
+
+        setVoluntarios(dadosFormatados);
+      } catch (error) {
+        console.error("Erro:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVoluntarios();
+  }, []);
+
+  // --- FUNÇÕES AUXILIARES ---
+  
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("pt-BR");
+  };
+
+  const abrirWhatsApp = (telefone: string) => {
+    if (!telefone) return alert("Telefone não disponível");
+    const cleanPhone = telefone.replace(/\D/g, "");
+    const url = `https://web.whatsapp.com/send?phone=55${cleanPhone}`;
+    window.open(url, "_blank");
+  };
+
+  // Checkbox Logic
+  const toggleSelect = (id: number) => {
     setSelecionados((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
   const toggleSelectAll = () => {
-    if (selecionados.length === MOCK_VOLUNTARIOS.length) {
+    if (selecionados.length === voluntarios.length) {
       setSelecionados([]);
     } else {
-      setSelecionados(MOCK_VOLUNTARIOS.map((v) => v.id));
+      setSelecionados(voluntarios.map((v) => v.id));
     }
   };
 
-  // Função auxiliar para fechar o modal
-  const closeModal = () => {
-    setModalConfig({ ...modalConfig, isOpen: false });
-  };
-
+  // Funções placeholder para os botões (futuramente conectar na API)
   const handleAprovar = () => {
-    if (selecionados.length === 0) {
-      setModalConfig({
-        isOpen: true,
-        title: "Atenção",
-        message: "Selecione pelo menos um voluntário para aprovar.",
-        type: "error",
-      });
-      return;
-    }
-
-    console.log("Aprovando IDs:", selecionados);
-
-    setModalConfig({
-      isOpen: true,
-      title: "Sucesso!",
-      message: `${selecionados.length} voluntário(s) aprovado(s) com sucesso!`,
-      type: "success",
-    });
+    alert(`Aprovando IDs: ${selecionados.join(", ")}`);
+    // Aqui virá a lógica de fetch PATCH ...
   };
 
-  const handleRejeitar = () => {
-    if (selecionados.length === 0) {
-      setModalConfig({
-        isOpen: true,
-        title: "Atenção",
-        message: "Selecione pelo menos um voluntário para rejeitar.",
-        type: "error",
-      });
-      return;
-    }
-
-    console.log("Rejeitando IDs:", selecionados);
-
-    setModalConfig({
-      isOpen: true,
-      title: "Rejeitado",
-      message: `${selecionados.length} voluntário(s) foram rejeitados.`,
-      type: "error",
-    });
+  const handleRecusar = () => {
+    alert(`Recusando IDs: ${selecionados.join(", ")}`);
+    // Aqui virá a lógica de fetch PATCH ...
   };
 
   return (
     <Layout>
       <div className={styles.pageContainer}>
-        <Modal
-          isOpen={modalConfig.isOpen}
-          title={modalConfig.title}
-          message={modalConfig.message}
-          type={modalConfig.type}
-          onClose={closeModal}
-        />
-        {/* ELEMENTOS DE FUNDO (Patinhas Decorativas) */}
+        
+        {/* ELEMENTOS DE FUNDO */}
         <div className={styles.bgDecorations}>
           <FaPaw className={styles.paw1} />
           <FaPaw className={styles.paw2} />
           <FaPaw className={styles.paw3} />
         </div>
 
-        {/* --- CABEÇALHO DA PÁGINA --- */}
+        {/* --- CABEÇALHO --- */}
         <div className={styles.header}>
           <h1 className={styles.titulo}>Voluntários para Lar temporário</h1>
           <p className={styles.subtitulo}>
-            Acompanhe todos os voluntários e seus formulários
+            Acompanhe todos os voluntários disponíveis na rede.
           </p>
         </div>
 
-        {/* --- TABELA DE LISTAGEM --- */}
+        {/* --- TABELA --- */}
         <div className={styles.tableContainer}>
-          {/* Cabeçalho da Tabela */}
-          <div className={styles.tableHeader}>
-            <div className={styles.colCheck}>
-              <input
-                type="checkbox"
-                className={styles.checkbox}
-                checked={
-                  selecionados.length === MOCK_VOLUNTARIOS.length &&
-                  MOCK_VOLUNTARIOS.length > 0
-                }
-                onChange={toggleSelectAll}
-              />
-            </div>
-            <div className={styles.colId}>ID</div>
-            <div className={styles.colNome}>Nome</div>
-            <div className={styles.colTipo}></div>
-            <div className={styles.colData}>Feito em</div>
-          </div>
-
-          {/* Linhas da Tabela */}
-          <div className={styles.tableBody}>
-            {MOCK_VOLUNTARIOS.map((voluntario) => (
-              <div key={voluntario.id} className={styles.tableRow}>
+          
+          {loading ? (
+            <p style={{textAlign: 'center', padding: '20px', color: '#2D68A6'}}>Carregando voluntários...</p>
+          ) : (
+            <>
+              {/* Cabeçalho da Tabela */}
+              <div className={styles.tableHeader}>
                 <div className={styles.colCheck}>
-                  <input
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={selecionados.includes(voluntario.id)}
-                    onChange={() => toggleSelect(voluntario.id)}
+                  <input 
+                    type="checkbox" 
+                    className={styles.checkbox} 
+                    checked={selecionados.length === voluntarios.length && voluntarios.length > 0}
+                    onChange={toggleSelectAll}
                   />
                 </div>
-                <div className={styles.colId}>{voluntario.id}</div>
-                <div className={styles.colNome}>{voluntario.nome}</div>
-                <div className={styles.colTipo}></div>
-                <div className={styles.colData}>{voluntario.data}</div>
+                <div className={styles.colId}>ID</div>
+                <div className={styles.colNome}>Nome</div>
+                <div className={styles.colTipo}>Detalhes Moradia</div>
+                <div className={styles.colData}>Data Cadastro</div>
+                <div className={styles.colAcoes} style={{width: '100px', textAlign: 'center'}}>Contato</div> 
               </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.actionsContainer}>
-          {/* Botão Rejeitar (Vermelho) */}
-          <button
-            className={`${styles.botao} ${styles.botaoRejeitar}`}
-            onClick={handleRejeitar}
-          >
-            Rejeitar
-          </button>
 
-          {/* Botão Aprovar (Azul Padrão) */}
-          <button
-            className={`${styles.botao} ${styles.botaoAprovar}`}
-            onClick={handleAprovar}
-          >
-            Aprovar
-          </button>
+              {/* Corpo da Tabela */}
+              <div className={styles.tableBody}>
+                {voluntarios.length === 0 ? (
+                    <div style={{padding: '20px', textAlign: 'center', color: '#666'}}>Nenhum voluntário encontrado.</div>
+                ) : (
+                    voluntarios.map((vol) => (
+                    <div key={vol.id} className={styles.tableRow}>
+                        <div className={styles.colCheck}>
+                        <input
+                            type="checkbox"
+                            className={styles.checkbox}
+                            checked={selecionados.includes(vol.id)}
+                            onChange={() => toggleSelect(vol.id)}
+                        />
+                        </div>
+                        <div className={styles.colId}>#{vol.id}</div>
+                        <div className={styles.colNome}>
+                            <strong>{vol.nomeCompleto}</strong>
+                        </div>
+                        <div className={styles.colTipo}>
+                            Lar Temporário ({vol.tipoMoradia})
+                        </div>
+                        <div className={styles.colData}>{formatDate(vol.createdAt)}</div>
+                        
+                        {/* Botão de Contato */}
+                        <div className={styles.colAcoes} style={{display:'flex', justifyContent:'center'}}>
+                            <button 
+                                onClick={() => abrirWhatsApp(vol.telefone)}
+                                style={{
+                                    background: 'transparent', 
+                                    border: 'none', 
+                                    cursor: 'pointer', 
+                                    color: '#25D366', 
+                                    fontSize: '1.2rem'
+                                }}
+                                title="Chamar no WhatsApp"
+                            >
+                                <FaWhatsapp />
+                            </button>
+                        </div>
+                    </div>
+                    ))
+                )}
+              </div>
+            </>
+          )}
         </div>
+
+        {/* --- BARRA DE AÇÕES FLUTUANTE (NOVO) --- */}
+        {selecionados.length > 0 && (
+          <div className={styles.actionBarContainer}>
+            <span className={styles.selectedCount}>
+              {selecionados.length} {selecionados.length === 1 ? 'selecionado' : 'selecionados'}
+            </span>
+
+            <button className={styles.btnRecusar} onClick={handleRecusar}>
+              <FaTimes /> Recusar
+            </button>
+
+            <button className={styles.btnAprovar} onClick={handleAprovar}>
+              <FaCheck /> Aprovar
+            </button>
+          </div>
+        )}
+
       </div>
     </Layout>
   );

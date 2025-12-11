@@ -246,3 +246,70 @@
     white-space: normal; 
   }
 }
+
+/* --- BARRA DE AÇÕES FLUTUANTE --- */
+.actionBarContainer {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background-color: white;
+  padding: 15px 30px;
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 9999; /* Garante que fique na frente de tudo */
+  
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid #eee;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 100%); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.selectedCount {
+  font-weight: bold;
+  color: #555;
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+
+/* Botões da Barra */
+.btnAprovar, .btnRecusar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.btnAprovar {
+  background-color: #2ecc71; /* Verde */
+  color: white;
+}
+
+.btnRecusar {
+  background-color: #e74c3c; /* Vermelho */
+  color: white;
+}
+
+.btnAprovar:hover, .btnRecusar:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btnAprovar:active, .btnRecusar:active {
+  transform: scale(0.95);
+}

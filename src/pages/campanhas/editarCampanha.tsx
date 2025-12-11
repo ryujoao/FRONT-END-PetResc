@@ -25,36 +25,56 @@ export default function EditarCampanha() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // ============================
+  //      CARREGAR CAMPANHA
+  // ============================
   useEffect(() => {
     if (!id) return;
+
     async function fetchCampanha() {
       try {
         const resp = await api.get(`/campanha/${id}`);
         const data = resp.data;
+
         setFormData({
           nome: data.titulo ?? data.nome ?? "",
-          descricao: data.descricao ?? data.texto ?? "",
-          dataLimite: (data.dataLimite ?? data.data_limite ?? "").slice(0,10),
-          meta: String(data.metaFinanceira ?? data.meta_financeira ?? data.meta ?? ""),
-          itens: Array.isArray(data.itens_descricao) ? data.itens_descricao.join(", ") : (data.itens_descricao ?? data.itens ?? "").toString().replace(/^\[|\]$/g, "")
+          descricao: data.descricao ?? "",
+          dataLimite: (data.data_limite ?? data.dataLimite ?? "").slice(0, 10),
+          meta: String(data.meta_financeira ?? data.metaFinanceira ?? data.meta ?? ""),
+          itens: Array.isArray(data.itens_descricao)
+            ? data.itens_descricao.join(", ")
+            : (data.itens_descricao ?? "").toString().replace(/^\[|\]$/g, "")
         });
-        const imageUrl = data.imagemUrl ?? data.imagem ?? data.photoUrl ?? null;
+
+        const imageUrl =
+          data.imagemUrl ??
+          data.imagem ??
+          data.photoUrl ??
+          null;
+
         if (imageUrl) setImagemPreview(imageUrl);
       } catch (err) {
         console.error("Erro ao carregar campanha:", err);
       }
     }
+
     fetchCampanha();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // ============================
+  //       HANDLERS Inputs
+  // ============================
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     setImagemArquivo(file);
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setImagemPreview(reader.result as string);
@@ -62,28 +82,42 @@ export default function EditarCampanha() {
     }
   };
 
+  // ============================
+  //       SUBMIT / UPDATE
+  // ============================
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!id) return;
+
     if (!token) {
       alert("Sessão inválida. Faça login novamente.");
       return;
     }
 
     setLoading(true);
+
     try {
       const payload = new FormData();
       payload.append("titulo", formData.nome);
       payload.append("descricao", formData.descricao);
       payload.append("meta_financeira", formData.meta);
       payload.append("data_limite", formData.dataLimite);
-      const itensArray = formData.itens.split(",").map(i => i.trim()).filter(i => i);
+
+      const itensArray = formData.itens
+        .split(",")
+        .map((i) => i.trim())
+        .filter((i) => i);
+
       payload.append("itens_descricao", JSON.stringify(itensArray));
-      if (imagemArquivo) payload.append("imagem", imagemArquivo);
+
+      if (imagemArquivo) {
+        payload.append("imagem", imagemArquivo);
+      }
 
       await api.put(`/campanha/${id}`, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         }
       });
 
@@ -96,6 +130,9 @@ export default function EditarCampanha() {
     }
   };
 
+  // ============================
+  //       JSX FINAL
+  // ============================
   return (
     <Layout>
       <div className={styles.pageContainer}>
@@ -109,38 +146,86 @@ export default function EditarCampanha() {
             <div className={styles.colunaEsquerda}>
               <div className={styles.inputGroup}>
                 <label>Nome da campanha (Título):</label>
-                <input type="text" name="nome" value={formData.nome} onChange={handleChange} required className={styles.inputField} />
+                <input
+                  type="text"
+                  name="nome"
+                  value={formData.nome}
+                  onChange={handleChange}
+                  required
+                  className={styles.inputField}
+                />
               </div>
 
               <div className={styles.inputGroup}>
                 <label>Data limite (Encerramento):</label>
-                <input type="date" name="dataLimite" value={formData.dataLimite} onChange={handleChange} required className={styles.inputField} />
+                <input
+                  type="date"
+                  name="dataLimite"
+                  value={formData.dataLimite}
+                  onChange={handleChange}
+                  required
+                  className={styles.inputField}
+                />
               </div>
 
               <div className={styles.inputGroup}>
                 <label>Meta financeira (R$):</label>
-                <input type="number" name="meta" value={formData.meta} onChange={handleChange} required className={styles.inputField} />
+                <input
+                  type="number"
+                  name="meta"
+                  value={formData.meta}
+                  onChange={handleChange}
+                  required
+                  className={styles.inputField}
+                />
               </div>
 
               <div className={styles.inputGroup}>
                 <label>Itens de Impacto (Separe por vírgula):</label>
-                <input type="text" name="itens" value={formData.itens} onChange={handleChange} className={styles.inputField} />
-                <small className={styles.helperText}>Aparecerá como lista: "Com sua doação você garante..."</small>
+                <input
+                  type="text"
+                  name="itens"
+                  value={formData.itens}
+                  onChange={handleChange}
+                  className={styles.inputField}
+                />
+                <small className={styles.helperText}>
+                  Aparecerá como lista: "Com sua doação você garante..."
+                </small>
               </div>
             </div>
 
             <div className={styles.colunaDireita}>
               <div className={styles.inputGroup} style={{ flexGrow: 1 }}>
                 <label>Descrição detalhada:</label>
-                <textarea name="descricao" value={formData.descricao} onChange={handleChange} className={styles.textareaField} required />
+                <textarea
+                  name="descricao"
+                  value={formData.descricao}
+                  onChange={handleChange}
+                  className={styles.textareaField}
+                  required
+                />
               </div>
 
               <div className={styles.inputGroup}>
                 <label>Capa da campanha:</label>
                 <label className={styles.uploadBox}>
-                  <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: "none" }} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                  />
+
                   {imagemPreview ? (
-                    <img src={imagemPreview} alt="Preview" className={styles.previewImg} onError={(e)=> (e.currentTarget.src="/cachorroFofo.png")} />
+                    <img
+                      src={imagemPreview}
+                      alt="Preview"
+                      className={styles.previewImg}
+                      onError={(e) =>
+                        (e.currentTarget.src = "/cachorroFofo.png")
+                      }
+                    />
                   ) : (
                     <div className={styles.uploadPlaceholder}>
                       <BsImage size={40} color="#286699" />
@@ -166,10 +251,20 @@ export default function EditarCampanha() {
               <h2>Atualizado</h2>
               <p>A campanha foi atualizada com sucesso.</p>
               <div style={{ display: "flex", gap: 8 }}>
-                <button className={styles.btnModal} onClick={() => { setShowModal(false); navigate(-1); }}>
+                <button
+                  className={styles.btnModal}
+                  onClick={() => {
+                    setShowModal(false);
+                    navigate(-1);
+                  }}
+                >
                   Voltar
                 </button>
-                <button className={styles.btnModal} onClick={() => { setShowModal(false); }}>
+
+                <button
+                  className={styles.btnModal}
+                  onClick={() => setShowModal(false)}
+                >
                   Fechar
                 </button>
               </div>

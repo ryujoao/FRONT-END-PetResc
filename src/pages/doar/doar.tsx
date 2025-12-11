@@ -6,7 +6,9 @@ import Layout from "../../components/layout";
 
 const API_BASE_URL = "https://petresc.onrender.com";
 
-// --- TIPAGEM DA CAMPANHA (Vinda do Banco) ---
+// =========================================================
+// TIPAGEM DA CAMPANHA (Banco)
+// =========================================================
 interface Campanha {
   id: number;
   titulo: string;
@@ -22,7 +24,9 @@ interface Campanha {
   };
 }
 
-// --- TIPAGEM ESTATÍSTICAS ONG ---
+// =========================================================
+// TIPAGEM - Estatísticas da ONG
+// =========================================================
 interface OngStats {
   totalCampanhas: number;
   totalDoadores: number;
@@ -42,7 +46,7 @@ const fetchOngStats = (ongId: string): Promise<OngStats> => {
 };
 
 // =========================================================
-// COMPONENTE 1: VISÃO DO USUÁRIO ('PUBLICO')
+// COMPONENTE 1 — VISÃO DO USUÁRIO
 // =========================================================
 const DoarUsuarioView = () => {
   const [campanhasReais, setCampanhasReais] = useState<Campanha[]>([]);
@@ -62,6 +66,7 @@ const DoarUsuarioView = () => {
         setLoading(false);
       }
     };
+
     fetchCampanhas();
   }, []);
 
@@ -79,11 +84,7 @@ const DoarUsuarioView = () => {
         {/* Cards de estatísticas */}
         <div className={styles.cardContainer}>
           <div className={styles.card}>
-            <img
-              src="/doar/campanhas.png"
-              alt="Campanhas realizadas"
-              className={styles.cardImage}
-            />
+            <img src="/doar/campanhas.png" className={styles.cardImage} />
             <p className={styles.cardText}>
               {campanhasReais.length > 0 ? campanhasReais.length + 80 : 85}
             </p>
@@ -91,46 +92,32 @@ const DoarUsuarioView = () => {
           </div>
 
           <div className={styles.card}>
-            <img
-              src="/doar/doarImg.png"
-              alt="Pessoas beneficiadas"
-              className={styles.cardImage}
-            />
+            <img src="/doar/doarImg.png" className={styles.cardImage} />
           </div>
 
           <div className={styles.card}>
-            <img
-              src="/doar/doadores.png"
-              alt="Doadores ativos"
-              className={styles.cardImage}
-            />
+            <img src="/doar/doadores.png" className={styles.cardImage} />
             <p className={styles.cardText}>157</p>
             <p className={styles.cardSubtext}>Doadores Ativos</p>
           </div>
 
           <div className={styles.card}>
-            <img
-              src="/doar/doarImg2.png"
-              alt="Pessoas beneficiadas"
-              className={styles.cardImage}
-            />
+            <img src="/doar/doarImg2.png" className={styles.cardImage} />
           </div>
 
           <div className={styles.card}>
-            <img
-              src="/doar/valor.png"
-              alt="Valor arrecadado"
-              className={styles.cardImage}
-            />
+            <img src="/doar/valor.png" className={styles.cardImage} />
             <p className={styles.cardText}>R$ 78.446,96</p>
             <p className={styles.cardSubtext}>Valor Arrecadado</p>
           </div>
         </div>
       </div>
 
+      {/* ===================== Instituições ===================== */}
       <div className={styles.pagInstituicoes}>
-        {/* SEÇÃO 1: MAIS POPULARES */}
+        {/* MAIS POPULARES */}
         <h1 className={styles.tituloInstituicoes}>Mais Populares</h1>
+
         <div className={styles.cardInstituicoes}>
           {[
             {
@@ -152,25 +139,24 @@ const DoarUsuarioView = () => {
               meta: 20000,
             },
           ].map((inst, index) => (
-            /* CORREÇÃO AQUI: Link dinâmico para /instituto/:id */
             <Link
               key={index}
               to={`/instituto/${inst.id}`}
               className={styles.instituicoes}
             >
-              <img
-                src={inst.imagem}
-                alt={inst.nome}
-                className={styles.imgInstituicoes}
-              />
+              <img src={inst.imagem} className={styles.imgInstituicoes} />
               <h2 className={styles.nomeInstituicoes}>{inst.nome}</h2>
+
               <div className={styles.enderecoInstituicoes}>
                 <div className={styles.iconLocal}></div>
                 {inst.endereco}
               </div>
+
               <progress value={inst.arrecadado} max={inst.meta}></progress>
+
               <p className={styles.valorInstituicoes}>
-                R$ {inst.arrecadado.toLocaleString("pt-BR")} / R${" "}
+                R$
+                {inst.arrecadado.toLocaleString("pt-BR")} / R$
                 {inst.meta.toLocaleString("pt-BR")} (
                 {Math.round((inst.arrecadado / inst.meta) * 100)}%)
               </p>
@@ -178,7 +164,7 @@ const DoarUsuarioView = () => {
           ))}
         </div>
 
-        {/* SEÇÃO 2: NOVAS CAMPANHAS */}
+        {/* NOVAS CAMPANHAS */}
         <h1 className={styles.tituloInstituicoes}>Novas Campanhas</h1>
 
         {loading ? (
@@ -192,11 +178,9 @@ const DoarUsuarioView = () => {
                 const porcentagem =
                   meta > 0 ? Math.round((arrecadado / meta) * 100) : 0;
 
-                const imgSrc =
-                  campanha.imagemUrl || "/institutos/default.png";
+                const imgSrc = campanha.imagemUrl || "/institutos/default.png";
 
                 return (
-                  /* CORREÇÃO AQUI: Link dinâmico para /instituto/:id */
                   <Link
                     key={campanha.id}
                     to={`/instituto/${campanha.id}`}
@@ -208,20 +192,24 @@ const DoarUsuarioView = () => {
                       className={styles.imgInstituicoes}
                       style={{ objectFit: "cover" }}
                     />
+
                     <h2 className={styles.nomeInstituicoes}>
                       {campanha.titulo}
                     </h2>
+
                     <div className={styles.enderecoInstituicoes}>
                       <div className={styles.iconLocal}></div>
                       {campanha.ong?.nome || "ONG Parceira"}
                     </div>
+
                     <progress value={arrecadado} max={meta}></progress>
+
                     <p className={styles.valorInstituicoes}>
-                      R${" "}
+                      R$
                       {arrecadado.toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                       })}{" "}
-                      / R${" "}
+                      / R$
                       {meta.toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                       })}{" "}
@@ -231,50 +219,51 @@ const DoarUsuarioView = () => {
                 );
               })
             ) : (
-              [
-                {
-                  id: "ampara",
-                  nome: "Instituto Ampara Animal",
-                  endereco:
-                    "Rua José Felix de Oliveira, 1234 - Granja Viana, Cotia - SP",
-                  imagem: "/institutos/ampara.png",
-                  arrecadado: 4500,
-                  meta: 10000,
-                },
-                {
-                  id: "patasdadas",
-                  nome: "Patas Dadas",
-                  endereco:
-                    "Av. Dom Hélder Câmara, 1801 - Benfica, Rio de Janeiro - RJ",
-                  imagem: "/institutos/patasDadas.png",
-                  arrecadado: 8104.64,
-                  meta: 16000,
-                },
-              ].map((inst, index) => (
-                /* CORREÇÃO AQUI: Link dinâmico para /instituto/:id */
-                <Link
-                  key={index}
-                  to={`/instituto/${inst.id}`}
-                  className={styles.instituicoes}
-                >
-                  <img
-                    src={inst.imagem}
-                    alt={inst.nome}
-                    className={styles.imgInstituicoes}
-                  />
-                  <h2 className={styles.nomeInstituicoes}>{inst.nome}</h2>
-                  <div className={styles.enderecoInstituicoes}>
-                    <div className={styles.iconLocal}></div>
-                    {inst.endereco}
-                  </div>
-                  <progress value={inst.arrecadado} max={inst.meta}></progress>
-                  <p className={styles.valorInstituicoes}>
-                    R$ {inst.arrecadado.toLocaleString("pt-BR")} / R${" "}
-                    {inst.meta.toLocaleString("pt-BR")} (
-                    {Math.round((inst.arrecadado / inst.meta) * 100)}%)
-                  </p>
-                </Link>
-              ))
+              <>
+                {[
+                  {
+                    id: "ampara",
+                    nome: "Instituto Ampara Animal",
+                    endereco:
+                      "Rua José Felix de Oliveira, 1234 - Granja Viana, Cotia - SP",
+                    imagem: "/institutos/ampara.png",
+                    arrecadado: 4500,
+                    meta: 10000,
+                  },
+                  {
+                    id: "patasdadas",
+                    nome: "Patas Dadas",
+                    endereco:
+                      "Av. Dom Hélder Câmara, 1801 - Benfica, Rio de Janeiro - RJ",
+                    imagem: "/institutos/patasDadas.png",
+                    arrecadado: 8104.64,
+                    meta: 16000,
+                  },
+                ].map((inst, index) => (
+                  <Link
+                    key={index}
+                    to={`/instituto/${inst.id}`}
+                    className={styles.instituicoes}
+                  >
+                    <img src={inst.imagem} className={styles.imgInstituicoes} />
+                    <h2 className={styles.nomeInstituicoes}>{inst.nome}</h2>
+
+                    <div className={styles.enderecoInstituicoes}>
+                      <div className={styles.iconLocal}></div>
+                      {inst.endereco}
+                    </div>
+
+                    <progress value={inst.arrecadado} max={inst.meta}></progress>
+
+                    <p className={styles.valorInstituicoes}>
+                      R$
+                      {inst.arrecadado.toLocaleString("pt-BR")} / R$
+                      {inst.meta.toLocaleString("pt-BR")} (
+                      {Math.round((inst.arrecadado / inst.meta) * 100)}%)
+                    </p>
+                  </Link>
+                ))}
+              </>
             )}
           </div>
         )}
@@ -284,7 +273,7 @@ const DoarUsuarioView = () => {
 };
 
 // =========================================================
-// COMPONENTE 2: VISÃO DA ONG (DASHBOARD) - MANTIDO
+// COMPONENTE 2 — VISÃO DA ONG
 // =========================================================
 const DoarOngView = ({ ongId }: { ongId: string }) => {
   const [stats, setStats] = useState<OngStats | null>(null);
@@ -292,6 +281,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
 
   useEffect(() => {
     setLoading(true);
+
     fetchOngStats(ongId)
       .then((data) => {
         setStats(data);
@@ -305,19 +295,30 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
 
   return (
     <div className={styles.ongPageWrapper}>
-      {/* Conteúdo mantido igual */}
       <div style={{ padding: "20px", textAlign: "center" }}>
-          <h2>Painel da ONG</h2>
-          <p>Estatísticas carregadas...</p>
+        <h2>Painel da ONG</h2>
+        <p>Estatísticas carregadas...</p>
       </div>
     </div>
   );
 };
 
+// =========================================================
+// EXPORT PRINCIPAL
+// =========================================================
 export default function Doar() {
   const { isAuthenticated, user } = useAuth();
+
   const isOng =
     isAuthenticated && (user?.role === "ONG" || user?.role === "ADMIN");
 
-  return <Layout>{isOng && user ? <DoarOngView ongId={user.id.toString()} /> : <DoarUsuarioView />}</Layout>;
+  return (
+    <Layout>
+      {isOng && user ? (
+        <DoarOngView ongId={user.id.toString()} />
+      ) : (
+        <DoarUsuarioView />
+      )}
+    </Layout>
+  );
 }

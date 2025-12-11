@@ -9,14 +9,19 @@ import api from "../services/api";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
+// =========================================================
+// TIPAGEM DO USUÁRIO
+// =========================================================
 interface User {
   id: number;
   nome: string;
   email: string;
   role: "ADMIN" | "ONG" | "PUBLICO";
+
   nomeOng?: string;
   cpf?: string;
   cnpj?: string;
+
   cep?: string;
   rua?: string;
   numero?: string;
@@ -24,55 +29,60 @@ interface User {
   bairro?: string;
   cidade?: string;
   estado?: string;
+
   telefone?: string;
 }
 
+// =========================================================
+// TIPAGEM DO CONTEXTO
+// =========================================================
 interface AuthContextType {
   user: User | null;
-  token: string | null; // <--- 1. ADICIONADO AQUI
+  token: string | null;
+
   isLoading: boolean;
   isAuthenticated: boolean;
+
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   hasPermission: (requiredRole: User["role"][]) => boolean;
+
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// =========================================================
+// PROVIDER
+// =========================================================
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null); // <--- 2. ESTADO DO TOKEN ADICIONADO
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
-  // const isTokenValid = (token: string): boolean => {
-  //   try {
-  //     const [, payload] = token.split('.');
-  //     const decodedPayload = JSON.parse(atob(payload));
-  //     return decodedPayload.exp * 1000 > Date.now();
-  //   } catch {
-  //     return false;
-  //   }
-  // };
-
+  // =========================================================
+  // Função de validação do token
+  // =========================================================
   const isTokenValid = (token: string): boolean => {
     try {
-      const [, payload] = token.split('.');
-      
-      // Correção para suportar caracteres UTF-8 (acentos)
-      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const [, payload] = token.split(".");
+
+      const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+
       const jsonPayload = decodeURIComponent(
         window
           .atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
       );
 
       const decodedPayload = JSON.parse(jsonPayload);
+
       return decodedPayload.exp * 1000 > Date.now();
     } catch (error) {
       console.error("Erro na validação do token:", error);
@@ -80,6 +90,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  // =========================================================
+  // Carregar dados do storage ao iniciar
+  // =========================================================
   useEffect(() => {
     async function loadStoragedData() {
       const storedToken = localStorage.getItem("@AuthData:token");
@@ -89,9 +102,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setToken(storedToken);
         api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
 
+        // Se token expirou → logout
         if (!isTokenValid(storedToken)) {
           logout();
-          setIsLoading(false); // Importante desligar aqui também
+          setIsLoading(false);
           return;
         }
 
@@ -103,18 +117,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           localStorage.setItem("@AuthData:user", JSON.stringify(response.data));
         } catch (error) {
           console.error("Erro ao validar token:", error);
-          // Se falhar (ex: sem internet), tenta usar o cache antigo
+
+          // Se não tiver internet → usa o cache
           if (storedUser) {
             setUser(JSON.parse(storedUser));
           } else {
             logout();
           }
         } finally {
-          // O SEGREDO: Isso garante que o loading SEMPRE para
           setIsLoading(false);
         }
       } else {
-        // Se não tem token, também para de carregar
         setIsLoading(false);
       }
     }
@@ -122,57 +135,58 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     loadStoragedData();
   }, []);
 
+  // =========================================================
+  // LOGIN
+  // =========================================================
   const login = async (email: string, password: string) => {
     try {
-      const response = await api({
-        method: "post",
-        url: "/auth/login",
-        data: { email, password },
-      });
+      const response = await api.post("/auth/login", { email, password });
+
       console.log("Resposta do login:", response);
 
       const { token, usuario } = response.data;
 
+      // Salva no localStorage
       localStorage.setItem("@AuthData:token", token);
       localStorage.setItem("@AuthData:user", JSON.stringify(usuario));
 
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      // Atualiza os estados
       setUser(usuario);
-      setToken(token); // <--- 4. ATUALIZA O TOKEN NO LOGIN
+      setToken(token);
 
-      if (usuario.role === 'ADMIN') {
-        navigate('/admin'); 
+      if (usuario.role === "ADMIN") {
+        navigate("/admin");
       } else {
         navigate("/");
       }
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
-        throw new Error(
-          err.response.data.error || "E-mail ou senha inválidos."
-        );
+        throw new Error(err.response.data.error || "E-mail ou senha inválidos.");
       }
+
       throw new Error("Erro de conexão. Tente novamente.");
     }
   };
 
+  // =========================================================
+  // LOGOUT
+  // =========================================================
   const logout = () => {
     localStorage.removeItem("@AuthData:token");
     localStorage.removeItem("@AuthData:user");
+
     api.defaults.headers.common["Authorization"] = undefined;
 
-    // Limpa os estados
     setUser(null);
-    setToken(null); // <--- 5. LIMPA O TOKEN NO LOGOUT
+    setToken(null);
 
     navigate("/login");
   };
 
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
-
+  // =========================================================
+  // PERMISSÕES
+  // =========================================================
   const isAuthenticated = !!user;
 
   const hasPermission = (requiredRoles: User["role"][]): boolean => {
@@ -180,11 +194,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     return requiredRoles.includes(user.role);
   };
 
+  // =========================================================
+  // LOADING
+  // =========================================================
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
+
+  // =========================================================
+  // PROVIDER
+  // =========================================================
   return (
     <AuthContext.Provider
       value={{
         user,
-        token, // <--- 6. EXPORTA O TOKEN PARA O CONTEXTO
+        token,
         isLoading,
         isAuthenticated,
         login,
@@ -198,10 +222,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+// =========================================================
+// HOOK DE AUTENTICAÇÃO
+// =========================================================
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
     throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
+
   return context;
 };
