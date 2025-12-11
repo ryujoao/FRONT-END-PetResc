@@ -158,7 +158,6 @@ export default function GerenciarAdocao() {
               Atualizado em: {new Date(animal.updatedAt).toLocaleDateString()}
             </div>
             
-            <button className={styles.btnMudarStatus}>Mudar Status</button>
             <span className={styles.codigoAnimal}>ID: #{animal.id}</span>
           </div>
         </div>
@@ -183,7 +182,7 @@ export default function GerenciarAdocao() {
                 <span className={styles.nomeCandidatoLista}>{candidato.account.nome}</span>
                 <span className={styles.resumoCandidato}>
                     {/* Status e Data */}
-                    {candidato.status} • {new Date(candidato.dataPedido).toLocaleDateString()}
+                    {candidato.status} &bull; {new Date(candidato.dataPedido).toLocaleDateString()}
                 </span>
               </div>
             ))}

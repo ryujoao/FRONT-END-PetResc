@@ -364,6 +364,21 @@
   align-items: center;
 }
 
+.limparBtn {
+  background-color: transparent;
+  border: none;
+  color: #286699;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1.2rem;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+.limparBtn:hover {
+  transform: translateY(-3px)
+}
+
 /* Responsividade do Grid */
 @media (max-width: 768px) {
   .contatoGrid {

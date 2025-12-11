@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
 
 // Componentes principais da home
-import Estatisticas from "../estatisticas";
+import Estatisticas from "./estatisticas";
 import NossaMissao from "./nossaMissao";
 import SaibaMais from "./saibaMais";
 
@@ -98,11 +98,6 @@ export default function Home() {
           <AnimaisCadastrados />
           <section className={styles.bannerDois}>
             
-            <img 
-              src="/banners/banner2.png" 
-              alt="Gatinho Curioso" 
-              className={styles.catImage} 
-            />
 
             <div className={styles.paginaDoar}>
               <h2 className={styles.tituloDoar}>Minhas Campanhas</h2>
