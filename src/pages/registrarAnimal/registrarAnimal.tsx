@@ -96,12 +96,16 @@ const RegistrarAnimalUsuario = () => {
     }
   };
 
-  // --- FUNÇÃO CORRIGIDA DA IA ---
+  // --- FUNÇÃO DA IA ---
   const gerarDescricaoIA = async (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (!nome || !especie) {
-      alert("Preencha Nome e Espécie antes de gerar a história!");
+      showModal(
+        "Campos Obrigatórios",
+        "Preencha o Nome e a Espécie antes de pedir para a IA gerar a história!",
+        "error"
+      );
       return;
     }
 
@@ -109,7 +113,6 @@ const RegistrarAnimalUsuario = () => {
     try {
       const token = localStorage.getItem("@AuthData:token");
 
-      // Pega dados específicos do Usuário
       const listaCaracteristicas = [
         raca,
         porte,
@@ -140,12 +143,15 @@ const RegistrarAnimalUsuario = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Erro IA");
 
-      // Aqui usamos setHistoria corretamente
       if (data.texto) setHistoria(data.texto);
-
     } catch (error) {
       console.error(error);
-      alert("Erro ao gerar descrição com IA.");
+
+      showModal(
+        "Erro na IA",
+        "Não foi possível gerar a descrição. Tente novamente.",
+        "error"
+      );
     } finally {
       setGerandoIA(false);
     }
@@ -290,11 +296,11 @@ const RegistrarAnimalUsuario = () => {
               </label>
               {/* BOTÃO DA IA CORRIGIDO */}
               <button
-                onClick={gerarDescricaoIA} 
-                disabled={gerandoIA} 
+                onClick={gerarDescricaoIA}
+                disabled={gerandoIA}
                 style={{
                   marginLeft: "10px",
-                  backgroundColor: "#6f42c1", 
+                  backgroundColor: "#6f42c1",
                   color: "white",
                   border: "none",
                   borderRadius: "5px",
@@ -570,7 +576,11 @@ const RegistrarAnimalOng = () => {
     e.preventDefault();
 
     if (!nome || !especie) {
-      alert("Preencha Nome e Espécie antes de gerar a história!");
+      showModal(
+        "Campos Obrigatórios",
+        "Preencha o Nome e a Espécie antes de pedir para a IA gerar a história!",
+        "error"
+      );
       return;
     }
 
@@ -578,7 +588,6 @@ const RegistrarAnimalOng = () => {
     try {
       const token = localStorage.getItem("@AuthData:token");
 
-      // Pega dados específicos da ONG
       const listaCaracteristicas = [
         raca,
         porte,
@@ -612,7 +621,8 @@ const RegistrarAnimalOng = () => {
       if (data.texto) setHistoria(data.texto);
     } catch (error) {
       console.error(error);
-      alert("Erro ao gerar descrição com IA.");
+
+      showModal("Erro na IA", "Não foi possível gerar a descrição.", "error");
     } finally {
       setGerandoIA(false);
     }
@@ -1105,7 +1115,7 @@ const RegistrarAnimalOng = () => {
                 {gerandoIA ? "Criando..." : "Gerar com IA"}
               </button>
             </div>
-            
+
             <textarea
               value={historia}
               onChange={(e) => setHistoria(e.target.value)}
