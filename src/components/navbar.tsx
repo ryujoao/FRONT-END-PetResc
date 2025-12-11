@@ -20,10 +20,8 @@ export default function Nav() {
 
   const displayName =
     user?.role === "ONG"
-      ? 
-        user.nomeOng || user.nome
-      : 
-        user?.nome || (isAdmin ? "Administrador" : "Visitante");
+      ? user?.ong?.nome || user?.nome
+      : user?.nome || (isAdmin ? "Administrador" : "Visitante");
 
   return (
     <>

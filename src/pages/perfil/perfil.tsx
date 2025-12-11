@@ -395,7 +395,10 @@ export default function Perfil() {
   const petsExibidos = getDisplayedPets();
 
   const displayNome =
-    user?.role === "ONG" && user?.nomeOng ? user.nomeOng : user?.nome;
+  user?.role === "ONG" 
+    ? user?.ong?.nome || user?.nome   
+    : user?.nome;
+
   const userCity =
     user?.cidade && user?.estado
       ? `${user.cidade}, ${user.estado}`
