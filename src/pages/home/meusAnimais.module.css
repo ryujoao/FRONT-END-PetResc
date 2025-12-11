@@ -7,6 +7,8 @@
     justify-content: center;
     flex-wrap: wrap; /* Permite quebrar linha em telas pequenas */
     align-items: flex-start; 
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .loadingContainer {
@@ -18,12 +20,16 @@
     color: #666;
 }
 
-/* COLUNAS */
 .containerMeusAnimais,
 .adocaoProcesso {
-    flex: 1; /* Faz as duas tentarem ocupar o mesmo espaço horizontal */
-    min-width: 450px; 
-    max-width: 800px;
+    /* 1. Mágica do Flexbox */
+    flex: 1 1 450px;
+    
+    /* 2. Limites de segurança */
+   min-width: 350px; /* Reduzi um pouco para caberem lado a lado em notebooks menores */
+    width: 100%;  /* Garante que não estoure a tela */
+    
+    /* 3. Estilos Visuais (Mantidos) */
     min-height: 700px; 
     background-color: #F0F9FF;
     display: flex;
@@ -32,6 +38,10 @@
     border-radius: 20px;
     padding-bottom: 2rem;
     box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    max-width: 700px;   
+    
+    /* 4. Importante para padding não zoar o tamanho */
+    box-sizing: border-box; 
 }
 
 .headerSection {
@@ -145,14 +155,14 @@
 }
 
 .descricaoCard {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #555;
     margin: 0;
 }
 
 .tagId {
-    font-size: 0.9rem;
-    color: #999;
+    font-size: 1.1rem;
+    color: #555;
 }
 
 /* Status */
@@ -160,7 +170,7 @@
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-weight: bold;
     color: #2b6b99;
     background: #e6f2ff;
@@ -172,7 +182,7 @@
     position: absolute;
     bottom: 15px;
     right: 20px;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 

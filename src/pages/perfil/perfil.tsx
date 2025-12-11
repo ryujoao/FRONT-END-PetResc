@@ -83,10 +83,12 @@ const OngPetRow = ({
         onClick={() => onClickCard(pet.id)}
       />
       <div className={styles.ongCardContent}>
-        <p className={styles.ongCardName}>{pet.nome},{pet.raca}</p>
+        <p className={styles.ongCardName}>
+          {pet.nome},{pet.raca}
+        </p>
 
         <div className={styles.ongCardInfo}>
-          <span>{pet.raca }</span>
+          <span>{pet.raca}</span>
           {/* Mostra código mockado ou ID real */}
           <span className={styles.ongCode}>{pet.codigo || `#${pet.id}`}</span>
           <br />
@@ -161,42 +163,38 @@ const DonationsContent = () => {
 
 // --- DADOS DOS GRÁFICOS (MANTIDOS COMPLETOS) ---
 const dataMonths = [
-  { name: "Mai", val: 23, color: "#103f6e" },
-  { name: "Jun", val: 13, color: "#103f6e" },
-  { name: "Jul", val: 27, color: "#9abddf" },
-  { name: "Ago", val: 18, color: "#103f6e" },
-  { name: "Set", val: 22, color: "#103f6e" },
-  { name: "Out", val: 7, color: "#9abddf" },
+  { name: "Ago", val: 5, color: "#103f6e" },
+  { name: "Set", val: 14, color: "#103f6e" },
+  { name: "Out", val: 11, color: "#103f6e" },
+  { name: "Nov", val: 13, color: "#103f6e" },
+  { name: "Dez", val: 4, color: "#9abddf" },
 ];
 
 const dataWeek = [
   { name: "Dom", val: 1, color: "#103f6e" },
   { name: "Seg", val: 0, color: "#103f6e" },
-  { name: "Ter", val: 0, color: "#103f6e" },
+  { name: "Ter", val: 1, color: "#103f6e" },
   { name: "Qua", val: 1, color: "#103f6e" },
-  { name: "Qui", val: 1, color: "#103f6e" },
-  { name: "Sex", val: 3, color: "#9abddf" },
+  { name: "Qui", val: 2, color: "#9abddf" },
+  { name: "Sex", val: 3, color: "#103f6e" },
   { name: "Sáb", val: 1, color: "#103f6e" },
 ];
 
 const dataEntradas = [
-  { name: "Mai", val: 23, color: "#103f6e" },
-  { name: "Jun", val: 13, color: "#103f6e" },
-  { name: "Jul", val: 27, color: "#9abddf" }, 
-  { name: "Ago", val: 18, color: "#103f6e" },
-  { name: "Set", val: 22, color: "#103f6e" },
-  { name: "Out", val: 7, color: "#9abddf" },
+  { name: "Ago", val: 5, color: "#103f6e" },
+  { name: "Set", val: 12, color: "#103f6e" },
+  { name: "Out", val: 16, color: "#103f6e" },
+  { name: "Nov", val: 8, color: "#103f6e" },
+  { name: "Dez", val: 3, color: "#9abddf" },
 ];
 
 const dataSaidas = [
-  { name: "Mai", val: 22, color: "#103f6e" },
-  { name: "Jun", val: 13, color: "#103f6e" },
-  { name: "Jul", val: 27, color: "#9abddf" },
-  { name: "Ago", val: 18, color: "#103f6e" },
-  { name: "Set", val: 22, color: "#103f6e" },
-  { name: "Out", val: 7, color: "#9abddf" },
+  { name: "Ago", val: 5, color: "#103f6e" },
+  { name: "Set", val: 10, color: "#103f6e" },
+  { name: "Out", val: 12, color: "#103f6e" },
+  { name: "Nov", val: 14, color: "#103f6e" },
+  { name: "Dez", val: 2, color: "#9abddf" },
 ];
-
 // --- COMPONENTES DOS GRÁFICOS ---
 const SimpleBarChart = ({ data }: { data: any[] }) => {
   const maxVal = Math.max(...data.map((d) => d.val)) || 1;
@@ -234,7 +232,7 @@ const OngCharts = ({ activeView }: { activeView: string }) => {
       {activeView === "adotados" && (
         <>
           <div className={styles.chartBox}>
-            <h3 className={styles.chartTitle}>Processos de adoção (6 meses)</h3>
+            <h3 className={styles.chartTitle}>Processos de adoção (5 meses)</h3>
             <SimpleBarChart data={dataMonths} />
           </div>
           <div className={styles.chartBox}>
@@ -249,11 +247,11 @@ const OngCharts = ({ activeView }: { activeView: string }) => {
       {activeView === "registrados" && (
         <>
           <div className={styles.chartBox}>
-            <h3 className={styles.chartTitle}>Entradas de animais (6 meses)</h3>
+            <h3 className={styles.chartTitle}>Entradas de animais (5 meses)</h3>
             <SimpleBarChart data={dataEntradas} />
           </div>
           <div className={styles.chartBox}>
-            <h3 className={styles.chartTitle}>Saída de animais (6 meses)</h3>
+            <h3 className={styles.chartTitle}>Saída de animais (5 meses)</h3>
             <SimpleBarChart data={dataSaidas} />
           </div>
         </>
@@ -277,7 +275,8 @@ export default function Perfil() {
 
   // Ajusta a view inicial
   useEffect(() => {
-    if (isOng) setActiveView("registrados"); // Alterado para começar em Registrados
+    if (isOng)
+      setActiveView("registrados"); // Alterado para começar em Registrados
     else setActiveView("todos");
   }, [isOng]);
 
@@ -288,30 +287,31 @@ export default function Perfil() {
       setLoading(true);
       try {
         const resMeus = await api.get("/animais/gerenciar/lista");
-        
+
         // --- AQUI ESTÁ A LÓGICA QUE VOCÊ TINHA E EU RESTAUREI ---
         // Se o animal vier sem status ou dados específicos do banco,
         // geramos dados fictícios para que o Design funcione (Abas Adotados/Registrados)
         const meusFormatados = resMeus.data.map((p: any, index: number) => {
-            // Se o backend já mandar o status certo, usamos. Se não, usamos o mock.
-            let statusFinal = p.status;
-            
-            // Lógica MOCK para distribuir nas abas (se o banco estiver tudo igual)
-            // Metade vira "Adotado", Metade vira "Disponível"
-            if (!statusFinal || statusFinal === 'DISPONIVEL') {
-                if (index % 2 !== 0) statusFinal = "Adotado"; // Mock para popular a aba
-                else statusFinal = "Disponível";
-            }
+          // Se o backend já mandar o status certo, usamos. Se não, usamos o mock.
+          let statusFinal = p.status;
 
-            return {
-                ...p,
-                favorito: false,
-                status: statusFinal, 
-                codigo: index % 2 === 0 ? "AD." : "FI.", // Mock visual
-                dataAdocao: statusFinal === "Adotado" ? "10/10/2025" : null, // Mock visual
-            };
+          // Lógica MOCK para distribuir nas abas (se o banco estiver tudo igual)
+          // Metade vira "Adotado", Metade vira "Disponível"
+          if (!statusFinal || statusFinal === "DISPONIVEL") {
+            if (index % 2 !== 0)
+              statusFinal = "Adotado"; // Mock para popular a aba
+            else statusFinal = "Disponível";
+          }
+
+          return {
+            ...p,
+            favorito: false,
+            status: statusFinal,
+            codigo: index % 2 === 0 ? "AD." : "FI.", // Mock visual
+            dataAdocao: statusFinal === "Adotado" ? "10/10/2025" : null, // Mock visual
+          };
         });
-        
+
         setMeusPets(meusFormatados);
 
         // Se não for ONG, busca favoritos
@@ -369,13 +369,22 @@ export default function Perfil() {
     switch (activeView) {
       case "adotados":
         // Filtra pelo status (seja real do banco ou o mockado acima)
-        return meusPets.filter((p) => p.status === "Adotado" || p.status === "ADOTADO");
+        return meusPets.filter(
+          (p) => p.status === "Adotado" || p.status === "ADOTADO"
+        );
       case "registrados":
         // Filtra os disponíveis
-        return meusPets.filter((p) => p.status === "Disponível" || p.status === "DISPONIVEL" || p.status === "Visita Agendada");
+        return meusPets.filter(
+          (p) =>
+            p.status === "Disponível" ||
+            p.status === "DISPONIVEL" ||
+            p.status === "Visita Agendada"
+        );
       case "lartemporario":
         // Mantive sua lógica original
-        return meusPets.filter((p) => p.status === "Lar Temporário" || p.status === "LAR_TEMPORARIO");
+        return meusPets.filter(
+          (p) => p.status === "Lar Temporário" || p.status === "LAR_TEMPORARIO"
+        );
       case "doacoes":
         return []; // Renderiza componente separado
       default:
@@ -384,11 +393,22 @@ export default function Perfil() {
   };
 
   const petsExibidos = getDisplayedPets();
-  
-  const displayNome = user?.role === "ONG" && user?.nomeOng ? user.nomeOng : user?.nome;
-  const userCity = user?.cidade && user?.estado ? `${user.cidade}, ${user.estado}` : user?.cidade ? user.cidade : "Localização não definida";
 
-  if (!user) return <Layout><div style={{ textAlign: "center", padding: "4rem" }}>Faça login.</div></Layout>;
+  const displayNome =
+    user?.role === "ONG" && user?.nomeOng ? user.nomeOng : user?.nome;
+  const userCity =
+    user?.cidade && user?.estado
+      ? `${user.cidade}, ${user.estado}`
+      : user?.cidade
+      ? user.cidade
+      : "Localização não definida";
+
+  if (!user)
+    return (
+      <Layout>
+        <div style={{ textAlign: "center", padding: "4rem" }}>Faça login.</div>
+      </Layout>
+    );
 
   return (
     <Layout>
@@ -426,7 +446,9 @@ export default function Perfil() {
                 return (
                   <button
                     key={tab}
-                    className={activeView === tab ? styles.tabUm : styles.tabDois}
+                    className={
+                      activeView === tab ? styles.tabUm : styles.tabDois
+                    }
                     onClick={() => setActiveView(tab)}
                   >
                     {labels[tab]}
@@ -444,7 +466,9 @@ export default function Perfil() {
               Meus Pets ({meusPets.length})
             </button>
             <button
-              className={activeView === "salvos" ? styles.tabUm : styles.tabDois}
+              className={
+                activeView === "salvos" ? styles.tabUm : styles.tabDois
+              }
               onClick={() => setActiveView("salvos")}
             >
               Salvos ({outrosSalvos.length})
@@ -471,21 +495,23 @@ export default function Perfil() {
         </div>
 
         {/* FILTROS VISUAIS DA ONG (MANTIDOS) */}
-        {isOng && activeView !== "doacoes" && activeView !== "lartemporario" && (
-          <div className={styles.filterContainer}>
-            {activeView === "adotados" ? (
-              <>
-                <button className={styles.filterBadge}>Última semana</button>
-                <button className={styles.filterBadge}>Último mês</button>
-              </>
-            ) : (
-              <>
+        {isOng &&
+          activeView !== "doacoes" &&
+          activeView !== "lartemporario" && (
+            <div className={styles.filterContainer}>
+              {activeView === "adotados" ? (
+                <>
                   <button className={styles.filterBadge}>Última semana</button>
                   <button className={styles.filterBadge}>Último mês</button>
-              </>
-            )}
-          </div>
-        )}
+                </>
+              ) : (
+                <>
+                  <button className={styles.filterBadge}>Última semana</button>
+                  <button className={styles.filterBadge}>Último mês</button>
+                </>
+              )}
+            </div>
+          )}
 
         {/* LISTAGEM */}
         <div

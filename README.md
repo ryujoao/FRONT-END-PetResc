@@ -1,73 +1,51 @@
-<<<<<<< HEAD
-# pet-co
-=======
-# React + TypeScript + Vite
+# 🐾 PetResc
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
 
-Currently, two official plugins are available:
+## 💻 Sobre o projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**PetResc** é uma plataforma desenvolvida para conectar ONGs, protetores e adotantes. O objetivo é facilitar a adoção de animais, o encontro de lares temporários e a divulgação de animais perdidos/encontrados.
 
-## Expanding the ESLint configuration
+O sistema permite que ONGs gerenciem seus animais e que usuários comuns se candidatem para adoção ou ofereçam lar temporário.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠 Tecnologias
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+As seguintes ferramentas foram usadas na construção do projeto:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **[React](https://reactjs.org/)** + **[Vite](https://vitejs.dev/)**
+- **[TypeScript](https://www.typescriptlang.org/)**
+- **[Node.js](https://nodejs.org/en/)** (Backend)
+- **[Prisma](https://www.prisma.io/)** (ORM)
+- **[PostgreSQL](https://www.postgresql.org/)** (Banco de Dados)
+- **[CSS Modules](https://github.com/css-modules/css-modules)**
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Como executar o projeto
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
->>>>>>> front-end
+### Pré-requisitos
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/).
+Além disso é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/).
+
+### Acessando o site
+É possível acessar o site pelo link:
+(https://pet-resc.vercel.app/)
+
+
+### 🎲 Rodando a Aplicação
+
+```bash
+# Clone este repositório
+$ git clone <https://github.com/ryujoao/PetResc.git>
+
+# Acesse a pasta do projeto no terminal/cmd
+$ cd petresc
+
+# Instale as dependências
+$ npm install
+$ npm i react-icons
+
+# O servidor iniciará na porta:5173 - acesse <http://localhost:5173>
