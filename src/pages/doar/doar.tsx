@@ -230,7 +230,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
           <div className={styles.mosaicGrid}>
             <div className={styles.mosaicCol}>
               <img
-                src="../../../public/doar/campanhas.png"
+                src="/public/doar/campanhas.png"
                 alt="Campanhas"
                 className={styles.mosaicImg}
               />
@@ -244,7 +244,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
 
             <div className={styles.mosaicCol}>
               <img
-                src="../../../public/doar/doarImg.png"
+                src="/public/doar/doarImg.png"
                 alt="Mãos"
                 className={`${styles.mosaicImg} ${styles.tallImg}`}
               />
@@ -258,7 +258,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
                 <span className={styles.mosaicLabel}>Doadores Ativos</span>
               </div>
               <img
-                src="../../../public/doar/doadores.png"
+                src="/public/doar/doadores.png"
                 alt="Doadores"
                 className={styles.mosaicImg}
               />
@@ -266,7 +266,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
 
             <div className={styles.mosaicCol}>
               <img
-                src="../../../public/doar/doarImg2.png"
+                src="/public/doar/doarImg2.png"
                 alt="Animais"
                 className={styles.mosaicImg}
                 style={{ height: "180px" }}
@@ -307,7 +307,7 @@ const DoarOngView = ({ ongId }: { ongId: string }) => {
           {/* Imagem Central */}
           <div className={styles.centerDogContainer}>
             <img
-              src="../../../public/banners/cachorroDoar.png"
+              src="/public/banners/cachorroDoar.png"
               alt="Cachorro olhando"
               className={styles.centerDogImg}
             />
